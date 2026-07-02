@@ -29,6 +29,9 @@ next-env.d.ts
 # deploy convenience wrappers (contain nothing secret, but local-only)
 deploy-remote.bat
 
+# files prepared for handover to the CEO (contains her .env — never commit)
+/ship-to-ceo/
+
 # misc
 .DS_Store
 *.log
