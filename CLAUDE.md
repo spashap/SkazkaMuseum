@@ -61,8 +61,10 @@ SQLite-only bits, migrate. The app code doesn't need to change.
 
 ## Daily workflow (both PCs — Pavel and the CEO)
 
-- `install.bat` — one-time bootstrap: installs Git, Node, the code from GitHub, deps, DB, Claude Code.
-- `pull.bat` — get the latest code from GitHub (guards against wiping unpushed local changes).
+- `pull.bat` — FIRST file to run on a new PC: installs Git/Node/Claude Code if missing,
+  then pulls the latest code from GitHub (guards against wiping unpushed local changes).
+  A new machine needs only `pull.bat` + `.env`; everything else comes with the pull.
+- `install.bat` — one-time after the first pull: deps, `.env` fallback, DB create+seed.
 - `start.bat` — run the dev server at http://localhost:3100.
 - `push.bat` — bump the site version (see below), commit with a description, push to GitHub.
 

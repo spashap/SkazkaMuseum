@@ -1,10 +1,8 @@
 @echo off
 REM ============================================================
 REM  Museum of Russian Fairy Tales - INSTALL (run once)
-REM  Put this file (with pull.bat, push.bat and .env) into an
-REM  empty folder, e.g. C:\projects\Muzei-skazki, and double-click.
-REM  It installs: Git, Node.js, the website code from GitHub,
-REM  all components, the database, and the Claude Code assistant.
+REM  Run AFTER pull.bat has downloaded the code.
+REM  Installs the website components, settings and database.
 REM  (Messages are in English on purpose - Windows .bat files
 REM   are not reliable with Cyrillic text.)
 REM ============================================================
@@ -18,101 +16,42 @@ echo   Installing the Skazka Museum website  (one-time setup)
 echo ============================================================
 echo.
 
-REM --- 1/6 Git -------------------------------------------------
-where git >nul 2>nul
-if %errorlevel%==0 goto GIT_OK
-echo [1/6] Git not found. Trying to install automatically...
-where winget >nul 2>nul
-if %errorlevel%==0 (
-  winget install -e --id Git.Git --accept-source-agreements --accept-package-agreements
-  echo.
-  echo Git installed. Please CLOSE this window and run install.bat again.
-  echo ^(Windows needs a restart of this window to see the new program.^)
-  echo.
-  pause
-  exit /b 0
-) else (
-  echo Could not install automatically.
-  echo The Git download page will open now. Install it, then run install.bat again.
-  start https://git-scm.com/download/win
-  pause
-  exit /b 1
-)
-:GIT_OK
-for /f "delims=" %%g in ('git --version') do echo [1/6] %%g
-
-REM --- 2/6 Node.js ---------------------------------------------
+REM --- 0/3 Prerequisites (pull.bat installs these) -------------
 where node >nul 2>nul
-if %errorlevel%==0 goto NODE_OK
-echo [2/6] Node.js not found. Trying to install automatically...
-where winget >nul 2>nul
-if %errorlevel%==0 (
-  winget install -e --id OpenJS.NodeJS.LTS --accept-source-agreements --accept-package-agreements
-  echo.
-  echo Node.js installed. Please CLOSE this window and run install.bat again.
-  echo ^(Windows needs a restart of this window to see the new program.^)
-  echo.
-  pause
-  exit /b 0
-) else (
-  echo Could not install automatically.
-  echo The Node.js download page will open now. Install the "LTS" version,
-  echo then run install.bat again.
-  start https://nodejs.org/en/download
+if errorlevel 1 (
+  echo Node.js not found. Please run pull.bat first - it installs
+  echo everything needed and downloads the website code.
   pause
   exit /b 1
 )
-:NODE_OK
-for /f "delims=" %%v in ('node -v') do echo [2/6] Node.js found: %%v
-
-REM --- 3/6 Get the website code from GitHub --------------------
-echo.
-if exist ".git" (
-  echo [3/6] Code already connected to GitHub - skipping download.
-  goto CODE_OK
+if not exist "package.json" (
+  echo Website code not found in this folder.
+  echo Please run pull.bat first - it downloads the code from GitHub.
+  pause
+  exit /b 1
 )
-echo [3/6] Downloading the website code from GitHub...
-git init -b main >nul
-git remote add origin https://github.com/spashap/SkazkaMuseum
-git fetch origin
-if errorlevel 1 goto FAIL
-git reset --hard origin/main
-if errorlevel 1 goto FAIL
-:CODE_OK
 
-REM --- 4/6 Install components ----------------------------------
-echo.
-echo [4/6] Installing components ^(this can take a few minutes^)...
+REM --- 1/3 Install components ----------------------------------
+echo [1/3] Installing components ^(this can take a few minutes^)...
 call npm install
 if errorlevel 1 goto FAIL
 
-REM --- 5/6 Settings file .env + database -----------------------
+REM --- 2/3 Settings file .env ----------------------------------
 echo.
 if exist ".env" (
-  echo [5/6] Settings file .env found - keeping it.
+  echo [2/3] Settings file .env found - keeping it.
 ) else (
-  echo [5/6] No .env found. Creating one with a unique security key...
+  echo [2/3] No .env found. Creating one with a unique security key...
   echo        ^(If Pavel gave you a .env file, put it in this folder instead.^)
   powershell -NoProfile -Command "$s = -join (1..64 | ForEach-Object { '{0:x}' -f (Get-Random -Maximum 16) }); (Get-Content -Raw '.env.example').Replace('change-me-to-a-long-random-string', $s) | Set-Content -NoNewline -Encoding ascii '.env'"
   if errorlevel 1 goto FAIL
 )
-echo        Creating the database and starting data...
+
+REM --- 3/3 Create database + starting data ---------------------
+echo.
+echo [3/3] Creating the database and starting data...
 call npm run setup
 if errorlevel 1 goto FAIL
-
-REM --- 6/6 Claude Code (AI assistant) --------------------------
-echo.
-where claude >nul 2>nul
-if %errorlevel%==0 (
-  echo [6/6] Claude Code already installed.
-) else (
-  echo [6/6] Installing Claude Code ^(AI assistant^)...
-  call npm install -g @anthropic-ai/claude-code
-  if errorlevel 1 (
-    echo Claude Code install failed - you can retry later with:
-    echo    npm install -g @anthropic-ai/claude-code
-  )
-)
 
 echo.
 echo ============================================================
@@ -137,7 +76,9 @@ exit /b 0
 echo.
 echo ------------------------------------------------------------
 echo   Something went wrong. Take a photo of this screen
-echo   and send it to Pavel.
+echo   and send it to Pavel. Or ask the AI assistant: open a
+echo   terminal in this folder, type: claude
+echo   and describe the problem.
 echo ------------------------------------------------------------
 echo.
 pause
