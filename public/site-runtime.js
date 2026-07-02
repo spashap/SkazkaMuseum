@@ -1,3 +1,5 @@
+document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fallback for .fade-up
+
     (function(){
       // Calendar exists only on the tickets page; skip on all other pages.
       if(!document.getElementById('calGrid')){return;}
@@ -412,20 +414,25 @@ function sendTeatrToMax(e){
   window.open('https://t.me/museum_skazki?text='+msg,'_blank');
 }
 function showPage(id) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  // Each page is its own route now; the target section usually is NOT in the DOM.
+  // Find it BEFORE hiding anything, otherwise a click leaves a blank page.
+  // (site-overrides.js replaces this with real navigation once it loads.)
   const page = document.getElementById('page-' + id);
-  if (page) {
-    page.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Обновляем URL для SEO и шаринга
-    try {
-      if (id === 'home') {
-        history.pushState(null, '', window.location.pathname);
-      } else {
-        history.pushState(null, '', '#' + id);
-      }
-    } catch(e) {}
+  if (!page) {
+    window.location.href = id === 'home' ? '/' : '/' + id;
+    return;
   }
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  page.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Обновляем URL для SEO и шаринга
+  try {
+    if (id === 'home') {
+      history.pushState(null, '', window.location.pathname);
+    } else {
+      history.pushState(null, '', '#' + id);
+    }
+  } catch(e) {}
 }
 
 // Инициализация: читаем hash при загрузке страницы
@@ -443,13 +450,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function showArticle(id) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  // Same guard as showPage: never hide the current page when the target is missing.
   const page = document.getElementById('page-' + id);
-  if (page) {
-    page.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    try { history.pushState(null, '', '#' + id); } catch(e) {}
-  }
+  if (!page) return;
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  page.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  try { history.pushState(null, '', '#' + id); } catch(e) {}
 }
 
 function showForm(id) {
