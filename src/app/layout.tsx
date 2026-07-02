@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './fonts.css';
 import { getTheme, themeToCss } from '@/lib/theme';
 
 export const metadata: Metadata = {
@@ -12,19 +13,17 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 };
 
-// Root layout injects the design tokens (from the Theme row) as :root CSS variables
-// and loads the 3 locked fonts. This is what makes "change font in admin → whole site".
+// Root layout injects the design tokens (from the Theme row) as :root CSS variables.
+// Fonts are SELF-HOSTED (public/fonts + fonts.css, same family names as the theme
+// tokens) — no render-blocking Google Fonts request, works without google reachability.
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const theme = await getTheme();
   return (
     <html lang="ru">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Ruslan+Display&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Manrope:wght@400;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Above-the-fold fonts (cyrillic subsets): body text + display headings */}
+        <link rel="preload" href="/fonts/Manrope-400-cyrillic.woff2" as="font" type="font/woff2" crossOrigin="" />
+        <link rel="preload" href="/fonts/RuslanDisplay-400-cyrillic.woff2" as="font" type="font/woff2" crossOrigin="" />
         <style dangerouslySetInnerHTML={{ __html: themeToCss(theme) }} />
       </head>
       {/* suppressHydrationWarning: browser extensions (ad blockers etc.) inject attributes
