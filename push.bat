@@ -17,6 +17,27 @@ echo   Sending your changes to GitHub
 echo ============================================================
 echo.
 
+REM --- GitHub access + git identity from .env --------------------
+set GITHUB_TOKEN=
+set GIT_USER_NAME=
+set GIT_USER_EMAIL=
+if exist ".env" for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do (
+  if "%%a"=="GITHUB_TOKEN" set "GITHUB_TOKEN=%%~b"
+  if "%%a"=="GIT_USER_NAME" set "GIT_USER_NAME=%%~b"
+  if "%%a"=="GIT_USER_EMAIL" set "GIT_USER_EMAIL=%%~b"
+)
+if not "%GITHUB_TOKEN%"=="" git remote set-url origin https://%GITHUB_TOKEN%@github.com/spashap/SkazkaMuseum
+
+REM first commit on a fresh PC needs a git identity
+set HASNAME=
+for /f "delims=" %%n in ('git config user.name 2^>nul') do set HASNAME=%%n
+if defined HASNAME goto ID_OK
+if "%GIT_USER_NAME%"=="" set GIT_USER_NAME=Skazka CEO
+if "%GIT_USER_EMAIL%"=="" set GIT_USER_EMAIL=ceo@skazkamuseum.ru
+git config user.name "%GIT_USER_NAME%"
+git config user.email "%GIT_USER_EMAIL%"
+:ID_OK
+
 REM --- anything to push? ---------------------------------------
 set CHANGES=0
 for /f %%i in ('git status --porcelain ^| find /c /v ""') do set CHANGES=%%i

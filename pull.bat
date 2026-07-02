@@ -17,6 +17,14 @@ echo   Getting the latest version from GitHub
 echo ============================================================
 echo.
 
+REM --- GitHub access: use GITHUB_TOKEN from .env when present ---
+set GITHUB_TOKEN=
+if exist ".env" for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do (
+  if "%%a"=="GITHUB_TOKEN" set "GITHUB_TOKEN=%%~b"
+)
+set REPO_URL=https://github.com/spashap/SkazkaMuseum
+if not "%GITHUB_TOKEN%"=="" set REPO_URL=https://%GITHUB_TOKEN%@github.com/spashap/SkazkaMuseum
+
 REM --- 1/4 Git -------------------------------------------------
 where git >nul 2>nul
 if %errorlevel%==0 goto GIT_OK
@@ -83,7 +91,7 @@ echo.
 if exist ".git" goto HAVE_REPO
 echo [4/4] First download of the website code...
 git init -b main >nul
-git remote add origin https://github.com/spashap/SkazkaMuseum
+git remote add origin %REPO_URL%
 git fetch origin
 if errorlevel 1 goto FAIL
 git reset --hard origin/main
@@ -92,6 +100,7 @@ goto CODE_DONE
 
 :HAVE_REPO
 echo [4/4] Checking for updates...
+git remote set-url origin %REPO_URL%
 git fetch origin
 if errorlevel 1 goto FAIL
 
