@@ -1,0 +1,45 @@
+<header class="header">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav__logo" onclick="showPage('home')" style="cursor:pointer">
+        <img loading="lazy" decoding="async"  src="/seed/header_1.webp" alt="За лесами за горами — Музей русской сказки" style="width:52px;height:52px;object-fit:contain;flex-shrink:0;">
+        
+      </div>
+      <div class="nav__links">
+        <span class="nav__link" onclick="showPage('tickets')">Билеты</span>
+        <span class="nav__link" onclick="showPage('tours')">Экскурсии</span>
+        <span class="nav__link" onclick="showPage('birthday')">Дни рождения</span>
+        <span class="nav__link" onclick="showPage('schools')">Школам</span>
+        <span class="nav__link" onclick="showPage('kindergarten')">Дет. сады</span>
+        <span class="nav__link" onclick="showPage('masterclasses')">Мастер-классы</span>
+        <span class="nav__link" onclick="showPage('kvesty')">Квесты</span>
+        <span class="nav__link" onclick="showPage('teatr')">Театр</span>
+        <span class="nav__link" onclick="showPage('lektsii')">Лекции</span>
+        <span class="nav__link" onclick="showPage('poleznoe')">Полезное</span>
+        <span class="nav__link" onclick="showPage('partners')">Партнёрам</span>
+        <span class="nav__link" onclick="showPage('contacts')">Контакты</span>
+        <button class="btn btn--primary" onclick="showPage('tickets')">Купить билет</button>
+      </div>
+      <button class="nav__burger" id="burger" aria-label="Меню" onclick="toggleMobile()">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="nav__mobile" id="mobileNav">
+      <span class="nav__link" onclick="showPage('home');closeMobile()">Главная</span>
+      <span class="nav__link" onclick="showPage('tickets');closeMobile()">Купить билет</span>
+      <span class="nav__link" onclick="showPage('tours');closeMobile()">Экскурсии</span>
+      <span class="nav__link" onclick="showPage('birthday');closeMobile()">Дни рождения</span>
+      <span class="nav__link" onclick="showPage('schools');closeMobile()">Школам</span>
+      <span class="nav__link" onclick="showPage('kindergarten');closeMobile()">Детским садам</span>
+      <span class="nav__link" onclick="showPage('masterclasses');closeMobile()">Мастер-классы</span>
+      <span class="nav__link" onclick="showPage('kvesty');closeMobile()">Квесты</span>
+      <span class="nav__link" onclick="showPage('teatr');closeMobile()">Театр</span>
+      <span class="nav__link" onclick="showPage('lektsii');closeMobile()">Лекции</span>
+      <span class="nav__link" onclick="showPage('partners');closeMobile()">Партнёрам</span>
+      <span class="nav__link" onclick="showPage('contacts');closeMobile()">Контакты</span>
+      <span class="nav__link" onclick="showPage('poleznoe');closeMobile()">Полезное</span>
+    </div>
+  </div>
+</header>
+
+<!-- ========== HOME ========== -->

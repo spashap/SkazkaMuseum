@@ -1,0 +1,244 @@
+// Museum of Russian Fairy Tales — data model.
+// SQLite + Prisma. To upgrade to PostgreSQL later: change `provider` + DATABASE_URL,
+// then `prisma migrate`. Enums are strings for SQLite compatibility (see comments).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Staff & access ────────────────────────────────────────────────
+// role: "ADMIN" | "MANAGER" | "CASHIER"
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  phone        String?
+  role         String    @default("MANAGER")
+  status       String    @default("active") // active | blocked
+  createdAt    DateTime  @default(now())
+  actions      ActionLog[]
+}
+
+model ActionLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  detail    String?
+  createdAt DateTime @default(now())
+}
+
+// ─── Design tokens (single source of CSS control) ──────────────────
+// One active row. Edited from admin "Design". Rendered as :root CSS vars.
+model Theme {
+  id          Int    @id @default(1)
+  fontDisplay String @default("'Ruslan Display', cursive")
+  fontSerif   String @default("'Cormorant Garamond', Georgia, serif")
+  fontBody    String @default("'Manrope', system-ui, sans-serif")
+  fsHeroXl    String @default("clamp(2.2rem,6vw,3.8rem)")
+  fsH1        String @default("clamp(1.6rem,4vw,2.4rem)")
+  fsH2        String @default("1.5rem")
+  fsH3        String @default("1.2rem")
+  fsBody      String @default("1rem")
+  fsSmall     String @default("0.85rem")
+  fsCaption   String @default("0.75rem")
+  gold        String @default("#C8963E")
+  goldLight   String @default("#E8B96A")
+  crimson     String @default("#8B1A2F")
+  crimsonDark String @default("#5C1020")
+  forest      String @default("#2C4A2E")
+  cream       String @default("#FBF5E6")
+  dark        String @default("#1A1209")
+  text        String @default("#2D2416")
+  textLight   String @default("#6B5D45")
+  white       String @default("#FFFFFF")
+  radius      String @default("12px")
+  shadow      String @default("0 4px 24px rgba(0,0,0,0.12)")
+  shadowLg    String @default("0 8px 40px rgba(0,0,0,0.18)")
+  transition  String @default("0.3s ease")
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Company data (all admin-editable) ─────────────────────────────
+model CompanySettings {
+  id         Int    @id @default(1)
+  name       String @default("Музей русской сказки «За лесами, за горами»")
+  address    String @default("197022, Санкт-Петербург, Каменноостровский проспект, 61")
+  metro      String @default("Петроградская (7 мин пешком)")
+  phone      String @default("+7 921 363 83 05")
+  email      String @default("spb@skazka-museum.ru")
+  telegram   String @default("https://t.me/+79213638305")
+  maxLink    String @default("https://max.ru/+79213638305")
+  lat        String @default("59.972991")
+  lon        String @default("30.305808")
+  metrikaId  String @default("")
+  yandexVerification String @default("")
+  updatedAt  DateTime @updatedAt
+}
+
+// ─── Images ────────────────────────────────────────────────────────
+model ImageSlot {
+  id          String  @id
+  label       String
+  recW        Int
+  recH        Int
+  alt         String  @default("")
+  seedPath    String  @default("")
+  webpPath    String  @default("")
+  fallbackPath String @default("")
+  blurData    String  @default("")
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Editable page content (SEO per route) ─────────────────────────
+model PageContent {
+  id        String @id
+  title     String
+  navLabel  String
+  heroTitle String @default("")
+  heroText  String @default("")
+  bodyJson  String @default("[]")
+  seoTitle  String @default("")
+  seoDesc   String @default("")
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Catalog ───────────────────────────────────────────────────────
+model Program {
+  id          String  @id @default(cuid())
+  title       String
+  type        String
+  shortDesc   String  @default("")
+  fullDesc    String  @default("")
+  ageLimit    String  @default("")
+  durationMin Int     @default(60)
+  maxGroup    Int     @default(30)
+  priceAdult  Int     @default(0)
+  priceChild  Int     @default(0)
+  priceReduced Int    @default(0)
+  priceGroup  Int     @default(0)
+  status      String  @default("active")
+  images      String  @default("[]")
+  upsells     Upsell[]
+  events      Event[]
+  bookings    Booking[]
+  createdAt   DateTime @default(now())
+}
+
+model Upsell {
+  id         String  @id @default(cuid())
+  programId  String
+  program    Program @relation(fields: [programId], references: [id])
+  title      String
+  description String @default("")
+  price      Int     @default(0)
+  active     Boolean @default(true)
+}
+
+model Event {
+  id         String   @id @default(cuid())
+  programId  String
+  program    Program  @relation(fields: [programId], references: [id])
+  startAt    DateTime
+  capacity   Int      @default(30)
+  booked     Int      @default(0)
+  assignee   String?
+  bookings   Booking[]
+}
+
+// ─── Intake (site forms) ───────────────────────────────────────────
+model Lead {
+  id        String   @id @default(cuid())
+  type      String
+  name      String
+  phone     String
+  email     String?
+  program   String?
+  date      String?
+  count     Int?
+  comment   String?
+  source    String?
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  booking   Booking?
+}
+
+// ─── Bookings pipeline ─────────────────────────────────────────────
+model Booking {
+  id          String   @id @default(cuid())
+  number      Int      @unique
+  leadId      String?  @unique
+  lead        Lead?    @relation(fields: [leadId], references: [id])
+  clientId    String?
+  client      Client?  @relation(fields: [clientId], references: [id])
+  programId   String?
+  program     Program? @relation(fields: [programId], references: [id])
+  eventId     String?
+  event       Event?   @relation(fields: [eventId], references: [id])
+  status      String   @default("new")
+  adults      Int      @default(0)
+  children    Int      @default(0)
+  amount      Int      @default(0)
+  payMethod   String?
+  upsellsJson String   @default("[]")
+  clientNote  String   @default("")
+  staffNote   String   @default("")
+  historyJson String   @default("[]")
+  createdAt   DateTime @default(now())
+  transactions Transaction[]
+}
+
+// ─── CRM ───────────────────────────────────────────────────────────
+model Client {
+  id        String   @id @default(cuid())
+  fullName  String
+  phone     String   @unique
+  email     String?
+  birthDate String?
+  source    String?
+  tags      String   @default("[]")
+  note      String   @default("")
+  ltv       Int      @default(0)
+  createdAt DateTime @default(now())
+  bookings  Booking[]
+}
+
+// ─── Finance ───────────────────────────────────────────────────────
+model Transaction {
+  id        String   @id @default(cuid())
+  bookingId String?
+  booking   Booking? @relation(fields: [bookingId], references: [id])
+  amount    Int
+  method    String
+  status    String   @default("completed")
+  createdAt DateTime @default(now())
+}
+
+// ─── Promo & certificates ──────────────────────────────────────────
+model Promo {
+  id         String   @id @default(cuid())
+  code       String   @unique
+  discountType String @default("percent")
+  amount     Int      @default(0)
+  expiresAt  DateTime?
+  maxUses    Int      @default(0)
+  uses       Int      @default(0)
+  programIds String   @default("[]")
+  active     Boolean  @default(true)
+}
+
+model Certificate {
+  id        String   @id @default(cuid())
+  number    String   @unique
+  amount    Int      @default(0)
+  programId String?
+  expiresAt DateTime?
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+}

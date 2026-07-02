@@ -1,0 +1,39 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# next
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# env & secrets — NEVER commit
+.env
+.env.local
+.env*.local
+
+# database (SQLite) — local data, not committed
+# (DATABASE_URL is resolved relative to prisma/, so the file ends up in prisma/prisma/)
+*.db
+*.db-journal
+/prisma/dev.db*
+
+# uploaded images (generated at runtime on the server)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# deploy convenience wrappers (contain nothing secret, but local-only)
+deploy-remote.bat
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+
+# orphaned original seed images (site uses optimized .webp; keep repo light)
+/public/seed/*.jpg
+/public/seed/*.png

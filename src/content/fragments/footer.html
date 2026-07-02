@@ -1,0 +1,53 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo" style="display:flex;align-items:center;gap:0.75rem;">
+  <img loading="lazy" decoding="async"  src="/seed/footer_2.webp" alt="Логотип музея" style="width:44px;height:44px;object-fit:contain;">
+  За лесами за горами
+</div>
+        <p class="footer__desc">Интерактивный музей в центре Санкт-Петербурга. Мир русских сказок для детей и взрослых. Работаем ежедневно с 10:00.</p>
+      </div>
+      <div>
+        <div class="footer__heading">Посещение</div>
+        <div class="footer__links">
+          <span class="footer__link" onclick="showPage('tickets')">Купить билет</span>
+          <span class="footer__link" onclick="showPage('tours')">Экскурсии</span>
+          <span class="footer__link" onclick="showPage('birthday')">Дни рождения</span>
+          <span class="footer__link" onclick="showPage('masterclasses')">Мастер-классы</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer__heading">Группам</div>
+        <div class="footer__links">
+          <span class="footer__link" onclick="showPage('schools')">Школам</span>
+          <span class="footer__link" onclick="showPage('contacts')">Контакты</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer__heading">Материалы</div>
+        <div class="footer__links">
+          <span class="footer__link" onclick="showPage('poleznoe')">Полезное</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2024 Музей русской сказки. Санкт-Петербург, Каменноостровский пр., 61</span>
+      <span>+7 921 363-83-05 · spb@skazka-museum.ru</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING CTA -->
+<div class="floating-cta">
+  <div class="fab-contacts">
+    <button class="fab-contacts__toggle" type="button" aria-label="Связаться с нами" title="Связаться с нами" onclick="this.parentNode.classList.toggle('open')">💬</button>
+    <div class="fab-contacts__list">
+      <a href="https://t.me/museum_skazki" target="_blank" rel="noopener" class="floating-btn floating-btn--tg" title="Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M9.04 15.51l-.38 5.36c.54 0 .78-.23 1.06-.51l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L22.9 3.9c.31-1.43-.52-1.99-1.46-1.64L2.35 9.62c-1.4.54-1.38 1.32-.24 1.67l4.88 1.52L18.32 5.66c.53-.35 1.02-.16.62.19L9.04 15.51z"/></svg></a>
+      <a href="https://max.ru/chat/skazkamuseum" target="_blank" rel="noopener" class="floating-btn floating-btn--wa" title="MAX">MAX</a>
+      <a href="tel:+79213638305" class="floating-btn floating-btn--call" title="Позвонить" aria-label="Позвонить">📞</a>
+    </div>
+  </div>
+  <button class="floating-btn floating-btn--book" onclick="showPage('tickets')">🎟 <span class="btn-label">Купить билет</span></button>
+</div>
+<button class="buy-bar" type="button" onclick="showPage('tickets')">🎟 Купить билет</button>

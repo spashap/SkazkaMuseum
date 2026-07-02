@@ -1,0 +1,233 @@
+[
+  {
+    "id": "header_1",
+    "label": "header — изображение 1",
+    "recW": 120,
+    "recH": 120,
+    "seed": "/seed/header_1.webp"
+  },
+  {
+    "id": "footer_2",
+    "label": "footer — изображение 2",
+    "recW": 120,
+    "recH": 120,
+    "seed": "/seed/footer_2.webp"
+  },
+  {
+    "id": "home_3",
+    "label": "home — изображение 3",
+    "recW": 1999,
+    "recH": 1332,
+    "seed": "/seed/home_3.webp"
+  },
+  {
+    "id": "home_4",
+    "label": "home — изображение 4",
+    "recW": 1360,
+    "recH": 2000,
+    "seed": "/seed/home_4.webp"
+  },
+  {
+    "id": "home_5",
+    "label": "home — изображение 5",
+    "recW": 1200,
+    "recH": 800,
+    "seed": "/seed/home_5.webp"
+  },
+  {
+    "id": "home_6",
+    "label": "home — изображение 6",
+    "recW": 1999,
+    "recH": 1332,
+    "seed": "/seed/home_6.webp"
+  },
+  {
+    "id": "home_7",
+    "label": "home — изображение 7",
+    "recW": 1200,
+    "recH": 800,
+    "seed": "/seed/home_7.webp"
+  },
+  {
+    "id": "home_8",
+    "label": "home — изображение 8",
+    "recW": 1999,
+    "recH": 1332,
+    "seed": "/seed/home_8.webp"
+  },
+  {
+    "id": "home_9",
+    "label": "home — изображение 9",
+    "recW": 1999,
+    "recH": 1322,
+    "seed": "/seed/home_9.webp"
+  },
+  {
+    "id": "home_10",
+    "label": "home — изображение 10",
+    "recW": 1999,
+    "recH": 1332,
+    "seed": "/seed/home_10.webp"
+  },
+  {
+    "id": "home_11",
+    "label": "home — изображение 11",
+    "recW": 1999,
+    "recH": 1332,
+    "seed": "/seed/home_11.webp"
+  },
+  {
+    "id": "home_12",
+    "label": "home — изображение 12",
+    "recW": 1920,
+    "recH": 1080,
+    "seed": "/seed/home_12.webp"
+  },
+  {
+    "id": "tours_13",
+    "label": "tours — изображение 13",
+    "recW": 900,
+    "recH": 601,
+    "seed": "/seed/tours_13.webp"
+  },
+  {
+    "id": "tours_14",
+    "label": "tours — изображение 14",
+    "recW": 900,
+    "recH": 598,
+    "seed": "/seed/tours_14.webp"
+  },
+  {
+    "id": "tours_15",
+    "label": "tours — изображение 15",
+    "recW": 900,
+    "recH": 598,
+    "seed": "/seed/tours_15.webp"
+  },
+  {
+    "id": "tours_16",
+    "label": "tours — изображение 16",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/tours_16.webp"
+  },
+  {
+    "id": "tours_17",
+    "label": "tours — изображение 17",
+    "recW": 1440,
+    "recH": 900,
+    "seed": "/seed/tours_17.webp"
+  },
+  {
+    "id": "birthday_18",
+    "label": "birthday — изображение 18",
+    "recW": 1400,
+    "recH": 900,
+    "seed": "/seed/birthday_18.webp"
+  },
+  {
+    "id": "birthday_19",
+    "label": "birthday — изображение 19",
+    "recW": 1400,
+    "recH": 900,
+    "seed": "/seed/birthday_19.webp"
+  },
+  {
+    "id": "schools_20",
+    "label": "schools — изображение 20",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/schools_20.webp"
+  },
+  {
+    "id": "schools_21",
+    "label": "schools — изображение 21",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/schools_21.webp"
+  },
+  {
+    "id": "schools_22",
+    "label": "schools — изображение 22",
+    "recW": 1200,
+    "recH": 800,
+    "seed": "/seed/schools_22.webp"
+  },
+  {
+    "id": "masterclasses_23",
+    "label": "masterclasses — изображение 23",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/masterclasses_23.webp"
+  },
+  {
+    "id": "masterclasses_24",
+    "label": "masterclasses — изображение 24",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/masterclasses_24.webp"
+  },
+  {
+    "id": "masterclasses_25",
+    "label": "masterclasses — изображение 25",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/masterclasses_25.webp"
+  },
+  {
+    "id": "masterclasses_26",
+    "label": "masterclasses — изображение 26",
+    "recW": 900,
+    "recH": 1200,
+    "seed": "/seed/masterclasses_26.webp"
+  },
+  {
+    "id": "masterclasses_27",
+    "label": "masterclasses — изображение 27",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/masterclasses_27.webp"
+  },
+  {
+    "id": "kvesty_28",
+    "label": "kvesty — изображение 28",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/kvesty_28.webp"
+  },
+  {
+    "id": "kvesty_29",
+    "label": "kvesty — изображение 29",
+    "recW": 900,
+    "recH": 601,
+    "seed": "/seed/kvesty_29.webp"
+  },
+  {
+    "id": "kvesty_30",
+    "label": "kvesty — изображение 30",
+    "recW": 900,
+    "recH": 1346,
+    "seed": "/seed/kvesty_30.webp"
+  },
+  {
+    "id": "teatr_31",
+    "label": "teatr — изображение 31",
+    "recW": 900,
+    "recH": 600,
+    "seed": "/seed/teatr_31.webp"
+  },
+  {
+    "id": "teatr_32",
+    "label": "teatr — изображение 32",
+    "recW": 900,
+    "recH": 599,
+    "seed": "/seed/teatr_32.webp"
+  },
+  {
+    "id": "skazki_33",
+    "label": "skazki — изображение 33",
+    "recW": 1400,
+    "recH": 900,
+    "seed": "/seed/skazki_33.webp"
+  }
+]

@@ -1,0 +1,115 @@
+<div id="page-tickets" class="page-section">
+<div style="padding-top:68px; background:var(--dark); text-align:center; padding-bottom:3rem; padding-left:1rem; padding-right:1rem; position:relative; overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(139,26,47,0.4) 0%,transparent 60%);"></div>
+  <div style="position:relative;z-index:1; padding-top:2.5rem;">
+    <span class="eyebrow" style="color:var(--gold-light)">Онлайн-касса</span>
+    <h1 class="hero-h1" style="color:var(--white)">Купить билет</h1>
+    <p style="color:rgba(255,255,255,0.7); max-width:500px; margin:0.75rem auto;">Выберите удобный формат посещения. Онлайн-покупка без очереди.</p>
+  </div>
+</div>
+<section class="section" style="background:var(--cream)">
+  <div class="container">
+    <!-- КАЛЕНДАРЬ + РАСПИСАНИЕ -->
+    <div class="cal-wrap" id="ticketCal">
+
+      <!-- Левая колонка: месячный календарь -->
+      <div class="cal-card">
+        <div class="cal-head">
+          <button class="cal-nav" id="calPrev">&#8592;</button>
+          <div class="cal-head__title" id="calTitle"></div>
+          <button class="cal-nav" id="calNext">&#8594;</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+          <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--crimson)"></span>Есть сеансы</span>
+          <span class="cal-legend-item"><span class="cal-legend-dot" style="border:2px solid var(--gold);background:transparent"></span>Сегодня</span>
+          <span class="cal-legend-item"><span class="cal-legend-dot" style="background:var(--crimson)"></span><span style="opacity:0.4">Выбрана</span></span>
+        </div>
+      </div>
+
+      <!-- Правая колонка: список сеансов -->
+      <div class="sch-panel">
+        <div class="sch-head">
+          <div class="sch-head__date" id="schDate">Выберите дату</div>
+          <div class="sch-filters" id="schFilters">
+            <button class="sch-chip sch-chip--on" data-v="all">Все</button>
+            <button class="sch-chip" data-v="free">Вход</button>
+            <button class="sch-chip" data-v="excursion">Экскурсии</button>
+            <button class="sch-chip" data-v="quest">Квесты</button>
+            <button class="sch-chip" data-v="show">Шоу</button>
+            <button class="sch-chip" data-v="workshop">Мастер-классы</button>
+            <button class="sch-chip" data-v="lecture">Лекторий</button>
+          </div>
+        </div>
+        <div class="sch-body" id="schBody">
+          <div class="sch-empty"><div class="sch-empty__ico">📅</div>Выберите день в календаре<br>чтобы увидеть расписание</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Льготы -->
+    <details style="margin-top:1rem;background:var(--white);border-radius:var(--radius);padding:1rem 1.25rem;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.06)">
+      <summary style="cursor:pointer;font-size:0.85rem;color:var(--text-light);font-weight:600;list-style:none;display:flex;align-items:center;gap:0.4rem;user-select:none;">
+        <span id="льготыArr">▶</span> Льготные цены и скидки — 30%
+      </summary>
+      <div style="margin-top:0.85rem;font-size:0.85rem;color:var(--text-light);line-height:1.6;">
+        <p style="margin-bottom:0.5rem">Для пенсионеров, инвалидов, многодетных семей и участников СВО — по документу.</p>
+        <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin:0.5rem 0">
+          <thead><tr style="background:var(--dark);color:var(--white)">
+            <th style="padding:0.5rem 0.75rem;text-align:left">Тип билета</th>
+            <th style="padding:0.5rem 0.75rem;text-align:center">Будни</th>
+            <th style="padding:0.5rem 0.75rem;text-align:center">Выходные</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="padding:0.4rem 0.75rem">Входной взрослый</td><td style="text-align:center;padding:0.4rem 0.75rem">490 ₽</td><td style="text-align:center;padding:0.4rem 0.75rem">630 ₽</td></tr>
+            <tr style="background:rgba(0,0,0,0.03)"><td style="padding:0.4rem 0.75rem">Входной детский</td><td style="text-align:center;padding:0.4rem 0.75rem">350 ₽</td><td style="text-align:center;padding:0.4rem 0.75rem">490 ₽</td></tr>
+            <tr><td style="padding:0.4rem 0.75rem">Экскурсия взрослый</td><td style="text-align:center;padding:0.4rem 0.75rem">1 190 ₽</td><td style="text-align:center;padding:0.4rem 0.75rem">1 330 ₽</td></tr>
+            <tr style="background:rgba(0,0,0,0.03)"><td style="padding:0.4rem 0.75rem">Экскурсия детский</td><td style="text-align:center;padding:0.4rem 0.75rem">1 050 ₽</td><td style="text-align:center;padding:0.4rem 0.75rem">1 190 ₽</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:0.75rem;opacity:0.7;margin-top:0.4rem">Дети до 3 лет — бесплатно. Инвалиды I–II группы + сопровождающий — бесплатно.</p>
+      </div>
+    </details>
+
+    
+
+  </div>
+</section>
+<section class="section" style="background:var(--white)">
+  <div class="container">
+    <div style="background:var(--white);border-radius:12px;padding:2rem;margin-bottom:2rem;border-left:4px solid var(--gold);">
+    <h2 style="font-size:1.3rem;margin-bottom:1rem;">Купить билет в Музей русской сказки онлайн</h2>
+    <p style="color:var(--text-light);margin-bottom:0.75rem;">Купить билет в Музей русской сказки можно онлайн на нашем сайте или на кассе в день посещения. Мы рекомендуем бронировать заранее, особенно в выходные и праздничные дни — музей пользуется большой популярностью у жителей и гостей Санкт-Петербурга.</p>
+    <p style="color:var(--text-light);margin-bottom:0.75rem;">Для семей с детьми выгоднее всего семейный билет: два взрослых и двое детей за 1 800 рублей — экономия 400 рублей. Дети до 3 лет проходят бесплатно, инвалиды и сопровождающие также не платят за вход.</p>
+    <p style="color:var(--text-light);">Льготный билет по 400 рублей доступен пенсионерам, студентам и членам многодетных семей при предъявлении документа. По карте петербуржца — скидка 15%. Принимаем карты Visa, Mastercard, МИР, СБП, Apple Pay и Google Pay.</p>
+  </div>
+  <div class="section__header text-center"><span class="eyebrow">Расписание</span><h2>Режим работы</h2></div>
+    <table class="schedule__table"><thead><tr><th>День недели</th><th>Время работы</th><th>Последний вход</th></tr></thead><tbody>
+      <tr><td>Понедельник — пятница</td><td>10:00 – 20:00</td><td>19:00</td></tr>
+      <tr><td>Суббота</td><td>10:00 – 21:00</td><td>20:00</td></tr>
+      <tr><td>Воскресенье</td><td>10:00 – 21:00</td><td>20:00</td></tr>
+      <tr><td>Праздничные дни</td><td>10:00 – 21:00</td><td>20:00</td></tr>
+    </tbody></table>
+  </div>
+</section>
+<section class="section form-section" id="ticket-form" style="background:var(--cream)">
+  <div class="container">
+    <div class="section__header text-center"><span class="eyebrow">Онлайн-покупка</span><h2>Купить билет онлайн</h2></div>
+    <div class="form-card">
+      <form class="js-form" onsubmit="submitForm(event,this)">
+        <div class="form-row"><div class="form-group"><label>Имя *</label><input type="text" required placeholder="Ваше имя"></div><div class="form-group"><label>Телефон *</label><input type="tel" required placeholder="+7 (___) ___-__-__"></div></div>
+        <div class="form-row"><div class="form-group"><label>Дата посещения *</label><input type="date" required></div><div class="form-group"><label>Тип билета *</label><select required><option value="">Выберите...</option><option>Детский — 500 ₽</option><option>Взрослый — 700 ₽</option><option>Семейный — 1 800 ₽</option><option>Льготный — 400 ₽</option></select></div></div>
+        <div class="form-group"><label>Количество билетов</label><input type="number" min="1" max="20" value="1"></div>
+        <div class="form-group"><label>Комментарий</label><textarea placeholder="Особые пожелания..."></textarea></div>
+        <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Оформить заказ 🎟</button>
+      </form>
+      <div class="form-success"><div class="form-success__icon">✅</div><h3>Заявка принята!</h3><p>Мы свяжемся с вами в течение 30 минут.</p></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ========== TOURS ========== -->
