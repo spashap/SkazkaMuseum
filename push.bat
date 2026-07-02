@@ -8,7 +8,14 @@ REM    3. send everything to GitHub
 REM  The version is shown in the footer of every page.
 REM ============================================================
 setlocal EnableExtensions
-cd /d "%~dp0"
+REM Re-run from a TEMP copy: git pull --rebase below may overwrite THIS file
+REM while it is executing (cmd reads .bat files by byte offset -> corruption).
+if /i "%~1"=="--from-temp" goto FROMTEMP
+copy /y "%~f0" "%TEMP%\skazka-push.bat" >nul
+"%TEMP%\skazka-push.bat" --from-temp "%~dp0"
+exit /b
+:FROMTEMP
+cd /d "%~2"
 title Push - Skazka Museum
 
 echo.

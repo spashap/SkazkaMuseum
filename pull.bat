@@ -8,7 +8,14 @@ REM  Safe for your data: .env, the database and uploaded images
 REM  are NOT tracked by Git, so they are always kept.
 REM ============================================================
 setlocal EnableExtensions
-cd /d "%~dp0"
+REM Re-run from a TEMP copy: the git commands below may overwrite THIS file
+REM while it is executing (cmd reads .bat files by byte offset -> corruption).
+if /i "%~1"=="--from-temp" goto FROMTEMP
+copy /y "%~f0" "%TEMP%\skazka-pull.bat" >nul
+"%TEMP%\skazka-pull.bat" --from-temp "%~dp0"
+exit /b
+:FROMTEMP
+cd /d "%~2"
 title Pull - Skazka Museum
 
 echo.
