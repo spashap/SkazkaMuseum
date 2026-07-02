@@ -33,6 +33,11 @@ if exist ".env" for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do (
   if "%%a"=="GIT_USER_NAME" set "GIT_USER_NAME=%%~b"
   if "%%a"=="GIT_USER_EMAIL" set "GIT_USER_EMAIL=%%~b"
 )
+REM ignore placeholder/invalid tokens (spaces would break the git URL)
+if not "%GITHUB_TOKEN%"=="" if not "%GITHUB_TOKEN: =%"=="%GITHUB_TOKEN%" (
+  echo   NOTE: GITHUB_TOKEN in .env looks invalid - ignoring it.
+  set GITHUB_TOKEN=
+)
 if not "%GITHUB_TOKEN%"=="" git remote set-url origin https://%GITHUB_TOKEN%@github.com/spashap/SkazkaMuseum
 
 REM first commit on a fresh PC needs a git identity

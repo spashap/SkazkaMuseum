@@ -29,6 +29,11 @@ set GITHUB_TOKEN=
 if exist ".env" for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do (
   if "%%a"=="GITHUB_TOKEN" set "GITHUB_TOKEN=%%~b"
 )
+REM ignore placeholder/invalid tokens (spaces would break the git URL)
+if not "%GITHUB_TOKEN%"=="" if not "%GITHUB_TOKEN: =%"=="%GITHUB_TOKEN%" (
+  echo   NOTE: GITHUB_TOKEN in .env looks invalid - ignoring it.
+  set GITHUB_TOKEN=
+)
 set REPO_URL=https://github.com/spashap/SkazkaMuseum
 if not "%GITHUB_TOKEN%"=="" set REPO_URL=https://%GITHUB_TOKEN%@github.com/spashap/SkazkaMuseum
 
