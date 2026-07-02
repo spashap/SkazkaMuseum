@@ -50,7 +50,13 @@ async function main() {
     await db.pageContent.upsert({
       where: { id },
       update: {},
-      create: { id, title, navLabel, heroTitle, heroText, seoTitle: title, seoDesc: heroText },
+      create: {
+        id, title, navLabel, heroTitle, heroText,
+        // Home's tab title is the full brand; other pages get the site name
+        // appended automatically via the title template in src/app/layout.tsx.
+        seoTitle: id === 'home' ? 'Музей русской сказки «За лесами, за горами» — Санкт-Петербург' : title,
+        seoDesc: heroText,
+      },
     });
   }
 

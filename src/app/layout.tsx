@@ -3,7 +3,10 @@ import './globals.css';
 import { getTheme, themeToCss } from '@/lib/theme';
 
 export const metadata: Metadata = {
-  title: 'Музей русской сказки «За лесами, за горами» — Санкт-Петербург',
+  title: {
+    default: 'Музей русской сказки «За лесами, за горами» — Санкт-Петербург',
+    template: '%s — Музей русской сказки «За лесами, за горами»',
+  },
   description:
     'Интерактивный музей русского фольклора в СПб. 21 зона, живые актёры. Экскурсии для детей и школьников.',
   manifest: '/site.webmanifest',
