@@ -59,10 +59,22 @@ SQLite = one file (`prisma/prod.db` on the server). Back it up by copying that f
 To upgrade to PostgreSQL later: change `datasource.provider` + `DATABASE_URL`, adjust any
 SQLite-only bits, migrate. The app code doesn't need to change.
 
-## Deploying
+## Daily workflow (both PCs — Pavel and the CEO)
 
-1. `.\release.bat "message"` — commits + pushes to GitHub (`github.com/spashap/SkazkaMuseum`, branch `main`).
-2. `.\deploy-remote.bat` — SSHes to the VPS and runs `deploy.sh` (pull, install, db push, build, PM2 restart).
+- `install.bat` — one-time bootstrap: installs Git, Node, the code from GitHub, deps, DB, Claude Code.
+- `pull.bat` — get the latest code from GitHub (guards against wiping unpushed local changes).
+- `start.bat` — run the dev server at http://localhost:3100.
+- `push.bat` — bump the site version (see below), commit with a description, push to GitHub.
+
+**Versioning:** the `VERSION` file holds e.g. `V01.001` (major.minor). Every `push.bat` run
+raises the minor part by 1 and the commit message starts with the version. The version is
+shown in the footer of every public page and in the admin sidebar (`src/lib/version.ts`).
+Raise the MAJOR part manually by editing `VERSION` (set minor back to `000` so the next
+push makes `.001`). When committing manually instead of via push.bat, bump `VERSION` yourself.
+
+## Deploying (server — to be set up later)
+
+`.\deploy-remote.bat` — SSHes to the VPS and runs `deploy.sh` (pull, install, db push, build, PM2 restart).
 
 Server layout (Ubuntu 24.04, Fornex): app at `/var/www/skazkamuseum`, PM2 process `skazkamuseum`
 on `127.0.0.1:3100`, nginx proxies `skazkamuseum.ru` to it (see `deploy/nginx-skazkamuseum.conf`),

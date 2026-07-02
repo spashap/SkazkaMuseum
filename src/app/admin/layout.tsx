@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSession, canAccess, type Role } from '@/lib/auth';
+import { getVersion } from '@/lib/version';
 import LogoutButton from '@/components/admin/LogoutButton';
 
 const SECTIONS: { id: string; href: string; label: string }[] = [
@@ -24,6 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!session) redirect('/login');
   const role = session.role as Role;
   const visible = SECTIONS.filter((s) => canAccess(role, s.id));
+  const version = await getVersion();
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -41,6 +43,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </nav>
         <div style={{ marginTop: '1.5rem' }}><LogoutButton /></div>
         <Link href="/" className="caption" style={{ color: 'var(--gold-light)', display: 'block', marginTop: '1rem' }}>← На сайт</Link>
+        {version && <p className="caption" style={{ color: 'var(--text-light)', marginTop: '1rem' }}>{version}</p>}
       </aside>
       <div style={{ flex: 1, background: 'var(--white)', minWidth: 0 }}>
         <div style={{ padding: '1.5rem 2rem' }}>{children}</div>

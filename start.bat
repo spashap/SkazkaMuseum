@@ -11,6 +11,7 @@ echo.
 echo     http://localhost:3100
 echo.
 echo To STOP the site, close this window.
+echo When you finish working, run push.bat to save changes to GitHub.
 echo.
 
 call npm run dev

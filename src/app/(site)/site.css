@@ -770,6 +770,9 @@ p { font-size: 1rem; line-height: 1.75; }
 .fear-card__after .fear-card__label { color: var(--forest); }
 .fear-card__arrow { text-align: center; font-size: 1.25rem; color: var(--gold); margin: 0.5rem 0; }
 
+/* ===== SITE VERSION (footer bottom line, bumped by push.bat) ===== */
+.site-version { text-align: center; background: var(--dark); color: rgba(255,255,255,0.3); font-size: 0.72rem; padding: 0 0 0.9rem; letter-spacing: 0.06em; }
+
 /* ===== ANIMATIONS ===== */
 .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-up.visible { opacity: 1; transform: translateY(0); }
