@@ -10,7 +10,7 @@
   <div class="section__header text-center"><h2>Наши экскурсии</h2></div>
     <div class="programs-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
       <div class="program-card" style="overflow:hidden;padding:0;display:flex;flex-direction:column;">
-        <img loading="lazy" decoding="async"  src="/seed/tours_13.webp" alt="Баба-Яга в избушке — экскурсия для малышей" style="width:100%;height:200px;object-fit:cover;object-position:center 20%;display:block;">
+        <img width="900" height="601" loading="lazy" decoding="async"  src="/seed/tours_13.webp" alt="Баба-Яга в избушке — экскурсия для малышей" style="width:100%;height:200px;object-fit:cover;object-position:center 20%;display:block;">
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
           <h3 style="font-size:1.15rem;margin-bottom:0.5rem;text-align:center;">Интерактивная экскурсия с героем сказки</h3>
           <div class="program-card__meta">
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="program-card" style="overflow:hidden;padding:0;display:flex;flex-direction:column;">
-        <img loading="lazy" decoding="async"  src="/seed/tours_14.webp" alt="Экскурсия Мрачный фольклор — атмосфера с живыми персонажами" style="width:100%;height:200px;object-fit:cover;object-position:center 30%;display:block;">
+        <img width="900" height="598" loading="lazy" decoding="async"  src="/seed/tours_14.webp" alt="Экскурсия Мрачный фольклор — атмосфера с живыми персонажами" style="width:100%;height:200px;object-fit:cover;object-position:center 30%;display:block;">
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
           <h3 style="font-size:1.15rem;margin-bottom:0.5rem;text-align:center;">«Мрачный фольклор»</h3>
           <div class="program-card__meta" style="justify-content:center;">
@@ -68,7 +68,7 @@
           <button class="btn btn--outline-dark" onclick="showForm('tour-form')" style="margin-top:auto;">Забронировать</button>
         </div>
       </div><div class="program-card" style="overflow:hidden;padding:0;display:flex;flex-direction:column;">
-        <img loading="lazy" decoding="async"  src="/seed/tours_15.webp" alt="Школьная экскурсия Русские народные сказки" style="width:100%;height:200px;object-fit:cover;object-position:center 30%;display:block;">
+        <img width="900" height="598" loading="lazy" decoding="async"  src="/seed/tours_15.webp" alt="Школьная экскурсия Русские народные сказки" style="width:100%;height:200px;object-fit:cover;object-position:center 30%;display:block;">
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
           <h3 style="font-size:1.15rem;margin-bottom:0.5rem;text-align:center;">«Русские народные сказки»</h3>
           <div class="program-card__meta" style="justify-content:center;">
@@ -96,7 +96,7 @@
         </div>
       </div>
       <div class="program-card" style="overflow:hidden;padding:0;display:flex;flex-direction:column;">
-        <img loading="lazy" decoding="async"  src="/seed/tours_16.webp" alt="Экскурсия для детских садов Русские народные сказки" style="width:100%;height:200px;object-fit:cover;object-position:center 30%;display:block;">
+        <img width="900" height="600" loading="lazy" decoding="async"  src="/seed/tours_16.webp" alt="Экскурсия для детских садов Русские народные сказки" style="width:100%;height:200px;object-fit:cover;object-position:center 30%;display:block;">
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
           <h3 style="font-size:1.15rem;margin-bottom:0.5rem;text-align:center;">«Русские народные сказки»</h3>
           <div class="program-card__meta" style="justify-content:center;">
@@ -133,15 +133,15 @@
     <div class="form-card">
       <form class="js-form" onsubmit="sendTourToMax(event);">
         <div class="form-row">
-          <div class="form-group"><label>Ваше имя *</label><input type="text" name="name" required placeholder="Как к вам обращаться"></div>
-          <div class="form-group"><label>Телефон *</label><input type="tel" name="phone" required placeholder="+7 (___) ___-__-__"></div>
+          <div class="form-group"><label for="f-tours-1">Ваше имя *</label><input id="f-tours-1" type="text" name="name" required placeholder="Как к вам обращаться"></div>
+          <div class="form-group"><label for="f-tours-2">Телефон *</label><input id="f-tours-2" type="tel" name="phone" required placeholder="+7 (___) ___-__-__"></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>Желаемая дата</label><input type="date" name="date"></div>
-          <div class="form-group"><label>Количество человек</label><input type="number" name="count" min="1" placeholder="человек"></div>
+          <div class="form-group"><label for="f-tours-3">Желаемая дата</label><input id="f-tours-3" type="date" name="date"></div>
+          <div class="form-group"><label for="f-tours-4">Количество человек</label><input id="f-tours-4" type="number" name="count" min="1" placeholder="человек"></div>
         </div>
-        <div class="form-group"><label>Программа *</label>
-          <select name="program" required>
+        <div class="form-group"><label for="f-tours-5">Программа *</label>
+          <select id="f-tours-5" name="program" required>
             <option value="">Выберите программу...</option>
             <option>Интерактивная экскурсия с героем сказки</option>
             <option>«Мрачный фольклор» (18+)</option>
@@ -149,7 +149,7 @@
             <option>«Русские народные сказки» — детский сад</option>
           </select>
         </div>
-        <div class="form-group"><label>Комментарий</label><textarea name="comment" placeholder="Возраст группы, особые пожелания..."></textarea></div>
+        <div class="form-group"><label for="f-tours-6">Комментарий</label><textarea id="f-tours-6" name="comment" placeholder="Возраст группы, особые пожелания..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Отправить заявку →</button>
       </form>
       <div class="form-success"><div class="form-success__icon">✅</div><h3>Заявка принята!</h3><p>Мы свяжемся с вами в течение 30 минут.</p></div>

@@ -100,10 +100,10 @@
     <div class="section__header text-center"><span class="eyebrow">Онлайн-покупка</span><h2>Купить билет онлайн</h2></div>
     <div class="form-card">
       <form class="js-form" onsubmit="submitForm(event,this)">
-        <div class="form-row"><div class="form-group"><label>Имя *</label><input type="text" required placeholder="Ваше имя"></div><div class="form-group"><label>Телефон *</label><input type="tel" required placeholder="+7 (___) ___-__-__"></div></div>
-        <div class="form-row"><div class="form-group"><label>Дата посещения *</label><input type="date" required></div><div class="form-group"><label>Тип билета *</label><select required><option value="">Выберите...</option><option>Детский — 500 ₽</option><option>Взрослый — 700 ₽</option><option>Семейный — 1 800 ₽</option><option>Льготный — 400 ₽</option></select></div></div>
-        <div class="form-group"><label>Количество билетов</label><input type="number" min="1" max="20" value="1"></div>
-        <div class="form-group"><label>Комментарий</label><textarea placeholder="Особые пожелания..."></textarea></div>
+        <div class="form-row"><div class="form-group"><label for="f-tickets-1">Имя *</label><input id="f-tickets-1" type="text" required placeholder="Ваше имя"></div><div class="form-group"><label for="f-tickets-2">Телефон *</label><input id="f-tickets-2" type="tel" required placeholder="+7 (___) ___-__-__"></div></div>
+        <div class="form-row"><div class="form-group"><label for="f-tickets-3">Дата посещения *</label><input id="f-tickets-3" type="date" required></div><div class="form-group"><label for="f-tickets-4">Тип билета *</label><select id="f-tickets-4" required><option value="">Выберите...</option><option>Детский — 500 ₽</option><option>Взрослый — 700 ₽</option><option>Семейный — 1 800 ₽</option><option>Льготный — 400 ₽</option></select></div></div>
+        <div class="form-group"><label for="f-tickets-5">Количество билетов</label><input id="f-tickets-5" type="number" min="1" max="20" value="1"></div>
+        <div class="form-group"><label for="f-tickets-6">Комментарий</label><textarea id="f-tickets-6" placeholder="Особые пожелания..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Оформить заказ 🎟</button>
       </form>
       <div class="form-success"><div class="form-success__icon">✅</div><h3>Заявка принята!</h3><p>Мы свяжемся с вами в течение 30 минут.</p></div>

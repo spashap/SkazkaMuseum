@@ -32,7 +32,7 @@
       <!-- Quest 1 -->
       <div style="background:var(--cream);border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);display:flex;flex-direction:column;">
         <div style="padding:0;background:none;overflow:hidden;height:200px;position:relative;">
-          <img loading="lazy" decoding="async"  src="/seed/kvesty_28.webp" alt="Квест Здравствуй сказка" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img width="900" height="600" loading="lazy" decoding="async"  src="/seed/kvesty_28.webp" alt="Квест Здравствуй сказка" style="width:100%;height:100%;object-fit:cover;display:block;">
           <div style="position:absolute;top:1rem;left:1rem;background:var(--forest);color:#fff;font-size:0.72rem;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:20px;">от 4 лет</div>
         </div>
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
@@ -61,7 +61,7 @@
       <!-- Quest 2 -->
       <div style="background:var(--cream);border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);display:flex;flex-direction:column;">
         <div style="padding:0;background:none;overflow:hidden;height:200px;position:relative;">
-          <img loading="lazy" decoding="async"  src="/seed/kvesty_29.webp" alt="Квест В поисках сказочного сокровища" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img width="900" height="601" loading="lazy" decoding="async"  src="/seed/kvesty_29.webp" alt="Квест В поисках сказочного сокровища" style="width:100%;height:100%;object-fit:cover;display:block;">
           <div style="position:absolute;top:1rem;left:1rem;background:var(--crimson);color:#fff;font-size:0.72rem;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:20px;">от 8 лет</div>
         </div>
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
@@ -91,7 +91,7 @@
       <!-- Quest 3 -->
       <div style="background:var(--cream);border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);display:flex;flex-direction:column;">
         <div style="padding:0;background:none;overflow:hidden;height:200px;position:relative;">
-          <img loading="lazy" decoding="async"  src="/seed/kvesty_30.webp" alt="Квест Седьмая тайна сказки" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img width="900" height="1346" loading="lazy" decoding="async"  src="/seed/kvesty_30.webp" alt="Квест Седьмая тайна сказки" style="width:100%;height:100%;object-fit:cover;display:block;">
           <div style="position:absolute;top:1rem;left:1rem;background:#6b2fa0;color:#fff;font-size:0.72rem;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:20px;">от 13 лет</div>
         </div>
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
@@ -132,23 +132,23 @@
       <h2 style="text-align:center;font-family:'Ruslan Display',cursive;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:1.5rem;letter-spacing:0.05em;">ЗАБРОНИРОВАТЬ КВЕСТ</h2>
       <form onsubmit="return false;" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label>Имя *</label><input type="text" placeholder="Ваше имя" required></div>
-          <div class="form-group"><label>Телефон *</label><input type="tel" placeholder="+7" required></div>
+          <div class="form-group"><label for="f-kvesty-1">Имя *</label><input id="f-kvesty-1" type="text" placeholder="Ваше имя" required></div>
+          <div class="form-group"><label for="f-kvesty-2">Телефон *</label><input id="f-kvesty-2" type="tel" placeholder="+7" required></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label>Дата *</label><input type="date" required></div>
-          <div class="form-group"><label>Количество человек</label><input type="number" min="1" max="30" value="4"></div>
+          <div class="form-group"><label for="f-kvesty-3">Дата *</label><input id="f-kvesty-3" type="date" required></div>
+          <div class="form-group"><label for="f-kvesty-4">Количество человек</label><input id="f-kvesty-4" type="number" min="1" max="30" value="4"></div>
         </div>
         <div class="form-group" style="margin-bottom:1rem;">
-          <label>Квест-программа</label>
-          <select>
+          <label for="f-kvesty-5">Квест-программа</label>
+          <select id="f-kvesty-5">
             <option value="">Выберите...</option>
             <option>Здравствуй, сказка! — 1 000 ₽/чел. (от 4 лет)</option>
             <option>В поисках сказочного сокровища — 1 000 ₽/чел. (от 8 лет)</option>
             <option>Седьмая тайна сказки — 1 000 ₽/чел. (от 13 лет)</option>
           </select>
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem;"><label>Комментарий</label><textarea placeholder="Возраст участников, особые пожелания..."></textarea></div>
+        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-kvesty-6">Комментарий</label><textarea id="f-kvesty-6" placeholder="Возраст участников, особые пожелания..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Забронировать 🗝️</button>
       </form>
     </div>

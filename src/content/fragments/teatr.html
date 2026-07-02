@@ -111,22 +111,22 @@
       <h2 style="text-align:center;font-family:'Ruslan Display',cursive;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:1.5rem;letter-spacing:0.05em;">ЗАБРОНИРОВАТЬ БИЛЕТЫ</h2>
       <form onsubmit="sendTeatrToMax(event);" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label>Имя *</label><input type="text" name="name" placeholder="Ваше имя" required></div>
-          <div class="form-group"><label>Телефон *</label><input type="tel" name="contact" placeholder="+7" required></div>
+          <div class="form-group"><label for="f-teatr-1">Имя *</label><input id="f-teatr-1" type="text" name="name" placeholder="Ваше имя" required></div>
+          <div class="form-group"><label for="f-teatr-2">Телефон *</label><input id="f-teatr-2" type="tel" name="contact" placeholder="+7" required></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label>Дата *</label><input type="date" name="date" required></div>
-          <div class="form-group"><label>Количество человек</label><input type="number" name="children" min="1" max="30" value="2"></div>
+          <div class="form-group"><label for="f-teatr-3">Дата *</label><input id="f-teatr-3" type="date" name="date" required></div>
+          <div class="form-group"><label for="f-teatr-4">Количество человек</label><input id="f-teatr-4" type="number" name="children" min="1" max="30" value="2"></div>
         </div>
         <div class="form-group" style="margin-bottom:1rem;">
-          <label>Спектакль</label>
-          <select name="show">
+          <label for="f-teatr-5">Спектакль</label>
+          <select id="f-teatr-5" name="show">
             <option value="">Выберите...</option>
             <option>«Гуси-Лебеди» — 1 000 ₽/реб. (от 2 до 6 лет)</option>
             <option>Иммерсивное чтение сказок — 1 000 ₽/чел. (6+)</option>
           </select>
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem;"><label>Комментарий</label><textarea name="comment" placeholder="Возраст детей, особые пожелания..."></textarea></div>
+        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-teatr-6">Комментарий</label><textarea id="f-teatr-6" name="comment" placeholder="Возраст детей, особые пожелания..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Забронировать 🎭</button>
       </form>
       <p style="text-align:center;margin-top:1.2rem;color:var(--text-light);font-size:0.88rem;">Или звоните: <a href="tel:+79213638305" style="color:var(--crimson);font-weight:600;">+7 921 363 83 05</a></p>

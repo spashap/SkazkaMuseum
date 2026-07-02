@@ -1,3 +1,4 @@
+import { preload } from 'react-dom';
 import { db } from '@/lib/db';
 import { renderFragment } from '@/lib/fragments';
 
@@ -12,5 +13,9 @@ export async function generateMetadata() {
 
 export default async function Home() {
   const html = await renderFragment('home');
+  // The hero background is the LCP element; preload it (admin-uploaded override wins,
+  // same resolution logic as renderFragment's slot swap).
+  const hero = await db.imageSlot.findUnique({ where: { id: 'home_12' } });
+  preload(hero?.webpPath || '/seed/home_12.webp', { as: 'image', fetchPriority: 'high' });
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 }

@@ -50,6 +50,7 @@ model Theme {
   fsCaption   String @default("0.75rem")
   gold        String @default("#C8963E")
   goldLight   String @default("#E8B96A")
+  goldDark    String @default("#8A6425")
   crimson     String @default("#8B1A2F")
   crimsonDark String @default("#5C1020")
   forest      String @default("#2C4A2E")

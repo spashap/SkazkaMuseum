@@ -78,19 +78,19 @@
     <div class="form-card">
       <form class="js-form" onsubmit="submitForm(event,this)">
         <div class="form-row">
-          <div class="form-group"><label>Имя воспитателя *</label><input type="text" name="name" required placeholder="ФИО"></div>
-          <div class="form-group"><label>Телефон *</label><input type="tel" name="phone" required placeholder="+7"></div>
+          <div class="form-group"><label for="f-kindergarten-1">Имя воспитателя *</label><input id="f-kindergarten-1" type="text" name="name" required placeholder="ФИО"></div>
+          <div class="form-group"><label for="f-kindergarten-2">Телефон *</label><input id="f-kindergarten-2" type="tel" name="phone" required placeholder="+7"></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>Детский сад *</label><input type="text" name="garden" required placeholder="Название"></div>
-          <div class="form-group"><label>Возраст детей</label><input type="text" name="age" placeholder="напр. 4–5 лет"></div>
+          <div class="form-group"><label for="f-kindergarten-3">Детский сад *</label><input id="f-kindergarten-3" type="text" name="garden" required placeholder="Название"></div>
+          <div class="form-group"><label for="f-kindergarten-4">Возраст детей</label><input id="f-kindergarten-4" type="text" name="age" placeholder="напр. 4–5 лет"></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>Дата *</label><input type="date" name="date" required></div>
-          <div class="form-group"><label>Количество детей</label><input type="number" name="count" min="5" max="30" placeholder="человек"></div>
+          <div class="form-group"><label for="f-kindergarten-5">Дата *</label><input id="f-kindergarten-5" type="date" name="date" required></div>
+          <div class="form-group"><label for="f-kindergarten-6">Количество детей</label><input id="f-kindergarten-6" type="number" name="count" min="5" max="30" placeholder="человек"></div>
         </div>
 
-        <div class="form-group"><label>Комментарий</label><textarea name="comment" placeholder="Особые пожелания, аллергии..."></textarea></div>
+        <div class="form-group"><label for="f-kindergarten-7">Комментарий</label><textarea id="f-kindergarten-7" name="comment" placeholder="Особые пожелания, аллергии..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Отправить заявку 🧸</button>
       </form>
       <div class="form-success"><div class="form-success__icon">✅</div><h3>Заявка принята!</h3><p>Свяжемся в течение рабочего дня.</p></div>

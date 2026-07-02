@@ -99,13 +99,13 @@
       <h2 style="text-align:center;font-family:'Ruslan Display',cursive;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:1.5rem;letter-spacing:0.05em;">ЗАПИСАТЬСЯ НА ЛЕКЦИЮ</h2>
       <form onsubmit="sendLektsiiToMax(event);" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label>Имя *</label><input type="text" required placeholder="Ваше имя"></div>
-          <div class="form-group"><label>Телефон *</label><input type="tel" required placeholder="+7"></div>
+          <div class="form-group"><label for="f-lektsii-1">Имя *</label><input id="f-lektsii-1" type="text" required placeholder="Ваше имя"></div>
+          <div class="form-group"><label for="f-lektsii-2">Телефон *</label><input id="f-lektsii-2" type="tel" required placeholder="+7"></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
           <div class="form-group" style="min-width:0;">
-            <label>Лекция</label>
-            <select style="width:100%;">
+            <label for="f-lektsii-3">Лекция</label>
+            <select id="f-lektsii-3" style="width:100%;">
               <option value="">Выберите...</option>
               <option>07.07 — Карельские сказки</option>
               <option>14.07 — Саамские сказки</option>
@@ -119,15 +119,15 @@
             </select>
           </div>
           <div class="form-group" style="min-width:0;">
-            <label>Абонемент</label>
-            <select>
+            <label for="f-lektsii-4">Абонемент</label>
+            <select id="f-lektsii-4">
               <option>Одна лекция — 500 ₽</option>
               <option>Три лекции — 1 200 ₽</option>
               <option>Девять лекций — 2 700 ₽</option>
             </select>
           </div>
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem;"><label>Комментарий</label><textarea placeholder="Пожелания, вопросы..."></textarea></div>
+        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-lektsii-5">Комментарий</label><textarea id="f-lektsii-5" placeholder="Пожелания, вопросы..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Записаться ✨</button>
       </form>
       <p style="text-align:center;margin-top:1.2rem;color:var(--text-light);font-size:0.82rem;">Или позвоните: <a href="tel:+79213638305" style="color:var(--crimson);font-weight:600;">+7 921 363 83 05</a></p>

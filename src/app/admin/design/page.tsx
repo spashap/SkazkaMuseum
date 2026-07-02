@@ -16,7 +16,7 @@ async function save(formData: FormData) {
       fontDisplay: f('fontDisplay'), fontSerif: f('fontSerif'), fontBody: f('fontBody'),
       fsHeroXl: f('fsHeroXl'), fsH1: f('fsH1'), fsH2: f('fsH2'), fsH3: f('fsH3'),
       fsBody: f('fsBody'), fsSmall: f('fsSmall'), fsCaption: f('fsCaption'),
-      gold: f('gold'), goldLight: f('goldLight'), crimson: f('crimson'), crimsonDark: f('crimsonDark'),
+      gold: f('gold'), goldLight: f('goldLight'), goldDark: f('goldDark'), crimson: f('crimson'), crimsonDark: f('crimsonDark'),
       forest: f('forest'), cream: f('cream'), dark: f('dark'), text: f('text'),
       textLight: f('textLight'), white: f('white'), radius: f('radius'),
     },
@@ -60,6 +60,7 @@ export default async function Design() {
         <h2>Цвета</h2>
         <Row name="gold" label="Золото" value={t.gold} color />
         <Row name="goldLight" label="Золото светлое" value={t.goldLight} color />
+        <Row name="goldDark" label="Золото тёмное (мелкие надписи)" value={t.goldDark} color />
         <Row name="crimson" label="Багряный" value={t.crimson} color />
         <Row name="crimsonDark" label="Багряный тёмный" value={t.crimsonDark} color />
         <Row name="forest" label="Зелёный" value={t.forest} color />
