@@ -16,6 +16,8 @@ export default async function Home() {
   // The hero background is the LCP element; preload it (admin-uploaded override wins,
   // same resolution logic as renderFragment's slot swap).
   const hero = await db.imageSlot.findUnique({ where: { id: 'home_12' } });
-  preload(hero?.webpPath || '/seed/home_12.webp', { as: 'image', fetchPriority: 'high' });
+  // Default priority on purpose: 'high' makes the 100KB image compete with the
+  // render-blocking CSS on slow connections and delays first paint (measured).
+  preload(hero?.webpPath || '/seed/home_12.webp', { as: 'image' });
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 }

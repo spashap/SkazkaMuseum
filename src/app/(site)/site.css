@@ -783,6 +783,9 @@ p { font-size: 1rem; line-height: 1.75; }
    reveal the content anyway so the page is never blank */
 @keyframes fadeUpReveal { to { opacity: 1; transform: translateY(0); } }
 html:not(.js-ready) .fade-up { animation: fadeUpReveal 0.6s ease 1.5s forwards; }
+/* Above-the-fold content must not wait for JS: the hero fades in via pure CSS
+   right away (JS-added .visible is harmless after). Big win for mobile FCP/LCP. */
+.hero .fade-up { animation: fadeUpReveal 0.6s ease 0.1s forwards; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {

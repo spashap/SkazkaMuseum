@@ -21,9 +21,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="ru">
       <head>
-        {/* Above-the-fold fonts (cyrillic subsets): body text + display headings */}
+        {/* Preload only the body font (cyrillic) — more preloads delay first paint on mobile */}
         <link rel="preload" href="/fonts/Manrope-400-cyrillic.woff2" as="font" type="font/woff2" crossOrigin="" />
-        <link rel="preload" href="/fonts/RuslanDisplay-400-cyrillic.woff2" as="font" type="font/woff2" crossOrigin="" />
         <style dangerouslySetInnerHTML={{ __html: themeToCss(theme) }} />
       </head>
       {/* suppressHydrationWarning: browser extensions (ad blockers etc.) inject attributes
