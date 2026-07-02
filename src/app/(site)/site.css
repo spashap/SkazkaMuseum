@@ -670,8 +670,8 @@ p { font-size: 1rem; line-height: 1.75; }
 .f-field:focus { border-color:rgba(200,150,62,0.6); }
 .direct-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
 .contact-btn { padding:0.875rem 1.75rem; border-radius:100px; font-weight:600; font-size:0.9rem; text-decoration:none; transition:all 0.3s ease; }
-.contact-btn--phone { background:rgba(255,255,255,0.08); color:var(--cream); border:1px solid rgba(255,255,255,0.2); }
-.contact-btn--phone:hover { background:rgba(255,255,255,0.15); }
+.contact-btn--phone { background:var(--gold); color:var(--dark); border:1px solid var(--gold); }
+.contact-btn--phone:hover { background:var(--gold-light); border-color:var(--gold-light); }
 .contact-btn--wa { background:#25D366; color:#fff; }
 .contact-btn--wa:hover { background:#1ebe5c; }
 .contact-btn--tg { background:#2AABEE; color:#fff; }
