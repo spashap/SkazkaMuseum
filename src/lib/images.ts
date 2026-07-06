@@ -33,3 +33,15 @@ export async function processAndStore(slotId: string, buffer: Buffer) {
   });
   return { webpPath: `/uploads/${webpName}`, fallbackPath: `/uploads/${jpgName}` };
 }
+
+// Program cover images aren't pre-registered ImageSlot rows (Program.images is a free
+// JSON array), so this resizes to a fixed card size and writes a timestamped filename
+// (cache-busting on re-upload) instead of reusing the slot-based pipeline above.
+const PROGRAM_UPLOAD_DIR = path.join(UPLOAD_DIR, 'programs');
+
+export async function processAndStoreProgramImage(programId: string, buffer: Buffer): Promise<string> {
+  await fs.mkdir(PROGRAM_UPLOAD_DIR, { recursive: true });
+  const name = `${programId}-${Date.now()}.webp`;
+  await sharp(buffer).resize(800, 600, { fit: 'cover' }).webp({ quality: 78 }).toFile(path.join(PROGRAM_UPLOAD_DIR, name));
+  return `/uploads/programs/${name}`;
+}

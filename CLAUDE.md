@@ -29,6 +29,10 @@ one language, one deploy. Runs on a Fornex VPS under PM2 behind nginx, alongside
 4. **Content is data.** Public page copy currently lives in `src/content/fragments/*.html`
    (the fidelity port — see last section); company facts live in `CompanySettings` and SEO
    meta in `PageContent`, both admin-editable. Don't hardcode company facts in JSX.
+   Exception: excursion/quest/masterclass/birthday cards on `/tours`, `/kvesty`,
+   `/masterclasses`, `/birthday` are **not** in the fragment HTML — they're spliced in from
+   the `Program` table at render time (see the fidelity-port section below). Edit those via
+   `/admin/programs`, never by hand-editing cards back into the fragment.
 5. **Secrets live in `.env` on the server only.** Never commit `.env`. Integrations no-op when
    their keys are missing, so the app always runs. Don't add secrets to code.
 6. **Roles gate access.** Use `getSession()` + `canAccess(role, section)` from `src/lib/auth.ts`
@@ -99,6 +103,7 @@ pm2 save && pm2 startup                      # survive reboots
 | Change a design token programmatically | `prisma/schema.prisma` (Theme) + admin "Дизайн" page |
 | Add/rename an image slot | `prisma/seed.mjs` + `src/content/slots.json`; component `src/components/site/ImageSlot.tsx` |
 | Edit page copy | `src/content/fragments/<page>.html` (renderer `src/lib/fragments.ts` → `src/app/(site)/[page]/page.tsx`) |
+| Manage the program catalog (экскурсии/квесты/мастер-классы/дни рождения) | `/admin/programs` (create/edit/duplicate/archive/delete + upsells); public cards render from `Program` via `src/lib/programCards.ts` |
 | Site forms → leads | `public/site-overrides.js` (intercepts) → `src/app/api/leads/route.ts` |
 | Payments | `src/lib/integrations/yookassa.ts` + `src/app/api/pay/route.ts` |
 | Email | `src/lib/integrations/unisender.ts` |
@@ -110,8 +115,11 @@ pm2 save && pm2 startup                      # survive reboots
 
 See `PLAN.md`. Current build covers Phase 1–3 foundation + the full-fidelity public site
 (deploy pipeline, tokens, DB, auth, 14 pages with her real content, WebP+lazy images,
-intake→leads, admin shell with working Design/Images/Settings/Заявки/Users).
-Phases 4–8 (full bookings pipeline UI, calendar drag&drop, catalog editor, YooKassa live flow +
+intake→leads, admin shell with working Design/Images/Settings/Заявки/Users) plus a working
+program catalog: full CRUD in `/admin/programs` (create/edit/duplicate/archive/delete,
+upsells, filters, image upload) wired live to the public tours/kvesty/masterclasses/birthday
+pages (see "How the public site is built" below).
+Phases 4–8 (full bookings pipeline UI, calendar drag&drop, YooKassa live flow +
 PDF/QR tickets, finance/analytics depth, UniSender flows) are scaffolded with clear placeholders —
 each admin page notes which phase completes it.
 
@@ -137,7 +145,20 @@ extracted from `projectSpec/muzeyskazki_v3_final_244.html` by `scripts/extract-o
 
 At render time, `src/lib/fragments.ts` takes a fragment and (1) swaps a slot's seed image for
 an admin-uploaded one when present, (2) fixes contact links from `CompanySettings`, (3) marks
-the page section active. Pages render the fragment via `dangerouslySetInnerHTML`.
+the page section active, (4) splices in live program cards (see below). Pages render the
+fragment via `dangerouslySetInnerHTML`.
+
+**Program catalog pages are the one exception to "fragment = static HTML".** The
+`tours.html`, `kvesty.html`, `masterclasses.html`, `birthday.html` fragments each have an
+empty marker div (`data-program-catalog="excursion|quest|masterclass|birthday"`) where the
+hand-authored cards used to be. `renderFragment` fills that marker with HTML built from
+active `Program` rows of the matching type (`src/lib/programCards.ts`), reusing the same
+`.program-card` / `.catalog-card` / `.package-card` CSS the original cards used. So: create,
+edit, archive or delete a program in `/admin/programs` and the matching public page updates
+immediately — `status: 'active'` is what makes a program visible there. The original
+hand-authored card content (4 excursions, 3 quests, 5 masterclasses, the birthday package +
+its addons) was migrated into `Program`/`Upsell` rows by `prisma/migrate-programs-from-fragments.mjs`
+(one-time, idempotent) so nothing was lost in the switch.
 
 **To edit page text:** edit the fragment HTML in `src/content/fragments/`. **To change an
 image:** admin → «Изображения» (never edit base64 or add a raw `<img>`). **To re-extract from a

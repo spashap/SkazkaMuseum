@@ -3,10 +3,12 @@
 // Docs: https://godocs.unisender.ru/web-api-ref (v2). Endpoint: /transactional/api/v1/email/send.json
 export async function sendEmail(opts: {
   to: string; toName?: string; subject: string; html: string; fromEmail: string; fromName?: string;
+  attachment?: { filename: string; contentType: string; content: Buffer };
 }): Promise<boolean> {
   const apiKey = process.env.UNISENDER_GO_API_KEY;
   if (!apiKey) {
     console.log('[unisender] not configured — skipping. Would send to', opts.to, '—', opts.subject);
+    if (opts.attachment) console.log('[unisender] would attach', opts.attachment.filename);
     return false;
   }
   try {
@@ -20,6 +22,9 @@ export async function sendEmail(opts: {
           body: { html: opts.html },
           from_email: opts.fromEmail,
           from_name: opts.fromName || 'Музей русской сказки',
+          ...(opts.attachment
+            ? { attachments: [{ type: opts.attachment.contentType, name: opts.attachment.filename, content: opts.attachment.content.toString('base64') }] }
+            : {}),
         },
       }),
     });

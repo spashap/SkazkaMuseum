@@ -5,6 +5,8 @@ import YandexMap from '@/components/site/YandexMap';
 
 // Renders each page's full original design (from the extracted fragment), with images
 // admin-controlled and links corrected. Contacts gets the Yandex map appended (spec 2.3).
+// Note: the tours/kvesty/masterclasses/birthday fragments contain a Program-catalog
+// marker div that renderFragment fills in with live data from /admin/programs.
 const VALID = ['tickets','tours','birthday','schools','kindergarten','masterclasses','kvesty','partners','lektsii','teatr','reviews','contacts','poleznoe','skazki'];
 
 export function generateStaticParams() {

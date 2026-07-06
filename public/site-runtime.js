@@ -3,243 +3,34 @@ document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fa
     (function(){
       // Calendar exists only on the tickets page; skip on all other pages.
       if(!document.getElementById('calGrid')){return;}
-      var WD_SHORT=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
       var WD_FULL=['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
       var MON_GEN=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
       var MON_NOM=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+      // Filter chip values match Program.type 1:1 except "workshop" (chip) <-> "masterclass" (Program.type).
+      var FILT_TYPE={workshop:'masterclass'};
 
-      // 0=Вс,1=Пн,...,6=Сб
-      var SCHED={
-        // ── Понедельник ──────────────────────────────────────────────────
-        1:[
-          {t:'10:00',te:'20:00',n:'Свободное посещение',tp:'free',age:0,dur:600,
-           desc:'Самостоятельное изучение всех залов в своём темпе · взрослый 700 ₽ · детский 500 ₽',
-           price:'от 500 ₽',seats:30,allday:true},
-          {t:'10:00',te:'19:00',n:'Интерактивная экскурсия',tp:'excursion',age:6,dur:60,
-           desc:'Каждый час · путешествие по всем залам с актёром-персонажем, стрельба из лука, чаепитие · взрослый 1 700 ₽ · детский 1 500 ₽',
-           price:'от 1 500 ₽',seats:15,hourly:true},
-          {t:'10:00',te:'19:00',n:'Квест «Здравствуй, сказка!»',tp:'quest',age:4,dur:45,
-           desc:'Захватывающий квест по залам музея · 4+ · до 10 человек · бронирование по времени',
-           price:'800 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «В поисках сокровища»',tp:'quest',age:7,dur:60,
-           desc:'Квест-приключение с тайным кладом · 7+ · до 10 человек · бронирование по времени',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «Седьмая тайна»',tp:'quest',age:10,dur:75,
-           desc:'Сложный квест с загадками и испытаниями · 10+ · до 10 человек · бронирование по времени',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'12:00',n:'МК «Народная кукла»',tp:'workshop',age:5,dur:45,
-           desc:'Традиционная кукла-оберег без лица своими руками · 5+ · до 12 человек',
-           price:'500 ₽/чел.',seats:12},
-          {t:'13:00',n:'МК «Крупеничка»',tp:'workshop',age:7,dur:60,
-           desc:'Кукла-зернушка — символ достатка и урожая · 7+ · до 10 человек',
-           price:'1 500 ₽/чел.',seats:10},
-          {t:'14:00',n:'МК «Народная кукла»',tp:'workshop',age:5,dur:45,
-           desc:'Традиционная кукла-оберег без лица своими руками · 5+ · до 12 человек',
-           price:'500 ₽/чел.',seats:12},
-          {t:'15:00',n:'МК «Крупеничка»',tp:'workshop',age:7,dur:60,
-           desc:'Кукла-зернушка — символ достатка и урожая · 7+ · до 10 человек',
-           price:'1 500 ₽/чел.',seats:10},
-          {t:'16:00',n:'МК «Народная кукла»',tp:'workshop',age:5,dur:45,
-           desc:'Традиционная кукла-оберег без лица своими руками · 5+ · до 12 человек',
-           price:'500 ₽/чел.',seats:12},
-          {t:'17:00',n:'МК «Свеча из вощины»',tp:'workshop',age:6,dur:45,
-           desc:'Ароматная свеча из натурального пчелиного воска · 6+ · до 12 человек',
-           price:'1 500 ₽/чел.',seats:12},
-          {t:'17:00',n:'Клуб богатырей',tp:'show',age:6,dur:45,
-           desc:'Испытания силы и ловкости с профессиональными актёрами · 6+ · до 15 человек · ребёнок 1 000 ₽ · сопровождающий 500 ₽',
-           price:'от 500 ₽',seats:12},
-          {t:'19:00',n:'Клуб богатырей',tp:'show',age:6,dur:45,
-           desc:'Испытания силы и ловкости с профессиональными актёрами · 6+ · до 15 человек · ребёнок 1 000 ₽ · сопровождающий 500 ₽',
-           price:'от 500 ₽',seats:12},
-          {t:'19:00',n:'МК «Сумка в технике лубок»',tp:'workshop',age:6,dur:90,
-           desc:'Роспись льняной сумки в технике русского лубка · 6+ · до 10 человек',
-           price:'уточняйте',seats:10},
-        ],
-        // ── Вторник ──────────────────────────────────────────────────────
-        2:[
-          {t:'10:00',te:'20:00',n:'Свободное посещение',tp:'free',age:0,dur:600,
-           desc:'Самостоятельное изучение всех залов в своём темпе · взрослый 700 ₽ · детский 500 ₽',
-           price:'от 500 ₽',seats:30,allday:true},
-          {t:'10:00',te:'19:00',n:'Интерактивная экскурсия',tp:'excursion',age:6,dur:60,
-           desc:'Каждый час · путешествие по всем залам с актёром-персонажем, стрельба из лука, чаепитие · взрослый 1 700 ₽ · детский 1 500 ₽',
-           price:'от 1 500 ₽',seats:15,hourly:true},
-          {t:'10:00',te:'19:00',n:'Квест «Здравствуй, сказка!»',tp:'quest',age:4,dur:45,
-           desc:'Захватывающий квест по залам музея · 4+ · до 10 человек',
-           price:'800 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «В поисках сокровища»',tp:'quest',age:7,dur:60,
-           desc:'Квест-приключение с тайным кладом · 7+ · до 10 человек',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «Седьмая тайна»',tp:'quest',age:10,dur:75,
-           desc:'Сложный квест с загадками и испытаниями · 10+ · до 10 человек',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'16:00',n:'«Гуси-Лебеди» для малышей',tp:'show',age:0,dur:35,
-           desc:'Иммерсивный спектакль · 0+ · до 10 детей · живые актёры в народных костюмах',
-           price:'1 000 ₽/чел.',seats:8},
-          {t:'17:00',n:'МК «Сумка в технике лубок»',tp:'workshop',age:6,dur:90,
-           desc:'Роспись льняной сумки в технике русского лубка · 6+ · до 10 человек',
-           price:'уточняйте',seats:10},
-          {t:'19:00',n:'Иммерсивные чтения + Клуб богатырей',tp:'show',age:6,dur:90,
-           desc:'Живое чтение сказок с актёрами + богатырские испытания · ребёнок 1 500 ₽ · сопровождающий 500 ₽',
-           price:'от 500 ₽',seats:10},
-          {t:'19:00',n:'Лекторий «Русский фольклор»',tp:'lecture',age:18,dur:90,
-           desc:'Авторская лекция с чаепитием из самовара · 18+ · до 15 человек · другой зал',
-           price:'уточняйте',seats:12},
-        ],
-        // ── Среда (закрытие в 18:00, вечерние программы — отдельный формат) ──
-        3:[
-          {t:'10:00',te:'18:00',n:'Свободное посещение',tp:'free',age:0,dur:480,
-           desc:'Самостоятельное изучение всех залов · закрытие в 18:00 · взрослый 700 ₽ · детский 500 ₽',
-           price:'от 500 ₽',seats:30,allday:true},
-          {t:'10:00',te:'17:00',n:'Интерактивная экскурсия',tp:'excursion',age:6,dur:60,
-           desc:'Каждый час · путешествие по всем залам с актёром-персонажем, стрельба из лука, чаепитие · взрослый 1 700 ₽ · детский 1 500 ₽',
-           price:'от 1 500 ₽',seats:15,hourly:true},
-          {t:'10:00',te:'17:00',n:'Квест «Здравствуй, сказка!»',tp:'quest',age:4,dur:45,
-           desc:'Захватывающий квест по залам музея · 4+ · до 10 человек',
-           price:'800 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'17:00',n:'Квест «В поисках сокровища»',tp:'quest',age:7,dur:60,
-           desc:'Квест-приключение с тайным кладом · 7+',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'17:00',n:'Квест «Седьмая тайна»',tp:'quest',age:10,dur:75,
-           desc:'Сложный квест с загадками и испытаниями · 10+',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'17:00',n:'МК «Сумка в технике лубок»',tp:'workshop',age:6,dur:90,
-           desc:'Роспись льняной сумки в технике русского лубка · 6+ · до 10 человек',
-           price:'уточняйте',seats:10},
-          {t:'19:30',n:'Мрачный фольклор',tp:'show',age:18,dur:75,
-           desc:'Иммерсивный спектакль 18+ · тёмная сторона русских поверий, обрядов и преданий',
-           price:'2 500 ₽',seats:8,few:true},
-        ],
-        // ── Четверг ──────────────────────────────────────────────────────
-        4:[
-          {t:'10:00',te:'20:00',n:'Свободное посещение',tp:'free',age:0,dur:600,
-           desc:'Самостоятельное изучение всех залов в своём темпе · взрослый 700 ₽ · детский 500 ₽',
-           price:'от 500 ₽',seats:30,allday:true},
-          {t:'10:00',te:'19:00',n:'Интерактивная экскурсия',tp:'excursion',age:6,dur:60,
-           desc:'Каждый час · путешествие по всем залам с актёром-персонажем, стрельба из лука, чаепитие · взрослый 1 700 ₽ · детский 1 500 ₽',
-           price:'от 1 500 ₽',seats:15,hourly:true},
-          {t:'10:00',te:'19:00',n:'Квест «Здравствуй, сказка!»',tp:'quest',age:4,dur:45,
-           desc:'Захватывающий квест по залам музея · 4+',
-           price:'800 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «В поисках сокровища»',tp:'quest',age:7,dur:60,
-           desc:'Квест-приключение с тайным кладом · 7+',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «Седьмая тайна»',tp:'quest',age:10,dur:75,
-           desc:'Сложный квест с загадками и испытаниями · 10+',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'16:00',n:'«Гуси-Лебеди» для малышей',tp:'show',age:0,dur:35,
-           desc:'Иммерсивный спектакль · 0+ · до 10 детей · живые актёры в народных костюмах',
-           price:'1 000 ₽/чел.',seats:8},
-          {t:'17:00',n:'МК «Свеча из вощины»',tp:'workshop',age:6,dur:45,
-           desc:'Ароматная свеча из натурального пчелиного воска · 6+ · до 12 человек',
-           price:'1 500 ₽/чел.',seats:12},
-          {t:'19:00',n:'МК «Сумка в технике лубок»',tp:'workshop',age:6,dur:90,
-           desc:'Роспись льняной сумки в технике русского лубка · 6+ · до 10 человек',
-           price:'уточняйте',seats:10},
-        ],
-        // ── Пятница ──────────────────────────────────────────────────────
-        5:[
-          {t:'10:00',te:'20:00',n:'Свободное посещение',tp:'free',age:0,dur:600,
-           desc:'Самостоятельное изучение всех залов в своём темпе · взрослый 700 ₽ · детский 500 ₽',
-           price:'от 500 ₽',seats:30,allday:true},
-          {t:'10:00',te:'19:00',n:'Интерактивная экскурсия',tp:'excursion',age:6,dur:60,
-           desc:'Каждый час · путешествие по всем залам с актёром-персонажем, стрельба из лука, чаепитие · взрослый 1 700 ₽ · детский 1 500 ₽',
-           price:'от 1 500 ₽',seats:15,hourly:true},
-          {t:'10:00',te:'19:00',n:'Квест «Здравствуй, сказка!»',tp:'quest',age:4,dur:45,
-           desc:'Захватывающий квест по залам музея · 4+',
-           price:'800 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «В поисках сокровища»',tp:'quest',age:7,dur:60,
-           desc:'Квест-приключение с тайным кладом · 7+',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «Седьмая тайна»',tp:'quest',age:10,dur:75,
-           desc:'Сложный квест с загадками и испытаниями · 10+',
-           price:'1 000 ₽/чел.',seats:10,allday:true},
-          {t:'17:00',n:'Иммерсивные чтения сказок',tp:'show',age:6,dur:45,
-           desc:'Живое чтение сказок с актёрами в атмосфере музея · ребёнок 1 000 ₽ · сопровождающий 500 ₽',
-           price:'от 500 ₽',seats:10},
-          {t:'17:00',n:'МК «Сумка в технике лубок»',tp:'workshop',age:6,dur:90,
-           desc:'Роспись льняной сумки в технике русского лубка · 6+ · до 10 человек',
-           price:'уточняйте',seats:10},
-          {t:'19:00',n:'Иммерсивные чтения сказок',tp:'show',age:6,dur:45,
-           desc:'Живое чтение сказок с актёрами в атмосфере музея · ребёнок 1 000 ₽ · сопровождающий 500 ₽',
-           price:'от 500 ₽',seats:10},
-          {t:'19:00',n:'МК «Свеча из вощины»',tp:'workshop',age:6,dur:45,
-           desc:'Ароматная свеча из натурального пчелиного воска · 6+ · до 12 человек',
-           price:'1 500 ₽/чел.',seats:12},
-        ],
-        // ── Суббота (выходные цены) ───────────────────────────────────────
-        6:[
-          {t:'10:00',te:'20:00',n:'Свободное посещение',tp:'free',age:0,dur:600,
-           desc:'Самостоятельное изучение всех залов в своём темпе · взрослый 900 ₽ · детский 700 ₽',
-           price:'от 700 ₽',seats:30,allday:true,pop:true},
-          {t:'10:00',te:'19:00',n:'Интерактивная экскурсия',tp:'excursion',age:6,dur:60,
-           desc:'Каждый час · путешествие по всем залам с актёром-персонажем, стрельба из лука, чаепитие · взрослый 1 900 ₽ · детский 1 700 ₽',
-           price:'от 1 700 ₽',seats:15,hourly:true,pop:true},
-          {t:'10:00',te:'19:00',n:'Квест «Здравствуй, сказка!»',tp:'quest',age:4,dur:45,
-           desc:'Захватывающий квест по залам музея · 4+',
-           price:'800 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «В поисках сокровища»',tp:'quest',age:7,dur:60,
-           desc:'Квест-приключение с тайным кладом · 7+',
-           price:'1 000 ₽/чел.',seats:8,allday:true},
-          {t:'10:00',te:'19:00',n:'Квест «Седьмая тайна»',tp:'quest',age:10,dur:75,
-           desc:'Сложный квест с загадками и испытаниями · 10+',
-           price:'1 000 ₽/чел.',seats:6,allday:true,few:true},
-          {t:'16:00',n:'«Гуси-Лебеди» для малышей',tp:'show',age:0,dur:35,
-           desc:'Иммерсивный спектакль · 0+ · до 10 детей · живые актёры в народных костюмах',
-           price:'1 000 ₽/чел.',seats:5,few:true},
-          {t:'17:00',n:'МК «Свеча из вощины»',tp:'workshop',age:6,dur:45,
-           desc:'Ароматная свеча из натурального пчелиного воска · 6+ · до 12 человек',
-           price:'1 500 ₽/чел.',seats:12},
-          {t:'19:00',n:'МК «Сумка в технике лубок»',tp:'workshop',age:6,dur:90,
-           desc:'Роспись льняной сумки в технике русского лубка · 6+ · до 10 человек',
-           price:'уточняйте',seats:10},
-        ],
-        // ── Воскресенье (выходные цены) ───────────────────────────────────
-        0:[
-          {t:'10:00',te:'18:00',n:'Свободное посещение',tp:'free',age:0,dur:480,
-           desc:'Самостоятельное изучение всех залов · взрослый 900 ₽ · детский 700 ₽',
-           price:'от 700 ₽',seats:30,allday:true,pop:true},
-          {t:'10:00',te:'17:00',n:'Интерактивная экскурсия',tp:'excursion',age:6,dur:60,
-           desc:'Каждый час · путешествие по всем залам с актёром-персонажем, стрельба из лука, чаепитие · взрослый 1 900 ₽ · детский 1 700 ₽',
-           price:'от 1 700 ₽',seats:15,hourly:true,pop:true},
-          {t:'10:00',te:'17:00',n:'Квест «Здравствуй, сказка!»',tp:'quest',age:4,dur:45,
-           desc:'Захватывающий квест по залам музея · 4+',
-           price:'800 ₽/чел.',seats:10,allday:true},
-          {t:'10:00',te:'17:00',n:'Квест «В поисках сокровища»',tp:'quest',age:7,dur:60,
-           desc:'Квест-приключение с тайным кладом · 7+',
-           price:'1 000 ₽/чел.',seats:8,allday:true},
-          {t:'10:00',te:'17:00',n:'Квест «Седьмая тайна»',tp:'quest',age:10,dur:75,
-           desc:'Сложный квест с загадками и испытаниями · 10+',
-           price:'1 000 ₽/чел.',seats:7,allday:true},
-          {t:'12:00',n:'МК «Народная кукла»',tp:'workshop',age:5,dur:45,
-           desc:'Традиционная кукла-оберег без лица своими руками · 5+ · до 12 человек',
-           price:'500 ₽/чел.',seats:12},
-          {t:'13:00',n:'МК «Крупеничка»',tp:'workshop',age:7,dur:60,
-           desc:'Кукла-зернушка — символ достатка и урожая · 7+ · до 10 человек',
-           price:'1 500 ₽/чел.',seats:10},
-          {t:'14:00',n:'МК «Народная кукла»',tp:'workshop',age:5,dur:45,
-           desc:'Традиционная кукла-оберег без лица своими руками · 5+',
-           price:'500 ₽/чел.',seats:12},
-          {t:'15:00',n:'МК «Крупеничка»',tp:'workshop',age:7,dur:60,
-           desc:'Кукла-зернушка — символ достатка и урожая · 7+',
-           price:'1 500 ₽/чел.',seats:10},
-          {t:'16:00',n:'МК «Народная кукла»',tp:'workshop',age:5,dur:45,
-           desc:'Традиционная кукла-оберег без лица своими руками · 5+',
-           price:'500 ₽/чел.',seats:12},
-          {t:'17:00',n:'МК «Сумка в технике лубок»',tp:'workshop',age:6,dur:90,
-           desc:'Роспись льняной сумки в технике русского лубка · 6+ · до 10 человек',
-           price:'уточняйте',seats:10},
-          {t:'19:30',n:'Мрачный фольклор',tp:'show',age:18,dur:75,
-           desc:'Иммерсивный спектакль 18+ · тёмная сторона русских поверий, обрядов и преданий',
-           price:'2 500 ₽',seats:6,few:true},
-        ],
-      };
-
-      function endT(t,d){var p=t.split(':'),h=+p[0],m=+p[1]+d;h+=Math.floor(m/60);m%=60;return(h<10?'0':'')+h+':'+(m<10?'0':'')+m;}
+      function pad(n){return (n<10?'0':'')+n;}
+      function dateKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
       function today0(){var d=new Date();d.setHours(0,0,0,0);return d;}
+      function fmtTime(iso){var d=new Date(iso);return pad(d.getHours())+':'+pad(d.getMinutes());}
+      function priceLabel(s){
+        if(!s.priceAdult&&!s.priceChild){return 'по запросу';}
+        if(s.priceChild&&s.priceChild!==s.priceAdult){return 'от '+Math.min(s.priceAdult,s.priceChild)+' ₽';}
+        return (s.priceAdult||s.priceChild)+' ₽';
+      }
 
       var curYear, curMonth, selDate=null, filt='all';
+      var monthDates=null; // Set of 'YYYY-MM-DD' with sessions, for the visible month
+      var daySessions=[]; // last sessions fetched for selDate
 
       function initMonth(){var n=today0();curYear=n.getFullYear();curMonth=n.getMonth();}
+
+      function loadMonth(){
+        fetch('/api/sessions?year='+curYear+'&month='+(curMonth+1))
+          .then(function(r){return r.json();})
+          .then(function(data){monthDates=new Set(data.dates||[]);buildCal();})
+          .catch(function(){monthDates=new Set();buildCal();});
+      }
 
       function buildCal(){
         var t0=today0();
@@ -260,7 +51,7 @@ document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fa
           var isWeekend=(wd===0||wd===6);
           var isPast=dt<t0;
           var isToday=dt.getTime()===t0.getTime();
-          var hasSched=!!(SCHED[wd]&&SCHED[wd].length);
+          var hasSched=!!(monthDates&&monthDates.has(dateKey(dt)));
           var isSel=selDate&&dt.getTime()===selDate.getTime();
           var cls='cal-day'+(isPast?' cal-day--past':'')+(isToday?' cal-day--today':'')+(isSel?' cal-day--sel':'')+(isWeekend?' cal-day--weekend':'')+(hasSched&&!isPast?' cal-day--ev':' cal-day--noev');
           var cell=document.createElement('div');
@@ -276,7 +67,12 @@ document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fa
       function selectDate(d){
         selDate=d;
         buildCal();
-        renderSched();
+        document.getElementById('schDate').textContent=d.getDate()+' '+MON_GEN[d.getMonth()]+' '+d.getFullYear()+', '+WD_FULL[d.getDay()];
+        document.getElementById('schBody').innerHTML='<div class="sch-empty"><div class="sch-empty__ico">⏳</div>Загрузка расписания…</div>';
+        fetch('/api/sessions?date='+dateKey(d))
+          .then(function(r){return r.json();})
+          .then(function(data){daySessions=data.sessions||[];renderSched();})
+          .catch(function(){daySessions=[];renderSched();});
         // On mobile scroll to schedule
         if(window.innerWidth<900){
           document.getElementById('schBody').scrollIntoView({behavior:'smooth',block:'start'});
@@ -285,46 +81,54 @@ document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fa
 
       function renderSched(){
         if(!selDate){return;}
-        var wd=selDate.getDay();
-        var sessions=(SCHED[wd]||[]).slice().sort(function(a,b){return a.t.localeCompare(b.t);});
-        // Date header
-        var wdNames=['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
-        var monNames=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
-        document.getElementById('schDate').textContent=selDate.getDate()+' '+monNames[selDate.getMonth()]+' '+selDate.getFullYear()+', '+wdNames[wd];
-        // Filter
-        var list=sessions.filter(function(s){return filt==='all'||s.tp===filt;});
+        var list=daySessions
+          .filter(function(s){return filt==='all'||s.type===(FILT_TYPE[filt]||filt);})
+          .slice().sort(function(a,b){return a.startAt.localeCompare(b.startAt);});
         var body=document.getElementById('schBody');
         if(!list.length){body.innerHTML='<div class="sch-empty"><div class="sch-empty__ico">🔍</div>Сеансов по выбранному фильтру нет</div>';return;}
         body.innerHTML=list.map(function(s){
-          var sold=s.sold||s.seats===0;
-          var few=!sold&&(s.few||s.seats<=5);
-          var seatsHtml=sold?'<span class="sch-seats--sold">Все билеты проданы</span>':few?'<span class="sch-seats--few">Осталось '+s.seats+' мест</span>':'<span class="sch-seats--ok">Мест: '+s.seats+'</span>';
-          var endStr=s.te?('до '+s.te):('до '+endT(s.t,s.dur));
-          var timeBoxHtml=s.hourly
-            ?'<div class="sch-timebox"><span class="sch-time" style="font-size:0.68rem;padding:0.22rem 0;line-height:1.2">каждый<br>час</span><span class="sch-time-end">'+s.t+'–'+s.te+'</span></div>'
-            :s.allday
-            ?'<div class="sch-timebox"><span class="sch-time" style="font-size:0.72rem;padding:0.22rem 0">с '+s.t+'</span><span class="sch-time-end">'+endStr+'</span></div>'
-            :'<div class="sch-timebox"><span class="sch-time">'+s.t+'</span><span class="sch-time-end">'+endStr+'</span></div>';
-          var tags='<span class="sch-tag sch-tag--age">'+s.age+'+ лет</span>'
-            +(s.hourly?'':'<span class="sch-tag sch-tag--dur">'+s.dur+' мин</span>')
-            +(s.allday?'<span class="sch-tag" style="background:#e8f5e9;color:#2e7d32;border-radius:20px;padding:0.18rem 0.55rem;font-size:0.7rem;font-weight:600">весь день</span>':'')
-            +(s.hourly?'<span class="sch-tag sch-tag--pop">⏰ каждый час</span>':'')
-            +(s.pop?'<span class="sch-tag sch-tag--pop">★ Популярно</span>':'');
-          var btn=sold?'<button class="sch-btn sch-btn--sold" disabled>Продано</button>':'<button class="sch-btn sch-btn--buy" onclick="document.getElementById(\'booking\').scrollIntoView({behavior:\'smooth\'})">Купить билет</button>';
+          var sold=!!s.sold;
+          var few=!sold&&s.free<=5;
+          var seatsHtml=sold?'<span class="sch-seats--sold">Все билеты проданы</span>':few?'<span class="sch-seats--few">Осталось '+s.free+' мест</span>':'<span class="sch-seats--ok">Мест: '+s.free+'</span>';
+          var timeBoxHtml='<div class="sch-timebox"><span class="sch-time">'+fmtTime(s.startAt)+'</span><span class="sch-time-end">до '+fmtTime(s.endAt)+'</span></div>';
+          var tags=(s.ageLimit?'<span class="sch-tag sch-tag--age">'+s.ageLimit+' лет</span>':'')
+            +'<span class="sch-tag sch-tag--dur">'+s.durationMin+' мин</span>';
+          var btn=sold?'<button class="sch-btn sch-btn--sold" disabled>Продано</button>':'<button class="sch-btn sch-btn--buy" onclick="window.addToCart(\''+s.id+'\')">Купить билет</button>';
           return '<div class="sch-row'+(sold?' sch-row--sold':'')+'">'
             +timeBoxHtml
-            +'<div class="sch-info"><div class="sch-name">'+s.n+'</div><div class="sch-desc">'+s.desc+'</div><div class="sch-tags">'+tags+' '+seatsHtml+'</div></div>'
-            +'<div class="sch-right"><div class="sch-price">'+s.price+'</div>'+btn+'</div>'
+            +'<div class="sch-info"><div class="sch-name">'+s.title+'</div><div class="sch-desc">'+(s.shortDesc||'')+'</div><div class="sch-tags">'+tags+' '+seatsHtml+'</div></div>'
+            +'<div class="sch-right"><div class="sch-price">'+priceLabel(s)+'</div>'+btn+'</div>'
             +'</div>';
         }).join('');
       }
 
+      // Adds the clicked session to the cart (shared localStorage format with
+      // src/lib/cart.ts) and goes to /tickets/cart — no form on this page anymore.
+      window.addToCart=function(eventId){
+        var s=null;
+        for(var i=0;i<daySessions.length;i++){ if(daySessions[i].id===eventId){ s=daySessions[i]; break; } }
+        if(!s){ location.href='/tickets/cart'; return; }
+        var cart=[];
+        try{ cart=JSON.parse(localStorage.getItem('museum_cart')||'[]'); }catch(e){ cart=[]; }
+        var existing=null;
+        for(var j=0;j<cart.length;j++){ if(cart[j].eventId===eventId){ existing=cart[j]; break; } }
+        if(existing){ existing.qty=(existing.qty||1)+1; }
+        else{
+          cart.push({
+            eventId:s.id, title:s.title, startAt:s.startAt, endAt:s.endAt,
+            priceAdult:s.priceAdult||0, priceChild:s.priceChild||0, qty:1
+          });
+        }
+        localStorage.setItem('museum_cart', JSON.stringify(cart));
+        location.href='/tickets/cart';
+      };
+
       // Month nav
       document.getElementById('calPrev').addEventListener('click',function(){
-        curMonth--;if(curMonth<0){curMonth=11;curYear--;}buildCal();
+        curMonth--;if(curMonth<0){curMonth=11;curYear--;}loadMonth();
       });
       document.getElementById('calNext').addEventListener('click',function(){
-        curMonth++;if(curMonth>11){curMonth=0;curYear++;}buildCal();
+        curMonth++;if(curMonth>11){curMonth=0;curYear++;}loadMonth();
       });
 
       // Filter chips
@@ -339,7 +143,7 @@ document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fa
       if(det){det.addEventListener('toggle',function(){var arr=document.getElementById('льготыArr');if(arr){arr.textContent=this.open?'▼':'▶';}});}
 
       initMonth();
-      buildCal();
+      loadMonth();
       // Auto-select today
       selectDate(today0());
     })();

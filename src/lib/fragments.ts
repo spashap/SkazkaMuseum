@@ -1,6 +1,17 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { db } from './db';
+import { renderExcursionCards, renderQuestCards, renderMasterclassCards, renderBirthdayPackages } from './programCards';
+
+// Each marker is an empty grid container left in the fragment HTML where the hardcoded
+// cards used to be; renderFragment splices in the live Program-driven markup (see
+// src/lib/programCards.ts) so /admin/programs is the single source of truth.
+const CATALOG_MARKERS: [string, () => Promise<string>][] = [
+  ['data-program-catalog="excursion"></div>', renderExcursionCards],
+  ['data-program-catalog="quest"></div>', renderQuestCards],
+  ['data-program-catalog="masterclass"></div>', renderMasterclassCards],
+  ['data-program-catalog="birthday"></div>', renderBirthdayPackages],
+];
 
 // Loads an extracted HTML fragment (header/footer/page) from the original design and:
 //  1. swaps her default (seed) image for an admin-uploaded one where present,
@@ -47,5 +58,13 @@ export async function renderFragment(name: string): Promise<string> {
 
   // 3. ensure the page section is visible on its own route
   html = html.replace('class="page-section"', 'class="page-section active"');
+
+  // 4. splice in live Program-driven cards where a catalog marker is present
+  for (const [marker, renderer] of CATALOG_MARKERS) {
+    if (html.includes(marker)) {
+      const cardsHtml = await renderer();
+      html = html.replace(marker, marker.replace('></div>', `>${cardsHtml}</div>`));
+    }
+  }
   return html;
 }

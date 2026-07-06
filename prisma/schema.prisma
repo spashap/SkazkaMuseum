@@ -119,6 +119,7 @@ model Program {
   fullDesc    String  @default("")
   ageLimit    String  @default("")
   durationMin Int     @default(60)
+  minGroup    Int     @default(1)
   maxGroup    Int     @default(30)
   priceAdult  Int     @default(0)
   priceChild  Int     @default(0)
@@ -126,6 +127,9 @@ model Program {
   priceGroup  Int     @default(0)
   status      String  @default("active")
   images      String  @default("[]")
+  slug        String  @default("")
+  seoTitle    String  @default("")
+  seoDescription String @default("")
   upsells     Upsell[]
   events      Event[]
   bookings    Booking[]
@@ -143,14 +147,22 @@ model Upsell {
 }
 
 model Event {
-  id         String   @id @default(cuid())
-  programId  String
-  program    Program  @relation(fields: [programId], references: [id])
-  startAt    DateTime
-  capacity   Int      @default(30)
-  booked     Int      @default(0)
-  assignee   String?
-  bookings   Booking[]
+  id            String   @id @default(cuid())
+  programId     String
+  program       Program  @relation(fields: [programId], references: [id])
+  startAt       DateTime
+  endAt         DateTime
+  capacity      Int      @default(30)
+  booked        Int      @default(0)
+  status        String   @default("scheduled") // scheduled | cancelled | hidden
+  seriesId      String?
+  assignee      String?
+  rescheduledAt DateTime? // set when startAt is changed after creation — surfaces "перенесено" to customers
+  updatedAt     DateTime @updatedAt
+  bookings      Booking[]
+
+  @@unique([programId, startAt])
+  @@index([status, startAt])
 }
 
 // ─── Intake (site forms) ───────────────────────────────────────────
@@ -199,8 +211,8 @@ model Booking {
 model Client {
   id        String   @id @default(cuid())
   fullName  String
-  phone     String   @unique
-  email     String?
+  phone     String?  @unique // optional: email-only account registration is allowed
+  email     String?  @unique
   birthDate String?
   source    String?
   tags      String   @default("[]")
@@ -208,6 +220,18 @@ model Client {
   ltv       Int      @default(0)
   createdAt DateTime @default(now())
   bookings  Booking[]
+
+  // ─── Personal account (self-service, separate from staff auth) ───
+  passwordHash         String?   // NULL = guest, never registered
+  emailVerifiedAt      DateTime?
+  emailVerifyToken     String?
+  emailVerifyExpiresAt DateTime?
+  resetToken           String?
+  resetTokenExpiresAt  DateTime?
+  bonusPoints          Int       @default(0) // loyalty-program architecture, no earning logic yet
+  emailOptIn           Boolean   @default(true)
+  promos               Promo[]
+  certificates         Certificate[]
 }
 
 // ─── Finance ───────────────────────────────────────────────────────
@@ -232,6 +256,8 @@ model Promo {
   uses       Int      @default(0)
   programIds String   @default("[]")
   active     Boolean  @default(true)
+  clientId   String?  // personal-offer architecture: a promo can be scoped to one client
+  client     Client?  @relation(fields: [clientId], references: [id])
 }
 
 model Certificate {
@@ -242,4 +268,6 @@ model Certificate {
   expiresAt DateTime?
   status    String   @default("active")
   createdAt DateTime @default(now())
+  clientId  String?
+  client    Client?  @relation(fields: [clientId], references: [id])
 }
