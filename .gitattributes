@@ -1,2 +1,6 @@
 # Windows batch files must always be CRLF (cmd.exe misbehaves on LF in edge cases)
 *.bat text eol=crlf
+
+# Shell scripts must always be LF, even when edited on Windows — a CR in a
+# server-side .sh breaks bash ("bad interpreter" / stray \r errors).
+*.sh text eol=lf

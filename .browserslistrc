@@ -1,0 +1,12 @@
+# Target modern browsers only, so Next/SWC stops shipping legacy polyfills
+# (Array.prototype.at, Object.hasOwn, flat/flatMap, trimStart/End, etc.).
+# These versions all support those natively. Widens JS savings with no effect
+# on the site's actual audience (auto-updating mobile Chrome / iOS Safari).
+Chrome >= 93
+Edge >= 93
+Firefox >= 93
+Safari >= 15.4
+iOS >= 15.4
+Samsung >= 16
+Opera >= 79
+not dead
