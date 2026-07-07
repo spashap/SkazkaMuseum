@@ -7,7 +7,8 @@ set -euo pipefail
 export NVM_DIR="$HOME/.nvm"
 # shellcheck disable=SC1091
 . "$NVM_DIR/nvm.sh"
-nvm use 22 >/dev/null || nvm use --lts
+# Use the nvm default (this VPS's is the current LTS, Node 24); fall back if unset.
+nvm use --lts >/dev/null 2>&1 || nvm use default >/dev/null 2>&1 || true
 
 cd /var/www/skazkamuseum
 
