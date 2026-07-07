@@ -423,13 +423,13 @@ p { font-size: 1rem; line-height: 1.75; }
 
 /* MASTERCLASSES */
 .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1.5rem; }
-.catalog-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); }
+.catalog-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); display: flex; flex-direction: column; height: 100%; }
 .catalog-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.catalog-card__img { height: 150px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
-.catalog-card__body { padding: 1.25rem; }
+.catalog-card__img { height: 150px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; flex-shrink: 0; }
+.catalog-card__body { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; }
 .catalog-card__title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
 .catalog-card p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.75rem; }
-.catalog-card__footer { display: flex; justify-content: space-between; align-items: center; }
+.catalog-card__footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
 .catalog-card__price { font-weight: 700; color: var(--crimson); }
 .catalog-card__age { font-size: 0.78rem; color: var(--text-light); }
 

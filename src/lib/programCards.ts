@@ -60,9 +60,12 @@ export async function renderQuestCards(): Promise<string> {
         <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;margin-bottom:0.7rem;color:var(--dark);">${esc(p.title)}</h3>
           <p style="font-size:0.9rem;color:var(--text-light);line-height:1.6;margin-bottom:1rem;">${esc(p.shortDesc)}</p>
-          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(0,0,0,0.08);padding-top:1rem;margin-top:auto;">
-            <span style="font-weight:700;color:var(--crimson);">${p.priceAdult ? `${p.priceAdult} ₽` : 'по запросу'}<span style="font-size:0.75rem;font-weight:400;color:var(--text-light);"> / чел.</span></span>
-            ${p.ageLimit ? `<span style="font-size:0.78rem;color:var(--text-light);">${esc(p.ageLimit)}</span>` : ''}
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;border-top:1px solid rgba(0,0,0,0.08);padding-top:1rem;margin-top:auto;">
+            <span style="display:flex;align-items:center;gap:0.6rem;">
+              <span style="font-weight:700;color:var(--crimson);">${p.priceAdult ? `${p.priceAdult} ₽` : 'по запросу'}<span style="font-size:0.75rem;font-weight:400;color:var(--text-light);"> / чел.</span></span>
+              ${p.ageLimit ? `<span style="font-size:0.78rem;color:var(--text-light);">${esc(p.ageLimit)}</span>` : ''}
+            </span>
+            <button class="btn btn--outline-dark" onclick="showPage('tickets')" style="padding:0.4rem 0.9rem;font-size:0.8rem;">Купить билет</button>
           </div>
         </div>
       </div>`;
@@ -80,9 +83,12 @@ export async function renderMasterclassCards(): Promise<string> {
         <div class="catalog-card__body">
           <div class="catalog-card__title">${esc(p.title)}</div>
           <p>${esc(p.shortDesc)}</p>
-          <div class="catalog-card__footer">
-            <span class="catalog-card__price">${p.priceAdult ? `${p.priceAdult} ₽` : 'по запросу'}</span>
-            ${p.ageLimit ? `<span class="catalog-card__age">${esc(p.ageLimit)}</span>` : ''}
+          <div class="catalog-card__footer" style="flex-wrap:wrap;gap:0.5rem;">
+            <span style="display:flex;align-items:center;gap:0.6rem;">
+              <span class="catalog-card__price">${p.priceAdult ? `${p.priceAdult} ₽` : 'по запросу'}</span>
+              ${p.ageLimit ? `<span class="catalog-card__age">${esc(p.ageLimit)}</span>` : ''}
+            </span>
+            <button class="btn btn--outline-dark" onclick="showPage('tickets')" style="padding:0.4rem 0.9rem;font-size:0.8rem;">Купить билет</button>
           </div>
         </div>
       </div>`;
