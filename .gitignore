@@ -28,6 +28,11 @@ next-env.d.ts
 
 # deploy convenience wrappers (contain nothing secret, but local-only)
 deploy-remote.bat
+setup-deploy.bat
+
+# server-deploy SSH key — MUST never be committed
+id_ed25519
+id_ed25519.pub
 
 # files prepared for handover to the CEO (contains her .env — never commit)
 /ship-to-ceo/
