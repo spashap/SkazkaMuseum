@@ -2,7 +2,9 @@
 # Runs ON THE SERVER (called by deploy-remote.bat over SSH).
 # Pulls latest code, installs deps, runs migrations, builds, restarts PM2.
 # Mirrors the existing `shepotzvezd` deploy pattern on this VPS.
-set -euo pipefail
+# NOTE: no `-u` (nounset) — nvm's own script references unset variables and
+# would abort the whole deploy under `set -u` before it even starts.
+set -eo pipefail
 
 export NVM_DIR="$HOME/.nvm"
 # shellcheck disable=SC1091
