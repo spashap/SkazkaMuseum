@@ -12,7 +12,11 @@ document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fa
       function pad(n){return (n<10?'0':'')+n;}
       function dateKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
       function today0(){var d=new Date();d.setHours(0,0,0,0);return d;}
-      function fmtTime(iso){var d=new Date(iso);return pad(d.getHours())+':'+pad(d.getMinutes());}
+      // Sessions are always in Moscow time (the museum's one timezone) — format
+      // explicitly against it so a visitor's own device timezone can't shift the
+      // displayed time away from what's shown in the admin calendar.
+      var timeFmt=new Intl.DateTimeFormat('ru-RU',{hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'Europe/Moscow'});
+      function fmtTime(iso){return timeFmt.format(new Date(iso));}
       function priceLabel(s){
         if(!s.priceAdult&&!s.priceChild){return 'по запросу';}
         if(s.priceChild&&s.priceChild!==s.priceAdult){return 'от '+Math.min(s.priceAdult,s.priceChild)+' ₽';}

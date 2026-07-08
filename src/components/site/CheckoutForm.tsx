@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCart, clearCart, removeItem, cartTotal, type CartItem } from '@/lib/cart';
 
-function pad(n: number): string {
-  return String(n).padStart(2, '0');
-}
+// Sessions are always in Moscow time — extract the calendar date against that
+// timezone explicitly, so a buyer's own device timezone can't shift it to the
+// next/previous day near midnight.
+const dateKeyFmt = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Moscow' });
 function dateKey(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  return dateKeyFmt.format(new Date(iso));
 }
 
 type ItemResult = { item: CartItem; ok: boolean; number?: number; error?: string };

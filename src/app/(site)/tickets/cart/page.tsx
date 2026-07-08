@@ -38,9 +38,9 @@ export default function CartPage() {
                 <div style={{ flex: 1, minWidth: 200 }}>
                   <strong>{item.title}</strong>
                   <p className="small" style={{ color: 'var(--text-light)', margin: '0.3rem 0' }}>
-                    {new Date(item.startAt).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })} ·{' '}
-                    {new Date(item.startAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}–
-                    {new Date(item.endAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
+                    {new Date(item.startAt).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'Europe/Moscow' })} ·{' '}
+                    {new Date(item.startAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' })}–
+                    {new Date(item.endAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' })}
                   </p>
                   <p className="small" style={{ color: 'var(--text-light)' }}>{item.priceAdult} ₽ / билет</p>
                 </div>
