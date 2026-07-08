@@ -1,17 +1,11 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
+import { PROGRAM_TYPES, PROGRAM_TYPE_LABELS } from '@/lib/programTypes';
 
 const TYPE_OPTIONS: { value: string; label: string }[] = [
   { value: '', label: 'Все типы' },
-  { value: 'excursion', label: 'Экскурсия' },
-  { value: 'masterclass', label: 'Мастер-класс' },
-  { value: 'quest', label: 'Квест' },
-  { value: 'birthday', label: 'Праздник' },
-  { value: 'free', label: 'Свободное посещение' },
-  { value: 'show', label: 'Шоу' },
-  { value: 'lecture', label: 'Лекторий' },
-  { value: 'other', label: 'Другое' },
+  ...PROGRAM_TYPES.map((v) => ({ value: v, label: PROGRAM_TYPE_LABELS[v] })),
 ];
 
 export default function CalendarFilters({ view, date, type }: { view: string; date: string; type: string }) {

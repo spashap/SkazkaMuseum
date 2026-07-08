@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
 import { getSession, canAccess } from '@/lib/auth';
+import { ticketCount } from '@/lib/ticketDetail';
 
 async function requireAccess() {
   const session = await getSession();
@@ -28,7 +29,7 @@ export async function cancelBooking(formData: FormData) {
     await tx.booking.update({ where: { id }, data: { status: 'cancelled', historyJson: JSON.stringify(history) } });
 
     if (booking.eventId) {
-      const qty = booking.adults + booking.children;
+      const qty = ticketCount(booking);
       await tx.event.update({
         where: { id: booking.eventId },
         data: { booked: { decrement: qty } },

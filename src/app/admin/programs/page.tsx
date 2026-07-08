@@ -2,16 +2,13 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
 import { getSession, canAccess } from '@/lib/auth';
-import { duplicateProgram, archiveProgram, deleteProgram } from './actions';
+import { duplicateProgram, archiveProgram } from './actions';
 import ProgramFilters from '@/components/admin/ProgramFilters';
 import ConfirmSubmitButton from '@/components/admin/ConfirmSubmitButton';
+import DeleteProgramButton from '@/components/admin/DeleteProgramButton';
 import type { Prisma } from '@prisma/client';
+import { programTypeLabel } from '@/lib/programTypes';
 
-const TYPE_RU: Record<string, string> = {
-  excursion: 'Экскурсия', quest: 'Квест', masterclass: 'Мастер-класс', birthday: 'Праздник', other: 'Другое',
-  free: 'Свободное посещение', show: 'Шоу', lecture: 'Лекторий',
-  theatre: 'Театр', partner: 'Партнёрское',
-};
 const STATUS_RU: Record<string, string> = { active: 'Активна', draft: 'Черновик', archived: 'В архиве' };
 const STATUS_BADGE: Record<string, string> = { active: 'badge--active', draft: 'badge--draft', archived: 'badge--archived' };
 
@@ -60,7 +57,7 @@ export default async function Programs({ searchParams }: { searchParams: { type?
                   <h3 style={{ margin: 0 }}>{p.title}</h3>
                   <span className={`badge ${STATUS_BADGE[p.status] || ''}`}>{STATUS_RU[p.status] || p.status}</span>
                 </div>
-                <p className="small">{TYPE_RU[p.type] || p.type} · {p.durationMin} мин · {p.minGroup}–{p.maxGroup} чел.</p>
+                <p className="small">{programTypeLabel(p.type)} · {p.durationMin} мин · {p.minGroup}–{p.maxGroup} чел.</p>
                 <p className="small">Взрослый: {p.priceAdult} ₽ · Детский: {p.priceChild} ₽ · Группа: {p.priceGroup} ₽</p>
                 <p className="caption">Допуслуг: {p._count.upsells} · Связанных событий: {p._count.events}</p>
 
@@ -74,10 +71,7 @@ export default async function Programs({ searchParams }: { searchParams: { type?
                     <input type="hidden" name="id" value={p.id} />
                     <button className="btn btn--outline" style={{ padding: '0.4rem 0.9rem' }}>{p.status === 'archived' ? 'Вернуть из архива' : 'Архивировать'}</button>
                   </form>
-                  <form action={deleteProgram}>
-                    <input type="hidden" name="id" value={p.id} />
-                    <ConfirmSubmitButton className="btn btn--outline" confirmMessage={`Удалить программу «${p.title}»?`} style={{ padding: '0.4rem 0.9rem' }}>Удалить</ConfirmSubmitButton>
-                  </form>
+                  <DeleteProgramButton id={p.id} title={p.title} />
                 </div>
               </div>
             </div>

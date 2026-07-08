@@ -3,6 +3,8 @@ import { db } from '@/lib/db';
 import { getCurrentClient } from '@/lib/customerAuth';
 import AccountNav from '@/components/site/AccountNav';
 import OrdersFilters from '@/components/site/OrdersFilters';
+import ReducedTicketNotice from '@/components/site/ReducedTicketNotice';
+import { ticketCount, ticketBreakdown } from '@/lib/ticketDetail';
 import type { Prisma } from '@prisma/client';
 
 export const metadata = { title: 'История заказов' };
@@ -59,13 +61,17 @@ export default async function OrdersPage({ searchParams }: { searchParams: { sta
               <td style={{ padding: '0.5rem' }}>№{o.number}</td>
               <td style={{ padding: '0.5rem' }}>{o.event?.program.title || '—'}</td>
               <td style={{ padding: '0.5rem' }}>{o.event ? o.event.startAt.toLocaleDateString('ru-RU') : '—'}</td>
-              <td style={{ padding: '0.5rem' }}>{o.adults + o.children}</td>
+              <td style={{ padding: '0.5rem' }}>
+                {ticketCount(o)}
+                {(o.children > 0 || o.reduced > 0) && <><br /><span className="caption">{ticketBreakdown(o)}</span></>}
+              </td>
               <td style={{ padding: '0.5rem' }}>{o.amount ? `${o.amount} ₽` : '—'}</td>
               <td style={{ padding: '0.5rem' }}>{STATUS_RU[o.status] || o.status}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      {orders.some((o) => o.reduced > 0) && <ReducedTicketNotice style={{ marginTop: '1.5rem' }} />}
     </section>
   );
 }

@@ -8,7 +8,7 @@ export default function LogoutButton() {
     router.push('/login'); router.refresh();
   }
   return (
-    <button className="btn btn--outline" onClick={logout} style={{ color: 'var(--cream)', boxShadow: 'inset 0 0 0 2px var(--gold)', width: '100%' }}>
+    <button className="btn btn--outline" onClick={logout} style={{ width: '100%' }}>
       Выйти
     </button>
   );

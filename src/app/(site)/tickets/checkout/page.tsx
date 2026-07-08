@@ -12,7 +12,7 @@ export default async function CheckoutPage() {
         <span className="eyebrow">Онлайн-касса</span>
         <h1>Оформление заказа</h1>
       </div>
-      <CheckoutForm initialName={client?.fullName} initialPhone={client?.phone ?? undefined} />
+      <CheckoutForm initialName={client?.fullName} initialPhone={client?.phone ?? undefined} initialEmail={client?.email ?? undefined} />
     </section>
   );
 }

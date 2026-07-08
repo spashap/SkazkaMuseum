@@ -116,11 +116,18 @@ document.documentElement.classList.add('js-ready'); // disables the CSS no-JS fa
         try{ cart=JSON.parse(localStorage.getItem('museum_cart')||'[]'); }catch(e){ cart=[]; }
         var existing=null;
         for(var j=0;j<cart.length;j++){ if(cart[j].eventId===eventId){ existing=cart[j]; break; } }
-        if(existing){ existing.qty=(existing.qty||1)+1; }
+        if(existing){
+          if(!existing.items){ existing.items=[{rateId:'adult',qty:existing.qty||1}]; }
+          var adultLi=null;
+          for(var k=0;k<existing.items.length;k++){ if(existing.items[k].rateId==='adult'){ adultLi=existing.items[k]; break; } }
+          if(adultLi){ adultLi.qty=(adultLi.qty||0)+1; } else { existing.items.push({rateId:'adult',qty:1}); }
+        }
         else{
           cart.push({
             eventId:s.id, title:s.title, startAt:s.startAt, endAt:s.endAt,
-            priceAdult:s.priceAdult||0, priceChild:s.priceChild||0, qty:1
+            priceAdult:s.priceAdult||0, priceChild:s.priceChild||0,
+            programType:s.type||'', reducedEnabled:!!s.reducedEnabled, reducedPercent:s.reducedPercent||30,
+            items:[{rateId:'adult',qty:1}]
           });
         }
         localStorage.setItem('museum_cart', JSON.stringify(cart));

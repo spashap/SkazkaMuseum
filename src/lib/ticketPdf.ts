@@ -1,7 +1,8 @@
 import PDFDocument from 'pdfkit';
 import { db } from './db';
 import { ticketQrBuffer } from './ticketQr';
-import { ticketStatusLabel, type TicketDetail } from './ticketDetail';
+import { ticketStatusLabel, ticketCount, ticketBreakdown, type TicketDetail } from './ticketDetail';
+import { REDUCED_TICKET_NOTICE } from './reducedTickets';
 
 function fmtDateTime(d: Date): string {
   return d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -30,8 +31,9 @@ export async function buildTicketPdf(t: TicketDetail, origin: string): Promise<B
     if (t.event) {
       doc.text(`Дата и время: ${fmtDateTime(t.event.startAt)} – ${fmtDateTime(t.event.endAt)}`);
     }
-    doc.text(`Количество билетов: ${t.adults + t.children}`);
-    doc.text(`Стоимость: ${t.amount ? `${t.amount} ₽` : 'по запросу'}`);
+    doc.text(`Количество билетов: ${ticketCount(t)}`);
+    if (t.children > 0 || t.reduced > 0) doc.text(ticketBreakdown(t));
+    doc.text(`Стоимость: ${t.amount ? `${t.amount} ₽` : 'по запросу'}${t.reduced > 0 && t.reducedDiscount ? ` (скидка ${t.reducedDiscount} ₽)` : ''}`);
     doc.text(`Номер заказа: №${t.number}`);
     doc.text(`Статус: ${ticketStatusLabel(t)}`);
     doc.moveDown();
@@ -39,6 +41,10 @@ export async function buildTicketPdf(t: TicketDetail, origin: string): Promise<B
     doc.image(qr, { fit: [160, 160], align: 'center' });
     doc.moveDown();
     doc.fontSize(9).fillColor('#666').text('Покажите этот билет (или QR-код) на входе.', { align: 'center' });
+    if (t.reduced > 0) {
+      doc.moveDown(0.5);
+      doc.fontSize(8).fillColor('#8B1A2F').text(REDUCED_TICKET_NOTICE, { align: 'center' });
+    }
 
     doc.end();
   });

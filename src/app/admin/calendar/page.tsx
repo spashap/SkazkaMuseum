@@ -69,8 +69,7 @@ export default async function Calendar({
             <Link
               key={v}
               href={viewHref(v, anchor, type)}
-              className="btn btn--outline"
-              style={view === v ? { background: 'var(--gold)', color: 'var(--dark)', borderColor: 'var(--gold)' } : undefined}
+              className={`view-toggle${view === v ? ' view-toggle--active' : ''}`}
             >
               {v === 'month' ? 'Месяц' : v === 'week' ? 'Неделя' : 'Список'}
             </Link>

@@ -125,6 +125,8 @@ model Program {
   priceChild  Int     @default(0)
   priceReduced Int    @default(0)
   priceGroup  Int     @default(0)
+  reducedEnabled Boolean @default(true) // льготные билеты (-30% по умолчанию); UI only offers this for type excursion/free
+  reducedDiscountPercent Int @default(30)
   status      String  @default("active")
   images      String  @default("[]")
   slug        String  @default("")
@@ -197,6 +199,9 @@ model Booking {
   status      String   @default("new")
   adults      Int      @default(0)
   children    Int      @default(0)
+  reduced     Int      @default(0) // count of льготный tickets in this booking (mutually exclusive with adults — one booking = one ticket type)
+  reducedCategory String @default("") // one of REDUCED_CATEGORIES (src/lib/reducedTickets.ts), empty if reduced = 0
+  reducedDiscount Int  @default(0) // total ₽ discount applied (0 when reduced = 0)
   amount      Int      @default(0)
   payMethod   String?
   upsellsJson String   @default("[]")

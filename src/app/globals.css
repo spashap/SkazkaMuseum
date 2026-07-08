@@ -33,17 +33,21 @@ img { max-width: 100%; height: auto; display: block; }
 .small { font-size: var(--fs-small); }
 .caption { font-size: var(--fs-caption); color: var(--text-light); }
 
+/* Single source of truth for every primary button on the site (public pages,
+   admin, account) — the historic "Купить билет" look: gold pill, dark text.
+   site.css intentionally does NOT redefine .btn — this is the only place. */
 .btn {
-  display: inline-block; cursor: pointer; border: none;
-  font-family: var(--font-body); font-weight: var(--fw-semibold); font-size: var(--fs-body);
-  padding: 0.8rem 1.6rem; border-radius: var(--radius);
-  background: var(--crimson); color: var(--white);
-  transition: background var(--transition), transform var(--transition);
+  display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; border: none;
+  font-family: var(--font-body); font-weight: var(--fw-semibold); font-size: 0.95rem;
+  padding: 0.875rem 1.75rem; border-radius: 50px;
+  background: var(--gold); color: var(--dark); box-shadow: 0 4px 16px rgba(200,150,62,0.35);
+  white-space: nowrap; transition: var(--transition);
 }
-.btn:hover { background: var(--crimson-dark); color: var(--white); transform: translateY(-1px); }
-.btn--gold { background: var(--gold); color: var(--dark); }
-.btn--gold:hover { background: var(--gold-light); color: var(--dark); }
-.btn--outline { background: transparent; color: var(--crimson); box-shadow: inset 0 0 0 2px var(--crimson); }
+.btn:hover { background: var(--gold-light); color: var(--dark); transform: translateY(-2px); }
+.btn--lg { padding: 1rem 2.25rem; font-size: 1.05rem; }
+/* Legacy modifier classes — dozens of existing call sites combine them with .btn.
+   Intentionally left without properties: .btn above is the only style that applies. */
+.btn--gold, .btn--outline, .btn--primary, .btn--outline-dark, .btn--crimson {}
 
 .card {
   background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
@@ -80,3 +84,14 @@ img { max-width: 100%; height: auto; display: block; }
 .badge--active { background: var(--forest); color: var(--white); }
 .badge--draft { background: var(--gold); color: var(--dark); }
 .badge--archived { background: var(--text-light); color: var(--white); }
+
+/* Segmented view toggle (not a CTA button — keeps a distinct selected/unselected look) */
+.view-toggle {
+  display: inline-block; cursor: pointer; text-decoration: none;
+  font-family: var(--font-body); font-weight: var(--fw-semibold); font-size: var(--fs-small);
+  padding: 0.8rem 1.6rem; border-radius: var(--radius);
+  background: var(--white); color: var(--text); border: 1px solid #d9cdb0;
+  transition: background var(--transition), color var(--transition);
+}
+.view-toggle:hover { background: #f4ecd8; }
+.view-toggle--active { background: var(--gold); color: var(--dark); border-color: var(--gold); }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCart, clearCart, removeItem, cartTotal, type CartItem } from '@/lib/cart';
+import ReducedTicketNotice from './ReducedTicketNotice';
 
 // Sessions are always in Moscow time — extract the calendar date against that
 // timezone explicitly, so a buyer's own device timezone can't shift it to the
@@ -15,13 +16,21 @@ function dateKey(iso: string): string {
 type ItemResult = { item: CartItem; ok: boolean; number?: number; error?: string };
 type Step = 'form' | 'submitting' | 'result' | 'payment';
 
-export default function CheckoutForm({ initialName, initialPhone }: { initialName?: string; initialPhone?: string }) {
+const ORDER_ERROR_RU: Record<string, string> = {
+  sold_out: 'Мест не осталось',
+  invalid_rate: 'Этот тариф недоступен для данной программы',
+  invalid_reduced_category: 'Не выбрана льготная категория',
+};
+
+export default function CheckoutForm({ initialName, initialPhone, initialEmail }: { initialName?: string; initialPhone?: string; initialEmail?: string }) {
   const [items, setItems] = useState<CartItem[] | null>(null);
   const [step, setStep] = useState<Step>('form');
   const [results, setResults] = useState<ItemResult[]>([]);
   const [payMsg, setPayMsg] = useState('');
 
   useEffect(() => { setItems(getCart()); }, []);
+
+  const hasReduced = items?.some((i) => i.items.some((li) => li.rateId === 'reduced' && li.qty > 0)) ?? false;
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,6 +39,7 @@ export default function CheckoutForm({ initialName, initialPhone }: { initialNam
     const fd = new FormData(e.currentTarget);
     const fio = String(fd.get('fio') || '');
     const phone = String(fd.get('phone') || '');
+    const email = String(fd.get('email') || '');
     const comment = String(fd.get('comment') || '');
 
     const settled: ItemResult[] = [];
@@ -37,14 +47,17 @@ export default function CheckoutForm({ initialName, initialPhone }: { initialNam
       try {
         const res = await fetch('/api/tickets/order', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ eventId: item.eventId, fio, phone, date: dateKey(item.startAt), count: item.qty, comment }),
+          body: JSON.stringify({
+            eventId: item.eventId, fio, phone, email: email || undefined, date: dateKey(item.startAt), comment,
+            items: item.items.map((li) => ({ rateId: li.rateId, qty: li.qty, category: li.category })),
+          }),
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.ok) {
           settled.push({ item, ok: true, number: data.number });
           removeItem(item.eventId);
         } else {
-          settled.push({ item, ok: false, error: data.error === 'sold_out' ? 'Мест не осталось' : 'Не удалось оформить' });
+          settled.push({ item, ok: false, error: ORDER_ERROR_RU[String(data.error)] || 'Не удалось оформить' });
         }
       } catch {
         settled.push({ item, ok: false, error: 'Ошибка сети' });
@@ -98,6 +111,7 @@ export default function CheckoutForm({ initialName, initialPhone }: { initialNam
           </p>
         ))}
         {!allOk && <p className="caption" style={{ marginTop: '0.5rem' }}>Неоформленные позиции остались в корзине — вернитесь и попробуйте снова.</p>}
+        {results.some((r) => r.ok && r.item.items.some((li) => li.rateId === 'reduced' && li.qty > 0)) && <ReducedTicketNotice style={{ marginTop: '0.75rem' }} />}
         <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem', flexWrap: 'wrap' }}>
           {anyOk && <button type="button" className="btn btn--primary" onClick={goToPayment}>Перейти к оплате</button>}
           {!allOk && <Link href="/tickets/cart" className="btn btn--outline-dark">Вернуться в корзину</Link>}
@@ -110,7 +124,9 @@ export default function CheckoutForm({ initialName, initialPhone }: { initialNam
     <form onSubmit={submit} className="form-card">
       <div className="form-group"><label>Имя *</label><input name="fio" required defaultValue={initialName} placeholder="Ваше имя" /></div>
       <div className="form-group"><label>Телефон *</label><input name="phone" type="tel" required defaultValue={initialPhone} placeholder="+7 (___) ___-__-__" /></div>
+      <div className="form-group"><label>Email (для чека и билета)</label><input name="email" type="email" defaultValue={initialEmail} placeholder="you@example.com" /></div>
       <div className="form-group"><label>Комментарий</label><textarea name="comment" placeholder="Особые пожелания..." /></div>
+      {hasReduced && <ReducedTicketNotice style={{ marginBottom: '1rem' }} />}
       <button type="submit" className="btn btn--primary" disabled={step === 'submitting'} style={{ width: '100%', justifyContent: 'center' }}>
         {step === 'submitting' ? 'Оформляем…' : 'Оформить и перейти к оплате'}
       </button>

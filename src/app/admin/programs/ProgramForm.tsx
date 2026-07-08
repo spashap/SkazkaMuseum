@@ -1,16 +1,5 @@
 import type { Program } from '@prisma/client';
-import { PROGRAM_TYPES, PROGRAM_STATUSES } from './constants';
-
-const TYPE_RU: Record<string, string> = {
-  excursion: 'Экскурсия',
-  masterclass: 'Мастер-класс',
-  quest: 'Квест',
-  birthday: 'Праздник',
-  free: 'Свободное посещение',
-  show: 'Шоу',
-  lecture: 'Лекторий',
-  other: 'Другое',
-};
+import { PROGRAM_TYPES, PROGRAM_TYPE_LABELS, PROGRAM_STATUSES } from '@/lib/programTypes';
 
 const STATUS_RU: Record<string, string> = { active: 'Активна', draft: 'Черновик', archived: 'В архиве' };
 
@@ -31,7 +20,7 @@ export default function ProgramForm({
       <div className="field"><label>Название программы *</label><input name="title" required defaultValue={program?.title} /></div>
       <div className="field"><label>Тип программы</label>
         <select name="type" defaultValue={program?.type ?? 'excursion'}>
-          {PROGRAM_TYPES.map((t) => <option key={t} value={t}>{TYPE_RU[t]}</option>)}
+          {PROGRAM_TYPES.map((t) => <option key={t} value={t}>{PROGRAM_TYPE_LABELS[t]}</option>)}
         </select>
       </div>
       <div className="field"><label>Краткое описание</label><textarea name="shortDesc" rows={2} defaultValue={program?.shortDesc} /></div>
@@ -62,6 +51,18 @@ export default function ProgramForm({
         <div className="field"><label>Цена группы, ₽</label><input name="priceGroup" type="number" min={0} required defaultValue={program?.priceGroup ?? 0} /></div>
       </div>
       {!program && <p className="caption">Дополнительные услуги (upsell) можно добавить после создания программы, на странице редактирования.</p>}
+
+      <h2 style={{ marginTop: '1.5rem' }}>Льготные билеты</h2>
+      <p className="caption">Действуют только для входных билетов и экскурсий — переключатель ни на что не влияет для остальных типов программ.</p>
+      <div className="grid grid--2">
+        <div className="field">
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <input type="checkbox" name="reducedEnabled" defaultChecked={program?.reducedEnabled ?? true} style={{ width: 'auto' }} />
+            Продавать льготные билеты для этой программы
+          </label>
+        </div>
+        <div className="field"><label>Размер скидки, %</label><input name="reducedDiscountPercent" type="number" min={0} max={100} required defaultValue={program?.reducedDiscountPercent ?? 30} /></div>
+      </div>
 
       <h2 style={{ marginTop: '1.5rem' }}>SEO</h2>
       <div className="field"><label>SEO title</label><input name="seoTitle" defaultValue={program?.seoTitle} /></div>

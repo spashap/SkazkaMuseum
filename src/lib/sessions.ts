@@ -42,6 +42,8 @@ export function serializeSession(e: SessionWithProgram) {
     durationMin: e.program.durationMin,
     priceAdult: e.program.priceAdult,
     priceChild: e.program.priceChild,
+    reducedEnabled: e.program.reducedEnabled,
+    reducedPercent: e.program.reducedDiscountPercent,
     shortDesc: e.program.shortDesc,
     capacity: e.capacity,
     booked: e.booked,

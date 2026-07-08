@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 import { getSession, canAccess } from '@/lib/auth';
 import { processAndStoreProgramImage } from '@/lib/images';
 import { slugify } from '@/lib/slug';
-import { PROGRAM_TYPES, PROGRAM_STATUSES } from './constants';
+import { PROGRAM_TYPES, PROGRAM_STATUSES } from '@/lib/programTypes';
 
 const ProgramSchema = z
   .object({
@@ -23,6 +23,8 @@ const ProgramSchema = z
     priceAdult: z.coerce.number().int().min(0),
     priceChild: z.coerce.number().int().min(0),
     priceGroup: z.coerce.number().int().min(0),
+    reducedEnabled: z.coerce.boolean(),
+    reducedDiscountPercent: z.coerce.number().int().min(0).max(100),
     seoTitle: z.string().trim(),
     seoDescription: z.string().trim(),
     slug: z.string().trim(),
@@ -32,7 +34,7 @@ const ProgramSchema = z
 function parseProgramForm(formData: FormData) {
   return ProgramSchema.parse({
     title: formData.get('title') || '',
-    type: formData.get('type') || 'other',
+    type: formData.get('type') || 'excursion',
     shortDesc: formData.get('shortDesc') || '',
     fullDesc: formData.get('fullDesc') || '',
     status: formData.get('status') || 'active',
@@ -43,6 +45,8 @@ function parseProgramForm(formData: FormData) {
     priceAdult: formData.get('priceAdult') || 0,
     priceChild: formData.get('priceChild') || 0,
     priceGroup: formData.get('priceGroup') || 0,
+    reducedEnabled: formData.get('reducedEnabled') === 'on',
+    reducedDiscountPercent: formData.get('reducedDiscountPercent') || 30,
     seoTitle: formData.get('seoTitle') || '',
     seoDescription: formData.get('seoDescription') || '',
     slug: formData.get('slug') || '',
@@ -130,6 +134,8 @@ export async function duplicateProgram(formData: FormData) {
       priceChild: source.priceChild,
       priceReduced: source.priceReduced,
       priceGroup: source.priceGroup,
+      reducedEnabled: source.reducedEnabled,
+      reducedDiscountPercent: source.reducedDiscountPercent,
       status: 'draft',
       images: source.images,
       slug,
@@ -158,20 +164,6 @@ export async function archiveProgram(formData: FormData) {
   const program = await db.program.findUnique({ where: { id } });
   if (!program) return;
   await db.program.update({ where: { id }, data: { status: program.status === 'archived' ? 'active' : 'archived' } });
-  revalidatePath('/admin/programs');
-}
-
-export async function deleteProgram(formData: FormData) {
-  await requireAccess();
-  const id = String(formData.get('id') || '');
-  await db.upsell.deleteMany({ where: { programId: id } });
-  try {
-    await db.program.delete({ where: { id } });
-  } catch {
-    // Program still has events/bookings referencing it — deleting would orphan real
-    // reservations, so fall back to archiving instead of losing that history.
-    await db.program.update({ where: { id }, data: { status: 'archived' } });
-  }
   revalidatePath('/admin/programs');
 }
 
