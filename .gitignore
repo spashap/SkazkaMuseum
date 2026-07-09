@@ -32,6 +32,7 @@ setup-deploy.bat
 
 # server-deploy SSH keys — MUST never be committed, under ANY name/extension
 id_ed25519*
+rotate-deploy-key.sh
 *.pem
 *.ppk
 
