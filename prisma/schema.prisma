@@ -206,6 +206,7 @@ model Booking {
   reducedDiscount Int  @default(0) // total ₽ discount applied across reduced + reducedChild (0 when both are 0)
   amount      Int      @default(0)
   payMethod   String?
+  paymentId   String   @default("") // YooKassa payment id once an online payment was started
   upsellsJson String   @default("[]")
   clientNote  String   @default("")
   staffNote   String   @default("")

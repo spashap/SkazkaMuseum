@@ -85,6 +85,25 @@ img { max-width: 100%; height: auto; display: block; }
 .badge--draft { background: var(--gold); color: var(--dark); }
 .badge--archived { background: var(--text-light); color: var(--white); }
 
+/* Payment modal — the YooKassa embedded widget renders inside .pay-modal__body,
+   so the whole payment happens in a popup without leaving the page. */
+.pay-modal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(26, 22, 14, 0.6); padding: 1rem;
+}
+.pay-modal__card {
+  background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto;
+  padding: 1.25rem; position: relative;
+}
+.pay-modal__close {
+  position: absolute; top: 0.6rem; right: 0.8rem; border: none; background: none;
+  font-family: var(--font-body); font-size: var(--fs-h3); line-height: 1;
+  color: var(--text-light); cursor: pointer; padding: 0.25rem;
+}
+.pay-modal__close:hover { color: var(--dark); }
+
 /* Segmented view toggle (not a CTA button — keeps a distinct selected/unselected look) */
 .view-toggle {
   display: inline-block; cursor: pointer; text-decoration: none;

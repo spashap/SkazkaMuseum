@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import { notifyTelegram } from '@/lib/integrations/telegram';
-import { sendEmail } from '@/lib/integrations/unisender';
+import { sendEmail } from '@/lib/integrations/mail';
 
 // Site forms → Lead in admin "Заявки" (spec 2.2) + Telegram notify + email notify (dup channels).
 const Schema = z.object({

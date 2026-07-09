@@ -1,5 +1,5 @@
 import { db } from './db';
-import { sendEmail } from './integrations/unisender';
+import { sendEmail } from './integrations/mail';
 import type { Client } from '@prisma/client';
 
 // Shared by the account API routes so the sender name / reply-to and the

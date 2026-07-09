@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { getCurrentClient } from '@/lib/customerAuth';
 import { getTicketDetail } from '@/lib/ticketDetail';
 import { buildTicketPdf } from '@/lib/ticketPdf';
-import { sendEmail } from '@/lib/integrations/unisender';
+import { sendEmail } from '@/lib/integrations/mail';
 import { requestOrigin } from '@/lib/origin';
 
 const Schema = z.object({ email: z.string().trim().toLowerCase().email().optional() });

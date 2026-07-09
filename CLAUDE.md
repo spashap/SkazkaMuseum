@@ -106,7 +106,7 @@ pm2 save && pm2 startup                      # survive reboots
 | Manage the program catalog (экскурсии/квесты/мастер-классы/дни рождения) | `/admin/programs` (create/edit/duplicate/archive/delete + upsells); public cards render from `Program` via `src/lib/programCards.ts` |
 | Site forms → leads | `public/site-overrides.js` (intercepts) → `src/app/api/leads/route.ts` |
 | Payments | `src/lib/integrations/yookassa.ts` + `src/app/api/pay/route.ts` |
-| Email | `src/lib/integrations/unisender.ts` |
+| Email | `src/lib/integrations/mail.ts` (Yandex 360 SMTP) |
 | Telegram alerts | `src/lib/integrations/telegram.ts` |
 | Auth & roles | `src/lib/auth.ts` |
 | Admin sidebar/sections | `src/app/admin/layout.tsx` |
