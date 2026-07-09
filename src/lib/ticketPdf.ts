@@ -1,4 +1,5 @@
 import PDFDocument from 'pdfkit';
+import path from 'path';
 import { db } from './db';
 import { ticketQrBuffer } from './ticketQr';
 import { ticketStatusLabel, ticketCount, ticketBreakdown, hasReducedTickets, type TicketDetail } from './ticketDetail';
@@ -7,6 +8,12 @@ import { REDUCED_TICKET_NOTICE } from './reducedTickets';
 function fmtDateTime(d: Date): string {
   return d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
+
+// pdfkit's built-in fonts (Helvetica & co) have NO Cyrillic glyphs — without a
+// registered TTF every Russian string renders as mojibake. The site's woff2 fonts
+// can't be loaded by pdfkit, so the PDF uses these dedicated TTF copies of Manrope
+// (the site's body font — full file, Cyrillic + ₽ included).
+const FONT_DIR = path.join(process.cwd(), 'public', 'fonts', 'pdf');
 
 // Simple, imperative single-page ticket PDF (A5) — program, session time, seat
 // count, price, order number, status and the same QR the customer sees in the
@@ -22,12 +29,15 @@ export async function buildTicketPdf(t: TicketDetail, origin: string): Promise<B
     doc.on('end', () => resolve(Buffer.concat(chunks)));
     doc.on('error', reject);
 
-    doc.fontSize(16).text(company?.name || 'Музей русской сказки', { align: 'center' });
+    doc.registerFont('body', path.join(FONT_DIR, 'Manrope-400.ttf'));
+    doc.registerFont('bold', path.join(FONT_DIR, 'Manrope-700.ttf'));
+
+    doc.font('bold').fontSize(16).text(company?.name || 'Музей русской сказки', { align: 'center' });
     doc.moveDown();
     doc.fontSize(20).text(t.event?.program.title || 'Билет', { align: 'center' });
     doc.moveDown();
 
-    doc.fontSize(12);
+    doc.font('body').fontSize(12);
     if (t.event) {
       doc.text(`Дата и время: ${fmtDateTime(t.event.startAt)} – ${fmtDateTime(t.event.endAt)}`);
     }

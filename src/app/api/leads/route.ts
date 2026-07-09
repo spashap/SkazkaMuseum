@@ -42,7 +42,8 @@ export async function POST(req: Request) {
   const company = await db.companySettings.findUnique({ where: { id: 1 } });
   const notifyEmail = company?.email || 'spb@skazka-museum.ru';
   await sendEmail({
-    to: notifyEmail, fromEmail: notifyEmail, fromName: company?.name || 'Музей русской сказки',
+    // reply-to = the visitor, so answering this notification writes to the client
+    to: notifyEmail, fromName: company?.name || 'Музей русской сказки', replyTo: d.email || undefined,
     subject: `Новая заявка с сайта — ${d.type}`,
     html: `<p><b>Тип:</b> ${d.type}</p><p><b>Имя:</b> ${d.name}</p><p><b>Телефон:</b> ${d.phone}</p>` +
       (d.email ? `<p><b>Email:</b> ${d.email}</p>` : '') +

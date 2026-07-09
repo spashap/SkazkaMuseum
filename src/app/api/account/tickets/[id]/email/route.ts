@@ -29,7 +29,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
 
   const sent = await sendEmail({
     to, toName: ticket.client?.fullName || '',
-    fromEmail: company?.email || 'noreply@skazkamuseum.ru', fromName: company?.name || 'Музей русской сказки',
+    fromName: company?.name || 'Музей русской сказки', replyTo: company?.email || undefined,
     subject: `Ваш билет №${ticket.number} — ${ticket.event?.program.title || ''}`,
     html: `<p>Билет №${ticket.number}${ticket.event ? ` на «${ticket.event.program.title}»` : ''} во вложении.</p>`,
     attachment: { filename: `ticket-${ticket.number}.pdf`, contentType: 'application/pdf', content: pdf },

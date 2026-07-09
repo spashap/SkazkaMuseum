@@ -7,6 +7,7 @@ import { sessionRates, findRate } from '@/lib/rates';
 import { isReducedCategory } from '@/lib/reducedTickets';
 import { ticketBreakdown } from '@/lib/ticketDetail';
 import { sendOrderConfirmationEmail } from '@/lib/orderEmail';
+import { requestOrigin } from '@/lib/origin';
 
 // Buys tickets for one concrete Event ("Сеанс"): reserves seats and creates a single
 // Booking covering any mix of rates (adult/child/reduced/...), atomically so two
@@ -128,7 +129,7 @@ export async function POST(req: Request) {
 
     const emailTo = d.email || loggedInClient?.email;
     if (emailTo) {
-      sendOrderConfirmationEmail({ to: emailTo, toName: d.fio, program: event.program, event, booking }).catch(() => {});
+      sendOrderConfirmationEmail({ to: emailTo, toName: d.fio, program: event.program, event, booking, origin: requestOrigin(req) }).catch(() => {});
     }
 
     return NextResponse.json({ ok: true, bookingId: booking.id, number: booking.number, amount, discount });
