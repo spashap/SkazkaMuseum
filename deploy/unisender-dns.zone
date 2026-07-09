@@ -1,0 +1,22 @@
+;; Unisender Go sender-domain DNS records for skazkamuseum.ru
+;; Import in Cloudflare: DNS -> Records -> Import and Export -> Import DNS records
+;; All records must stay "DNS only" (grey cloud), never proxied.
+$ORIGIN skazkamuseum.ru.
+$TTL 1800
+
+;; SPF — authorizes Unisender to send mail for the domain
+@	1800	IN	TXT	"v=spf1 include:spf.unisender.ru ~all"
+
+;; Unisender Go domain-ownership validation
+@	1800	IN	TXT	"unisender-go-validate-hash=a5ae5eceec819cf7c0308a472ba71ce6"
+
+;; DKIM public key (selector "us")
+us._domainkey	1800	IN	TXT	"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDkEPmp4EHl9d+ttbv7yJdMi0woV2q+PoTRBPVVRgbm8Smgvo1B0Zx6CdS/T0bKd0zNd/uQF7dewDgWewB+TTwjkUZaCmk2OYnzicqk57jqh2/JK/IyURkHExogqlYWPzSS+pV+pOm7ESbvz58Bka2pPMt/bz5550lGqxH32h5JQIDAQAB"
+
+;; DMARC policy delegated to Unisender
+_dmarc	1800	IN	CNAME	skazkamuseum.ru.dmarc.unisender.ru.
+
+;; Bounce/tracking subdomain delegated to Unisender nameservers
+email	3600	IN	NS	uns1.unisender.com.
+email	3600	IN	NS	uns2.unisender.com.
+email	3600	IN	NS	uns3.unisender.com.
