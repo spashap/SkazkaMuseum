@@ -6,12 +6,12 @@ import { buildTicketPdf } from './ticketPdf';
 import { ticketUrl } from './ticketQr';
 import type { Booking, Event, Program } from '@prisma/client';
 
-// Ticket email — sent best-effort right after a Booking is created
-// (see src/app/api/tickets/order/route.ts): the PDF ticket (with QR) is attached
-// and the bearer link to the ticket page is in the body. No-ops silently if
-// UNISENDER_GO_API_KEY isn't set (same convention as every other integration) or
-// if there's no address to send to (guest checkout has no email field to require,
-// so this is opportunistic).
+// Order-confirmation email — sent right after a Booking is created, BEFORE any
+// payment. Deliberately carries NO ticket: no PDF, no bearer link. The ticket
+// (PDF + QR) is delivered only by sendPaymentReceivedEmail below, once YooKassa
+// confirms the money — a buyer whose payment was canceled must not hold
+// anything that looks like a valid ticket. The order number is enough for the
+// pay-at-the-till fallback (cashier looks it up by number).
 export async function sendOrderConfirmationEmail(opts: {
   to: string;
   toName: string;
@@ -21,7 +21,6 @@ export async function sendOrderConfirmationEmail(opts: {
   origin?: string;
 }): Promise<void> {
   const { to, toName, program, event, booking } = opts;
-  const origin = opts.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://skazkamuseum.ru';
   const isReduced = hasReducedTickets(booking);
   try {
     const company = await db.companySettings.findUnique({ where: { id: 1 } });
@@ -30,29 +29,13 @@ export async function sendOrderConfirmationEmail(opts: {
       day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow',
     });
 
-    // The attachment is best-effort on top of best-effort: a PDF hiccup must not
-    // downgrade to NO email at all — the text confirmation still goes out.
-    let attachment;
-    try {
-      const detail = await getTicketDetail(booking.id);
-      if (detail) {
-        attachment = {
-          filename: `ticket-${booking.number}.pdf`,
-          contentType: 'application/pdf',
-          content: await buildTicketPdf(detail, origin),
-        };
-      }
-    } catch (e) {
-      console.error('[orderEmail] ticket PDF failed — sending without attachment', e);
-    }
-
     const html = `
       <p>Спасибо за заказ! Ваш заказ №${booking.number} оформлен.</p>
       <p><strong>${program.title}</strong><br>${dateStr}</p>
       <p>${ticketBreakdown(booking)}<br>Сумма: ${booking.amount} ₽${isReduced ? ` (скидка ${booking.reducedDiscount} ₽)` : ''}</p>
       ${isReduced ? `<p style="color:#8B1A2F">⚠ ${REDUCED_TICKET_NOTICE}</p>` : ''}
-      ${attachment ? '<p>Билет с QR-кодом — во вложении. Покажите его на входе с экрана или распечатайте.</p>' : ''}
-      <p>Билет также доступен по ссылке: <a href="${ticketUrl(booking.id, origin)}">${ticketUrl(booking.id, origin)}</a></p>
+      <p><strong>Билет придёт отдельным письмом сразу после оплаты.</strong></p>
+      <p>Если вы не оплатили заказ онлайн — оплатите его на кассе при визите, назвав номер заказа №${booking.number}.</p>
     `;
 
     await sendEmail({
@@ -61,7 +44,6 @@ export async function sendOrderConfirmationEmail(opts: {
       replyTo: company?.email || undefined,
       subject: `Заказ №${booking.number} оформлен — ${program.title}`,
       html,
-      attachment,
     });
   } catch (e) {
     console.error('[orderEmail] failed to send confirmation', e);

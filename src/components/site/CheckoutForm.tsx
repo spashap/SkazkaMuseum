@@ -24,6 +24,7 @@ const ORDER_ERROR_RU: Record<string, string> = {
   sold_out: 'Мест не осталось',
   invalid_rate: 'Этот тариф недоступен для данной программы',
   invalid_reduced_category: 'Не выбрана льготная категория',
+  past_event: 'Сеанс уже начался или прошёл — выберите другое время',
 };
 
 declare global {

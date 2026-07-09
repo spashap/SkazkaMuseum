@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { publicSessionWhere, serializeSession, startOfToday } from '@/lib/sessions';
+import { publicSessionWhere, serializeSession } from '@/lib/sessions';
 
 // GET /api/sessions
 //   ?date=YYYY-MM-DD          -> sessions on that day (ticket page schedule panel)
@@ -13,7 +13,8 @@ export async function GET(req: Request) {
   const month = searchParams.get('month');
   const upcoming = searchParams.get('upcoming');
 
-  const today0 = startOfToday();
+  // Clamp every "from" to NOW — already-started sessions are not sellable.
+  const now = new Date();
 
   if (date) {
     const from = new Date(`${date}T00:00:00`);
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
     const to = new Date(from);
     to.setDate(to.getDate() + 1);
     const sessions = await db.event.findMany({
-      where: { ...publicSessionWhere(), startAt: { gte: from < today0 ? today0 : from, lt: to } },
+      where: { ...publicSessionWhere(), startAt: { gte: from < now ? now : from, lt: to } },
       orderBy: { startAt: 'asc' },
       include: { program: true },
     });
@@ -35,7 +36,7 @@ export async function GET(req: Request) {
     const from = new Date(y, m - 1, 1);
     const to = new Date(y, m, 1);
     const sessions = await db.event.findMany({
-      where: { ...publicSessionWhere(), startAt: { gte: from < today0 ? today0 : from, lt: to } },
+      where: { ...publicSessionWhere(), startAt: { gte: from < now ? now : from, lt: to } },
       select: { startAt: true },
     });
     const dates = Array.from(

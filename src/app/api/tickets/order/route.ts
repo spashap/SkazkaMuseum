@@ -38,6 +38,11 @@ export async function POST(req: Request) {
   if (!event || event.status !== 'scheduled' || event.program.status !== 'active') {
     return NextResponse.json({ error: 'not_found' }, { status: 404 });
   }
+  // A session that already started can't be bought online (the schedule UI hides
+  // them, but a cart assembled before start time would still reach this point).
+  if (event.startAt <= new Date()) {
+    return NextResponse.json({ error: 'past_event' }, { status: 409 });
+  }
 
   // Every rate is priced and validated against the DB's own rate list — never trust a
   // client-sent id/qty/price. This also re-enforces the льготный-билет rules (program

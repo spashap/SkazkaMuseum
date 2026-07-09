@@ -21,8 +21,10 @@ export function startOfToday(): Date {
 }
 
 // What the public site is allowed to see: scheduled (not cancelled/hidden)
-// sessions of active programs, from a given moment forward.
-export function publicSessionWhere(from: Date = startOfToday()): Prisma.EventWhereInput {
+// sessions of active programs, from a given moment forward. The default is NOW,
+// not start-of-day: a session that already began must not be purchasable —
+// visitors were buying today's morning sessions in the evening.
+export function publicSessionWhere(from: Date = new Date()): Prisma.EventWhereInput {
   return {
     status: 'scheduled',
     startAt: { gte: from },
