@@ -30,12 +30,17 @@ next-env.d.ts
 deploy-remote.bat
 setup-deploy.bat
 
-# server-deploy SSH key — MUST never be committed
-id_ed25519
-id_ed25519.pub
+# server-deploy SSH keys — MUST never be committed, under ANY name/extension
+id_ed25519*
+*.pem
+*.ppk
 
-# files prepared for handover to the CEO (contains her .env — never commit)
+# files prepared for handover to the CEO (contain her .env / SSH key — never commit)
 /ship-to-ceo/
+ship-to-ceo*
+*.rar
+*.zip
+*.7z
 
 # misc
 .DS_Store
