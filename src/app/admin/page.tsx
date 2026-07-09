@@ -14,8 +14,12 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 export default async function Dashboard() {
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const [revenueAgg, ticketCount, newLeads, unpaid] = await Promise.all([
+  // Выручка и «продажи» считаются ТОЛЬКО по Transaction — строки создаёт
+  // verifyAndApplyPayment после подтверждения оплаты YooKassa (или админ вручную,
+  // этап 4+). Начатые и брошенные оплаты (booking 'new' с paymentId) сюда не попадают.
+  const [revenueAgg, paidCount, bookingCount, newLeads, unpaid] = await Promise.all([
     db.transaction.aggregate({ _sum: { amount: true }, where: { createdAt: { gte: monthStart }, status: 'completed' } }),
+    db.transaction.count({ where: { createdAt: { gte: monthStart }, status: 'completed' } }),
     db.booking.count({ where: { createdAt: { gte: monthStart } } }),
     db.lead.count({ where: { status: 'new' } }),
     db.booking.count({ where: { status: 'confirmed' } }),
@@ -26,9 +30,9 @@ export default async function Dashboard() {
     <>
       <h1>Главная панель</h1>
       <div className="grid grid--3" style={{ marginTop: '1rem' }}>
-        <Stat label="Выручка за месяц" value={`${revenue.toLocaleString('ru-RU')} ₽`} />
-        <Stat label="Бронирований за месяц" value={ticketCount} />
-        <Stat label="Новые заявки" value={newLeads} />
+        <Stat label="Выручка за месяц (оплачено)" value={`${revenue.toLocaleString('ru-RU')} ₽`} />
+        <Stat label="Оплаченных заказов за месяц" value={paidCount} />
+        <Stat label="Бронирований за месяц (все)" value={bookingCount} />
       </div>
 
       <h2 style={{ marginTop: '2rem' }}>Уведомления</h2>

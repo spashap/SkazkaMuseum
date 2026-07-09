@@ -33,6 +33,7 @@ declare global {
       return_url?: string;
       error_callback?: (error: { error: string }) => void;
     }) => { render: (containerId: string) => Promise<void>; destroy: () => void };
+    dataLayer?: unknown[];
   }
 }
 
@@ -122,6 +123,24 @@ export default function CheckoutForm({ initialName, initialPhone, initialEmail }
           pollingRef.current = false;
           widgetRef.current?.destroy();
           widgetRef.current = null;
+          // Yandex.Metrika e-commerce purchase (the counter is configured with
+          // ecommerce:"dataLayer") — pushed ONLY on verified payment.
+          try {
+            const paid = results.filter((r) => r.ok);
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              ecommerce: {
+                currencyCode: 'RUB',
+                purchase: {
+                  actionField: { id: paymentId, revenue: String(cartTotal(paid.map((r) => r.item))) },
+                  products: paid.map((r) => ({
+                    id: String(r.number || r.bookingId), name: r.item.title,
+                    price: String(cartTotal([r.item])), quantity: 1,
+                  })),
+                },
+              },
+            });
+          } catch { /* analytics must never break checkout */ }
           setPayState('paid');
           return;
         }

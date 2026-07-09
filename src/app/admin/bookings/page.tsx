@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { db } from '@/lib/db';
 import { getSession, canAccess } from '@/lib/auth';
 import { redirect } from 'next/navigation';
@@ -6,16 +7,32 @@ import { ticketCount } from '@/lib/ticketDetail';
 import { cancelBooking } from './actions';
 
 const ST: Record<string, string> = { new: 'Новая', confirmed: 'Подтверждена', paid: 'Оплачена', completed: 'Завершена', cancelled: 'Отменена' };
+// Filter-chip labels (plural); paid doubles as the "sales" view.
+const ST_FILTER: Record<string, string> = { new: 'Новые', confirmed: 'Подтверждённые', paid: 'Оплаченные (продажи)', completed: 'Завершённые', cancelled: 'Отменённые' };
 
-export default async function Bookings() {
+export default async function Bookings({ searchParams }: { searchParams?: { status?: string } }) {
   const session = await getSession();
   if (!session || !canAccess(session.role, 'bookings')) redirect('/admin');
-  const bookings = await db.booking.findMany({ orderBy: { createdAt: 'desc' }, take: 100, include: { client: true, program: true } });
+  const status = searchParams?.status && ST[searchParams.status] ? searchParams.status : undefined;
+  const bookings = await db.booking.findMany({
+    where: status ? { status } : undefined,
+    orderBy: { createdAt: 'desc' },
+    take: 100,
+    include: { client: true, program: true },
+  });
   return (
     <>
       <h1>Бронирования</h1>
       <p className="caption">Пайплайн: Новая → Подтверждена → Оплачена → Завершена → Отменена. Полная карточка и смена статуса — этап 4 (PLAN.md).</p>
-      {bookings.length === 0 && <p className="caption">Пока нет бронирований. Создаются из раздела «Заявки» и покупок билетов на сеанс.</p>}
+      <div className="toolbar">
+        <Link href="/admin/bookings" className={`view-toggle${!status ? ' view-toggle--active' : ''}`}>Все</Link>
+        {Object.entries(ST_FILTER).map(([key, label]) => (
+          <Link key={key} href={`/admin/bookings?status=${key}`} className={`view-toggle${status === key ? ' view-toggle--active' : ''}`}>
+            {label}
+          </Link>
+        ))}
+      </div>
+      {bookings.length === 0 && <p className="caption" style={{ marginTop: '1rem' }}>{status ? 'Нет бронирований с этим статусом.' : 'Пока нет бронирований. Создаются из раздела «Заявки» и покупок билетов на сеанс.'}</p>}
       <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem', fontSize: 'var(--fs-small)' }}>
         <thead><tr style={{ textAlign: 'left', borderBottom: '2px solid var(--cream)' }}>
           <th>№</th><th>Клиент</th><th>Программа</th><th>Взр.</th><th>Дет.</th><th>Всего</th><th>Льгота</th><th>Сумма</th><th>Статус</th><th>Создано</th><th></th>

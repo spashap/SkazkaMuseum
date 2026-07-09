@@ -42,6 +42,11 @@ export async function verifyAndApplyPayment(paymentId: string, origin?: string):
         where: { id: b.id },
         data: { status: 'paid', payMethod: 'online', historyJson: JSON.stringify(history) },
       });
+      // The Transaction row is what admin «Финансы»/«Выручка» aggregate — created
+      // ONLY here, for verified money. Abandoned payment attempts never reach this.
+      await db.transaction.create({
+        data: { bookingId: b.id, amount: b.amount, method: 'online', status: 'completed' },
+      });
 
       const emailTo = b.client?.email;
       if (emailTo && b.event) {
