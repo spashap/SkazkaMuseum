@@ -15,6 +15,10 @@ nvm use --lts >/dev/null 2>&1 || nvm use default >/dev/null 2>&1 || true
 cd /var/www/skazkamuseum
 
 echo "== git pull =="
+# The server's `npm install` may rewrite package-lock.json (platform/npm-version
+# drift), which then blocks the next pull. The repo's lockfile is canonical —
+# discard the server's local copy before pulling.
+git checkout -- package-lock.json 2>/dev/null || true
 git pull --ff-only
 
 echo "== npm install =="
