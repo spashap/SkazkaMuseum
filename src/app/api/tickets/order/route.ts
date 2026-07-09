@@ -42,7 +42,8 @@ export async function POST(req: Request) {
   // client-sent id/qty/price. This also re-enforces the льготный-билет rules (program
   // eligibility, valid category) exactly as before, just per-rate instead of whole-order.
   const availableRates = sessionRates(event.program);
-  let adults = 0, children = 0, reduced = 0, reducedCategory = '', amount = 0, discount = 0, count = 0;
+  let adults = 0, children = 0, reduced = 0, reducedCategory = '', reducedChild = 0, reducedChildCategory = '';
+  let amount = 0, discount = 0, count = 0;
 
   for (const li of d.items) {
     if (li.qty <= 0) continue;
@@ -52,13 +53,23 @@ export async function POST(req: Request) {
     amount += rate.unitPrice * li.qty;
     if (li.rateId === 'adult') adults += li.qty;
     else if (li.rateId === 'child') children += li.qty;
-    else if (li.rateId === 'reduced') {
+    else if (li.rateId === 'reduced_adult') {
       if (!li.category || !isReducedCategory(li.category)) {
         return NextResponse.json({ error: 'invalid_reduced_category' }, { status: 400 });
       }
       reduced += li.qty;
       reducedCategory = li.category;
+      // Льготный взрослый билет discounts off the adult price, not a shared/global rate.
       discount += (event.program.priceAdult - rate.unitPrice) * li.qty;
+    } else if (li.rateId === 'reduced_child') {
+      if (!li.category || !isReducedCategory(li.category)) {
+        return NextResponse.json({ error: 'invalid_reduced_category' }, { status: 400 });
+      }
+      reducedChild += li.qty;
+      reducedChildCategory = li.category;
+      // Льготный детский билет discounts off the child price — the bug this fixes was
+      // always discounting off priceAdult regardless of which category was bought.
+      discount += (event.program.priceChild - rate.unitPrice) * li.qty;
     }
   }
   if (count === 0 || count > 20) return NextResponse.json({ error: 'invalid' }, { status: 400 });
@@ -99,10 +110,12 @@ export async function POST(req: Request) {
           children,
           reduced,
           reducedCategory,
+          reducedChild,
+          reducedChildCategory,
           reducedDiscount: discount,
           amount,
           status: 'new',
-          clientNote: [ticketBreakdown({ adults, children, reduced, reducedCategory }), d.comment].filter(Boolean).join(' · '),
+          clientNote: [ticketBreakdown({ adults, children, reduced, reducedCategory, reducedChild, reducedChildCategory }), d.comment].filter(Boolean).join(' · '),
           historyJson: JSON.stringify([{ at: new Date().toISOString(), event: 'created' }]),
         },
       });
@@ -110,7 +123,7 @@ export async function POST(req: Request) {
 
     await notifyTelegram(
       `🎟 <b>Новый заказ билетов</b>\nПрограмма: ${event.program.title}\nСеанс: ${event.startAt.toLocaleString('ru-RU')}\n` +
-        `Имя: ${d.fio}\nТел: ${d.phone}\n${ticketBreakdown({ adults, children, reduced, reducedCategory })}`
+        `Имя: ${d.fio}\nТел: ${d.phone}\n${ticketBreakdown({ adults, children, reduced, reducedCategory, reducedChild, reducedChildCategory })}`
     );
 
     const emailTo = d.email || loggedInClient?.email;

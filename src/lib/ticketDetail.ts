@@ -22,20 +22,35 @@ export function ticketStatusLabel(t: TicketDetail): string {
   return t.event?.rescheduledAt ? `${base} · перенесено` : base;
 }
 
-type TicketCounts = { adults: number; children: number; reduced: number; reducedCategory: string };
+type TicketCounts = {
+  adults: number;
+  children: number;
+  reduced: number;
+  reducedCategory: string;
+  reducedChild: number;
+  reducedChildCategory: string;
+};
 
 // Total seats held by a booking — the one place this sum is computed, reused by seat
 // release math, PDFs, emails, and every ticket-count display so a new rate (a future
 // third/fourth bucket) only needs to be added here.
 export function ticketCount(t: TicketCounts): number {
-  return t.adults + t.children + t.reduced;
+  return t.adults + t.children + t.reduced + t.reducedChild;
 }
 
-// Human-readable per-rate breakdown, e.g. "Взрослых: 2 · Детских: 1 · Льготных: 1 (Пенсионеры)".
+// Whether a booking has any льготный ticket (adult or child rate) — the one place this
+// check is made, reused everywhere the reduced-ticket notice/legal text is shown.
+export function hasReducedTickets(t: { reduced: number; reducedChild: number }): boolean {
+  return t.reduced > 0 || t.reducedChild > 0;
+}
+
+// Human-readable per-rate breakdown, e.g.
+// "Взрослых: 2 · Детских: 1 · Льготных взрослых: 1 (Пенсионеры) · Льготных детских: 1 (Многодетные семьи)".
 export function ticketBreakdown(t: TicketCounts): string {
   const parts: string[] = [];
   if (t.adults > 0) parts.push(`Взрослых: ${t.adults}`);
   if (t.children > 0) parts.push(`Детских: ${t.children}`);
-  if (t.reduced > 0) parts.push(`Льготных: ${t.reduced}${t.reducedCategory ? ` (${t.reducedCategory})` : ''}`);
+  if (t.reduced > 0) parts.push(`Льготных взрослых: ${t.reduced}${t.reducedCategory ? ` (${t.reducedCategory})` : ''}`);
+  if (t.reducedChild > 0) parts.push(`Льготных детских: ${t.reducedChild}${t.reducedChildCategory ? ` (${t.reducedChildCategory})` : ''}`);
   return parts.join(' · ');
 }

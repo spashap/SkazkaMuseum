@@ -1,7 +1,7 @@
 import { db } from './db';
 import { sendEmail } from './integrations/unisender';
 import { REDUCED_TICKET_NOTICE } from './reducedTickets';
-import { ticketBreakdown } from './ticketDetail';
+import { ticketBreakdown, hasReducedTickets } from './ticketDetail';
 import type { Booking, Event, Program } from '@prisma/client';
 
 // Order-confirmation email — sent best-effort right after a Booking is created
@@ -16,7 +16,7 @@ export async function sendOrderConfirmationEmail(opts: {
   booking: Booking;
 }): Promise<void> {
   const { to, toName, program, event, booking } = opts;
-  const isReduced = booking.reduced > 0;
+  const isReduced = hasReducedTickets(booking);
   try {
     const company = await db.companySettings.findUnique({ where: { id: 1 } });
 

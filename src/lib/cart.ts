@@ -10,8 +10,8 @@ import { sessionRates, findRate, type Rate } from './rates';
 const KEY = 'museum_cart';
 
 // One entry per rate purchased on this session — e.g. [{rateId:'adult',qty:2},
-// {rateId:'child',qty:1},{rateId:'reduced',qty:1,category:'Пенсионеры'}]. `category`
-// only applies to the 'reduced' rate today; other future rates can ignore it.
+// {rateId:'child',qty:1},{rateId:'reduced_adult',qty:1,category:'Пенсионеры'}]. `category`
+// only applies to the reduced rates today; other future rates can ignore it.
 export type CartLineItem = { rateId: string; qty: number; category?: string };
 
 export type CartItem = {
@@ -34,11 +34,16 @@ export type CartItem = {
 // started before a deploy keeps working instead of appearing empty/broken.
 type LegacyCartItem = CartItem & { qty?: number; ticketType?: 'regular' | 'reduced'; reducedCategory?: string };
 function normalize(raw: LegacyCartItem): CartItem {
-  if (Array.isArray(raw.items)) return raw;
+  if (Array.isArray(raw.items)) {
+    // Carts written before the льготный билет split stored a single 'reduced' rate
+    // (always priced off the adult ticket) — remap it to 'reduced_adult' so carts
+    // sitting in a visitor's localStorage across this deploy keep working.
+    return { ...raw, items: raw.items.map((li) => (li.rateId === 'reduced' ? { ...li, rateId: 'reduced_adult' } : li)) };
+  }
   const qty = raw.qty || 1;
   const items: CartLineItem[] =
     raw.ticketType === 'reduced'
-      ? [{ rateId: 'reduced', qty, category: raw.reducedCategory || '' }]
+      ? [{ rateId: 'reduced_adult', qty, category: raw.reducedCategory || '' }]
       : [{ rateId: 'adult', qty }];
   return { ...raw, items };
 }

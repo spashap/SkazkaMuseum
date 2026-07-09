@@ -199,9 +199,11 @@ model Booking {
   status      String   @default("new")
   adults      Int      @default(0)
   children    Int      @default(0)
-  reduced     Int      @default(0) // count of льготный tickets in this booking (mutually exclusive with adults — one booking = one ticket type)
+  reduced     Int      @default(0) // count of льготный-взрослый tickets (priced off priceAdult) in this booking
   reducedCategory String @default("") // one of REDUCED_CATEGORIES (src/lib/reducedTickets.ts), empty if reduced = 0
-  reducedDiscount Int  @default(0) // total ₽ discount applied (0 when reduced = 0)
+  reducedChild Int     @default(0) // count of льготный-детский tickets (priced off priceChild) in this booking
+  reducedChildCategory String @default("") // one of REDUCED_CATEGORIES, empty if reducedChild = 0
+  reducedDiscount Int  @default(0) // total ₽ discount applied across reduced + reducedChild (0 when both are 0)
   amount      Int      @default(0)
   payMethod   String?
   upsellsJson String   @default("[]")

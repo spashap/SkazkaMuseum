@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCart, clearCart, removeItem, cartTotal, type CartItem } from '@/lib/cart';
+import { isReducedRateId } from '@/lib/rates';
 import ReducedTicketNotice from './ReducedTicketNotice';
 
 // Sessions are always in Moscow time — extract the calendar date against that
@@ -30,7 +31,7 @@ export default function CheckoutForm({ initialName, initialPhone, initialEmail }
 
   useEffect(() => { setItems(getCart()); }, []);
 
-  const hasReduced = items?.some((i) => i.items.some((li) => li.rateId === 'reduced' && li.qty > 0)) ?? false;
+  const hasReduced = items?.some((i) => i.items.some((li) => isReducedRateId(li.rateId) && li.qty > 0)) ?? false;
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -111,7 +112,7 @@ export default function CheckoutForm({ initialName, initialPhone, initialEmail }
           </p>
         ))}
         {!allOk && <p className="caption" style={{ marginTop: '0.5rem' }}>Неоформленные позиции остались в корзине — вернитесь и попробуйте снова.</p>}
-        {results.some((r) => r.ok && r.item.items.some((li) => li.rateId === 'reduced' && li.qty > 0)) && <ReducedTicketNotice style={{ marginTop: '0.75rem' }} />}
+        {results.some((r) => r.ok && r.item.items.some((li) => isReducedRateId(li.rateId) && li.qty > 0)) && <ReducedTicketNotice style={{ marginTop: '0.75rem' }} />}
         <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem', flexWrap: 'wrap' }}>
           {anyOk && <button type="button" className="btn btn--primary" onClick={goToPayment}>Перейти к оплате</button>}
           {!allOk && <Link href="/tickets/cart" className="btn btn--outline-dark">Вернуться в корзину</Link>}

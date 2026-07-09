@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ticketQrDataUrl } from '@/lib/ticketQr';
-import { ticketStatusLabel, ticketCount, ticketBreakdown, type TicketDetail } from '@/lib/ticketDetail';
+import { ticketStatusLabel, ticketCount, ticketBreakdown, hasReducedTickets, type TicketDetail } from '@/lib/ticketDetail';
 import { googleCalendarUrl, outlookCalendarUrl } from '@/lib/calendarLinks';
 import EmailTicketButton from './EmailTicketButton';
 import ReducedTicketNotice from './ReducedTicketNotice';
@@ -31,12 +31,12 @@ export default async function TicketCard({ t, origin, compact }: { t: TicketDeta
         <p className="small" style={{ color: 'var(--text-light)' }}>
           Билетов: {ticketCount(t)} · {t.amount ? `${t.amount} ₽` : 'по запросу'} · №{t.number}
         </p>
-        {(t.children > 0 || t.reduced > 0) && (
+        {(t.children > 0 || hasReducedTickets(t)) && (
           <p className="small" style={{ color: 'var(--forest)' }}>
             {ticketBreakdown(t)}{t.reducedDiscount ? ` · скидка ${t.reducedDiscount} ₽` : ''}
           </p>
         )}
-        {t.reduced > 0 && !compact && <ReducedTicketNotice style={{ marginTop: '0.5rem' }} />}
+        {hasReducedTickets(t) && !compact && <ReducedTicketNotice style={{ marginTop: '0.5rem' }} />}
         {!compact && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem', alignItems: 'center' }}>
             <Link href={`/account/ticket/${t.id}`} className="btn btn--outline-dark" style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem' }}>Подробнее</Link>

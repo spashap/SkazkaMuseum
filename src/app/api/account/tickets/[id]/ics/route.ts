@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { getTicketDetail, ticketCount, ticketBreakdown } from '@/lib/ticketDetail';
+import { getTicketDetail, ticketCount, ticketBreakdown, hasReducedTickets } from '@/lib/ticketDetail';
 import { buildIcs } from '@/lib/calendarLinks';
 
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
@@ -11,7 +11,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   const ics = buildIcs({
     title: ticket.event.program.title,
     description: `Заказ №${ticket.number} · ${ticketCount(ticket)} билет(ов)`
-      + (ticket.children > 0 || ticket.reduced > 0 ? ` (${ticketBreakdown(ticket)})` : ''),
+      + (ticket.children > 0 || hasReducedTickets(ticket) ? ` (${ticketBreakdown(ticket)})` : ''),
     location: company?.address || '',
     startAt: ticket.event.startAt,
     endAt: ticket.event.endAt,

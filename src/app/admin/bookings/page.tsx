@@ -30,10 +30,11 @@ export default async function Bookings() {
               <td>{b.children}</td>
               <td>{ticketCount(b)}</td>
               <td>
-                {b.reduced > 0 ? (
+                {b.reduced > 0 || b.reducedChild > 0 ? (
                   <>
-                    {b.reduced} шт. · {b.reducedCategory}
-                    <br /><span className="caption">скидка {b.reducedDiscount} ₽</span>
+                    {b.reduced > 0 && <div>{b.reduced} взр. · {b.reducedCategory}</div>}
+                    {b.reducedChild > 0 && <div>{b.reducedChild} дет. · {b.reducedChildCategory}</div>}
+                    <span className="caption">скидка {b.reducedDiscount} ₽</span>
                   </>
                 ) : '—'}
               </td>

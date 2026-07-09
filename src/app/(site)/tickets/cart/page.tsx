@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getCart, removeItem, setRateQty, rates, lineTotal, cartTotal, type CartItem } from '@/lib/cart';
+import { isReducedRateId } from '@/lib/rates';
 import { REDUCED_CATEGORIES } from '@/lib/reducedTickets';
 import ReducedTicketNotice from '@/components/site/ReducedTicketNotice';
 
@@ -26,8 +27,8 @@ export default function CartPage() {
     setItems(removeItem(eventId));
   }
 
-  const hasReduced = items?.some((i) => qtyFor(i, 'reduced') > 0) ?? false;
-  const missingCategory = items?.some((i) => qtyFor(i, 'reduced') > 0 && !categoryFor(i, 'reduced')) ?? false;
+  const hasReduced = items?.some((i) => i.items.some((li) => isReducedRateId(li.rateId) && li.qty > 0)) ?? false;
+  const missingCategory = items?.some((i) => i.items.some((li) => isReducedRateId(li.rateId) && li.qty > 0 && !li.category)) ?? false;
 
   return (
     <section className="section container" style={{ maxWidth: 720 }}>
@@ -76,10 +77,10 @@ export default function CartPage() {
                               {qty > 0 ? `${rate.unitPrice} ₽ × ${qty} = ${rate.unitPrice * qty} ₽` : ''}
                             </span>
                           </div>
-                          {rate.id === 'reduced' && qty > 0 && (
+                          {isReducedRateId(rate.id) && qty > 0 && (
                             <select
-                              value={categoryFor(item, 'reduced')}
-                              onChange={(e) => changeQty(item.eventId, 'reduced', qty, e.target.value)}
+                              value={categoryFor(item, rate.id)}
+                              onChange={(e) => changeQty(item.eventId, rate.id, qty, e.target.value)}
                               style={{ marginTop: '0.4rem', minWidth: 240 }}
                             >
                               <option value="">Выберите льготную категорию…</option>
