@@ -1,22 +1,29 @@
-;; Yandex 360 (business mail) DNS records for skazkamuseum.ru
+;; Yandex 360 (business mail) DNS records for skazkamuseum.ru — Unisender REMOVED,
+;; Yandex is now the only authorized mail sender.
 ;; Import in Cloudflare: DNS -> Records -> Import and Export -> Import DNS records
 ;;
-;; !! BEFORE importing: DELETE the existing SPF record in Cloudflare
-;;    (TXT @ "v=spf1 include:spf.unisender.ru ~all") — a domain may have ONE SPF
-;;    record only. The record below REPLACES it and authorizes BOTH senders:
-;;    Unisender (ticket/site emails) and Yandex (mailboxes like spb@/noreply@).
+;; !! BEFORE importing: delete every Unisender record (see chat guide) — especially
+;;    the old SPF TXT and the _dmarc CNAME, otherwise this import creates duplicates
+;;    and duplicate SPF/DMARC = broken mail validation.
+;; !! If an MX record for mx.yandex.net already exists (from an earlier import),
+;;    remove the MX line below before importing, or delete the duplicate after.
 ;;
 ;; All records must stay "DNS only" (grey cloud), never proxied.
 $ORIGIN skazkamuseum.ru.
 $TTL 1800
 
-;; SPF — merged: Unisender + Yandex in one record
-@	1800	IN	TXT	"v=spf1 include:spf.unisender.ru include:_spf.yandex.net ~all"
+;; SPF — Yandex only. The include+~all form (not Yandex's redirect= variant) so a
+;; second sender can simply be appended later without restructuring the record.
+@	1800	IN	TXT	"v=spf1 include:_spf.yandex.net ~all"
 
 ;; Mail delivery INTO the Yandex mailboxes (standard Yandex 360 MX)
 @	1800	IN	MX	10 mx.yandex.net.
 
-;; Yandex will also ask for (add when its wizard shows the values):
+;; DMARC — replaces the deleted Unisender CNAME. p=none = monitor-only, doesn't
+;; reject anything; tighten to p=quarantine once mail flow is proven stable.
+_dmarc	1800	IN	TXT	"v=DMARC1; p=none;"
+
+;; Yandex's setup wizard will also ask for (add when it shows the values):
 ;;  - domain ownership TXT:   @  TXT  "yandex-verification=XXXXXXXXXXXXXXXX"
 ;;  - DKIM key:               mail._domainkey  TXT  "v=DKIM1; k=rsa; p=MIGf..."
 ;; Paste those to Claude and they'll be added here.
