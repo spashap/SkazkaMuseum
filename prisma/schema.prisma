@@ -207,6 +207,8 @@ model Booking {
   amount      Int      @default(0)
   payMethod   String?
   paymentId   String   @default("") // YooKassa payment id once an online payment was started
+  usedAt      DateTime? // entry control: when the group was let in (null = not yet)
+  usedBy      String   @default("") // entry control: staff name who let the group in
   upsellsJson String   @default("[]")
   clientNote  String   @default("")
   staffNote   String   @default("")

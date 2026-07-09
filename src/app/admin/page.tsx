@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
+import { getSession, canAccess } from '@/lib/auth';
 
 // Dashboard (spec 3.3): sales, today's events, notifications.
 function Stat({ label, value }: { label: string; value: string | number }) {
@@ -12,6 +14,10 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 }
 
 export default async function Dashboard() {
+  // The cashier role has no dashboard (it shows revenue) — their home is entry control.
+  const session = await getSession();
+  if (session && !canAccess(session.role, 'dashboard')) redirect('/admin/checkin');
+
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   // Выручка и «продажи» считаются ТОЛЬКО по Transaction — строки создаёт

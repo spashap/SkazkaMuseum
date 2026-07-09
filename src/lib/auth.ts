@@ -6,14 +6,16 @@ import { db } from './db';
 export type Role = 'ADMIN' | 'MANAGER' | 'CASHIER';
 
 // Which admin sections each role can open.
+// CASHIER deliberately sees ONLY entry control (checkin) — no CRM, no finance,
+// no revenue on the dashboard (see projectSpec/checkin-plan.md).
 export const SECTION_ACCESS: Record<string, Role[]> = {
-  dashboard: ['ADMIN', 'MANAGER', 'CASHIER'],
+  dashboard: ['ADMIN', 'MANAGER'],
+  checkin: ['ADMIN', 'MANAGER', 'CASHIER'], // entry control: scan/validate tickets at the door
   zayavki: ['ADMIN', 'MANAGER'],
   bookings: ['ADMIN', 'MANAGER'],
   clients: ['ADMIN', 'MANAGER'],
-  calendar: ['ADMIN', 'MANAGER', 'CASHIER'],
+  calendar: ['ADMIN', 'MANAGER'],
   programs: ['ADMIN', 'MANAGER'],
-  tickets: ['ADMIN', 'MANAGER', 'CASHIER'], // cashier: sell tickets
   finance: ['ADMIN'],
   analytics: ['ADMIN'],
   promo: ['ADMIN', 'MANAGER'],

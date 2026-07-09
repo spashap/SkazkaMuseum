@@ -6,6 +6,7 @@ import LogoutButton from '@/components/admin/LogoutButton';
 
 const SECTIONS: { id: string; href: string; label: string }[] = [
   { id: 'dashboard', href: '/admin', label: 'Главная панель' },
+  { id: 'checkin', href: '/admin/checkin', label: 'Контроль билетов' },
   { id: 'zayavki', href: '/admin/zayavki', label: 'Заявки с сайта' },
   { id: 'bookings', href: '/admin/bookings', label: 'Бронирования' },
   { id: 'clients', href: '/admin/clients', label: 'Клиенты (CRM)' },
@@ -28,13 +29,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const version = await getVersion();
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <aside style={{ width: 240, background: 'var(--dark)', color: 'var(--cream)', padding: '1.25rem', flexShrink: 0 }}>
+    <div className="admin-shell">
+      <aside className="admin-aside">
         <div style={{ fontFamily: 'var(--font-display)', color: 'var(--gold)', fontSize: 'var(--fs-h3)', marginBottom: '0.25rem' }}>
           Личный кабинет
         </div>
         <p className="caption" style={{ color: 'var(--text-light)' }}>{session.name} · {role}</p>
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '1rem' }}>
+        <nav className="admin-nav">
           {visible.map((s) => (
             <Link key={s.id} href={s.href} style={{ color: 'var(--cream)', padding: '0.5rem 0.6rem', borderRadius: 'var(--radius)', fontSize: 'var(--fs-small)' }}>
               {s.label}
@@ -45,8 +46,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <Link href="/" className="caption" style={{ color: 'var(--gold-light)', display: 'block', marginTop: '1rem' }}>← На сайт</Link>
         {version && <p className="caption" style={{ color: 'var(--text-light)', marginTop: '1rem' }}>{version}</p>}
       </aside>
-      <div style={{ flex: 1, background: 'var(--white)', minWidth: 0 }}>
-        <div style={{ padding: '1.5rem 2rem' }}>{children}</div>
+      <div className="admin-main">
+        <div className="admin-main__inner">{children}</div>
       </div>
     </div>
   );

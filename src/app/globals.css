@@ -85,6 +85,20 @@ img { max-width: 100%; height: auto; display: block; }
 .badge--draft { background: var(--gold); color: var(--dark); }
 .badge--archived { background: var(--text-light); color: var(--white); }
 
+/* Admin shell — sidebar on desktop, stacked on phones (the cashier's entry-control
+   page is used from a mobile browser; the rest of the admin benefits too). */
+.admin-shell { display: flex; min-height: 100vh; }
+.admin-aside { width: 240px; background: var(--dark); color: var(--cream); padding: 1.25rem; flex-shrink: 0; }
+.admin-nav { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 1rem; }
+.admin-main { flex: 1; background: var(--white); min-width: 0; }
+.admin-main__inner { padding: 1.5rem 2rem; }
+@media (max-width: 760px) {
+  .admin-shell { flex-direction: column; }
+  .admin-aside { width: 100%; padding: 1rem 1.25rem; }
+  .admin-nav { flex-direction: row; flex-wrap: wrap; gap: 0.35rem; }
+  .admin-main__inner { padding: 1rem 1rem 3rem; }
+}
+
 /* Payment modal — the YooKassa embedded widget renders inside .pay-modal__body,
    so the whole payment happens in a popup without leaving the page. */
 .pay-modal {
