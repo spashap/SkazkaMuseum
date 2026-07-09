@@ -1,0 +1,22 @@
+;; Yandex 360 (business mail) DNS records for skazkamuseum.ru
+;; Import in Cloudflare: DNS -> Records -> Import and Export -> Import DNS records
+;;
+;; !! BEFORE importing: DELETE the existing SPF record in Cloudflare
+;;    (TXT @ "v=spf1 include:spf.unisender.ru ~all") — a domain may have ONE SPF
+;;    record only. The record below REPLACES it and authorizes BOTH senders:
+;;    Unisender (ticket/site emails) and Yandex (mailboxes like spb@/noreply@).
+;;
+;; All records must stay "DNS only" (grey cloud), never proxied.
+$ORIGIN skazkamuseum.ru.
+$TTL 1800
+
+;; SPF — merged: Unisender + Yandex in one record
+@	1800	IN	TXT	"v=spf1 include:spf.unisender.ru include:_spf.yandex.net ~all"
+
+;; Mail delivery INTO the Yandex mailboxes (standard Yandex 360 MX)
+@	1800	IN	MX	10 mx.yandex.net.
+
+;; Yandex will also ask for (add when its wizard shows the values):
+;;  - domain ownership TXT:   @  TXT  "yandex-verification=XXXXXXXXXXXXXXXX"
+;;  - DKIM key:               mail._domainkey  TXT  "v=DKIM1; k=rsa; p=MIGf..."
+;; Paste those to Claude and they'll be added here.
