@@ -207,6 +207,9 @@ model Booking {
   amount      Int      @default(0)
   payMethod   String?
   paymentId   String   @default("") // YooKassa payment id once an online payment was started
+  buyerEmail  String   @default("") // checkout email snapshot (per-order; survives Client.email @unique conflicts)
+  ticketEmailStatus String @default("") // paid-ticket email delivery: '' = not attempted, 'sent', 'failed', 'no_email'
+  ticketEmailAt DateTime? // when the last ticket-email attempt was made
   usedAt      DateTime? // entry control: when the group was let in (null = not yet)
   usedBy      String   @default("") // entry control: staff name who let the group in
   upsellsJson String   @default("[]")

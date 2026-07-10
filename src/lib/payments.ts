@@ -1,7 +1,7 @@
 import { db } from './db';
 import { getPayment } from './integrations/yookassa';
 import { notifyTelegram } from './integrations/telegram';
-import { sendPaymentReceivedEmail } from './orderEmail';
+import { sendTicketEmailForBooking } from './orderEmail';
 
 // Shared by the YooKassa webhook and the checkout status-poll endpoint so a
 // payment gets applied to its bookings exactly the same way no matter which of
@@ -48,17 +48,9 @@ export async function verifyAndApplyPayment(paymentId: string, origin?: string):
         data: { bookingId: b.id, amount: b.amount, method: 'online', status: 'completed' },
       });
 
-      const emailTo = b.client?.email;
-      if (emailTo && b.event) {
-        sendPaymentReceivedEmail({
-          to: emailTo,
-          toName: b.client?.fullName || '',
-          booking: b,
-          event: b.event,
-          program: b.event.program,
-          origin,
-        }).catch(() => {});
-      }
+      // Awaited (not fire-and-forget) so the delivery outcome lands on the
+      // booking before we answer — the admin email-status column depends on it.
+      await sendTicketEmailForBooking(b.id, origin);
       notifyTelegram(
         `💳 <b>Оплачен заказ №${b.number}</b>\n${b.event?.program.title || ''}\nСумма: ${b.amount} ₽`
       ).catch(() => {});

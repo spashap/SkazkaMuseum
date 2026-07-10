@@ -50,18 +50,19 @@ export async function sendOrderConfirmationEmail(opts: {
   }
 }
 
-// Payment-received email — sent by verifyAndApplyPayment (src/lib/payments.ts)
-// once YooKassa confirms the money, with the ticket PDF re-generated so its
+// Payment-received email — the ticket delivery. Reached only through
+// sendTicketEmailForBooking below, with the ticket PDF re-generated so its
 // status line already reads «Оплачена». The fiscal receipt (чек) is NOT ours to
-// send — YooKassa emails it to the buyer itself.
-export async function sendPaymentReceivedEmail(opts: {
+// send — YooKassa emails it to the buyer itself. Returns whether SMTP accepted
+// the message so the caller can persist the delivery status.
+async function sendPaymentReceivedEmail(opts: {
   to: string;
   toName: string;
   program: Program;
   event: Event;
   booking: Booking;
   origin?: string;
-}): Promise<void> {
+}): Promise<boolean> {
   const { to, toName, program, event, booking } = opts;
   const origin = opts.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://skazkamuseum.ru';
   try {
@@ -85,7 +86,7 @@ export async function sendPaymentReceivedEmail(opts: {
       console.error('[orderEmail] paid-ticket PDF failed — sending without attachment', e);
     }
 
-    await sendEmail({
+    return await sendEmail({
       to, toName,
       fromName: company?.name || 'Музей русской сказки',
       replyTo: company?.email || undefined,
@@ -102,5 +103,44 @@ export async function sendPaymentReceivedEmail(opts: {
     });
   } catch (e) {
     console.error('[orderEmail] failed to send payment-received email', e);
+    return false;
   }
+}
+
+// The ONE way to (re)send the paid ticket for a booking — used by the YooKassa
+// webhook/poll path, cash payment at the till, and the admin resend button.
+// Looks the booking up fresh (so the PDF reflects the paid status), picks the
+// address (per-order buyerEmail wins over the client card) and persists the
+// delivery outcome on the booking, which is what the admin «Проблемы с email»
+// filter reads.
+export async function sendTicketEmailForBooking(
+  bookingId: string,
+  origin?: string
+): Promise<'sent' | 'failed' | 'no_email' | 'skipped'> {
+  const detail = await getTicketDetail(bookingId);
+  if (!detail || !detail.event) return 'skipped'; // no session → no ticket to send
+
+  const emailTo = detail.buyerEmail || detail.client?.email;
+  if (!emailTo) {
+    await db.booking.update({
+      where: { id: bookingId },
+      data: { ticketEmailStatus: 'no_email', ticketEmailAt: new Date() },
+    });
+    return 'no_email';
+  }
+
+  const ok = await sendPaymentReceivedEmail({
+    to: emailTo,
+    toName: detail.client?.fullName || '',
+    booking: detail,
+    event: detail.event,
+    program: detail.event.program,
+    origin,
+  });
+  const status = ok ? 'sent' : 'failed';
+  await db.booking.update({
+    where: { id: bookingId },
+    data: { ticketEmailStatus: status, ticketEmailAt: new Date() },
+  });
+  return status;
 }

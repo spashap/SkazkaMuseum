@@ -120,12 +120,27 @@ export async function POST(req: Request) {
           reducedChildCategory,
           reducedDiscount: discount,
           amount,
+          buyerEmail: d.email || loggedInClient?.email || '',
           status: 'new',
           clientNote: [ticketBreakdown({ adults, children, reduced, reducedCategory, reducedChild, reducedChildCategory }), d.comment].filter(Boolean).join(' · '),
           historyJson: JSON.stringify([{ at: new Date().toISOString(), event: 'created' }]),
         },
       });
     });
+
+    // Keep the typed email on the client card too — but only when the card has
+    // none (never overwrite), and outside the order transaction: Client.email is
+    // @unique, and a caught violation inside the tx would still abort the order.
+    if (d.email && booking.clientId) {
+      try {
+        await db.client.updateMany({
+          where: { id: booking.clientId, email: null },
+          data: { email: d.email },
+        });
+      } catch {
+        // email belongs to another client — booking.buyerEmail keeps it for the ticket
+      }
+    }
 
     await notifyTelegram(
       `🎟 <b>Новый заказ билетов</b>\nПрограмма: ${event.program.title}\nСеанс: ${event.startAt.toLocaleString('ru-RU')}\n` +

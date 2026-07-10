@@ -38,7 +38,9 @@ export default function CheckinPanel({ t, staffName }: { t: TicketDetail; staffN
           </p>
         )}
         <p style={{ marginBottom: '0.25rem' }}><strong>{ticketBreakdown(t) || 'состав не указан'}</strong></p>
-        <p className="small" style={{ marginBottom: '0.75rem' }}>{t.client?.fullName || '—'} · {t.amount} ₽ · заказ №{t.number}</p>
+        <p className="small" style={{ marginBottom: '0.75rem' }}>
+          {t.client?.fullName || '—'} · {t.client?.phone || 'без телефона'} · {t.buyerEmail || t.client?.email || 'без email'} · {t.amount} ₽ · заказ №{t.number}
+        </p>
         {hasReducedTickets(t) && (
           <p className="small" style={{ color: 'var(--crimson)', marginBottom: '0.75rem' }}>
             ⚠ Льготные билеты — проверьте подтверждающий документ ({[t.reducedCategory, t.reducedChildCategory].filter(Boolean).join(', ')})

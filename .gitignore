@@ -51,3 +51,4 @@ npm-debug.log*
 # orphaned original seed images (site uses optimized .webp; keep repo light)
 /public/seed/*.jpg
 /public/seed/*.png
+.claude/settings.local.json

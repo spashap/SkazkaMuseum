@@ -21,7 +21,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   if (!ticket) return NextResponse.json({ error: 'not_found' }, { status: 404 });
 
   const client = await getCurrentClient();
-  const to = parsed.data.email || client?.email;
+  const to = parsed.data.email || client?.email || ticket.buyerEmail;
   if (!to) return NextResponse.json({ error: 'no_email' }, { status: 400 });
 
   const pdf = await buildTicketPdf(ticket, requestOrigin(req));
@@ -35,7 +35,16 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     attachment: { filename: `ticket-${ticket.number}.pdf`, contentType: 'application/pdf', content: pdf },
   });
 
-  // sendEmail() no-ops (logs) without a configured UniSender key — still respond
+  // A successful self-service send counts as delivered — clears the booking
+  // from the admin «Проблемы с email» filter.
+  if (sent && (ticket.status === 'paid' || ticket.status === 'completed')) {
+    await db.booking.update({
+      where: { id: ticket.id },
+      data: { ticketEmailStatus: 'sent', ticketEmailAt: new Date() },
+    });
+  }
+
+  // sendEmail() no-ops (logs) without configured SMTP creds — still respond
   // ok so the UI doesn't show a false error in dev.
   return NextResponse.json({ ok: true, delivered: sent });
 }

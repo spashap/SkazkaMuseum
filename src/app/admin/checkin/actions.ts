@@ -5,6 +5,8 @@ import { db } from '@/lib/db';
 import { getSession, canAccess } from '@/lib/auth';
 import { notifyTelegram } from '@/lib/integrations/telegram';
 import { ticketBreakdown } from '@/lib/ticketDetail';
+import { sendTicketEmailForBooking } from '@/lib/orderEmail';
+import { requestOrigin } from '@/lib/origin';
 
 // Entry-control actions (see projectSpec/checkin-plan.md). All three require a
 // staff session with 'checkin' access — the public bearer ticket page renders
@@ -85,6 +87,8 @@ export async function acceptCashPayment(formData: FormData) {
     },
   });
   await db.transaction.create({ data: { bookingId: id, amount: b.amount, method: 'cash', status: 'completed' } });
+  // Cash buyers with an email get the same QR-ticket email as online ones.
+  await sendTicketEmailForBooking(id, requestOrigin());
   notifyTelegram(`💵 <b>Оплата на кассе: заказ №${b.number}</b>\nСумма: ${b.amount} ₽\nПринял(а): ${session.name}`).catch(() => {});
   revalidateTicket(id);
 }
