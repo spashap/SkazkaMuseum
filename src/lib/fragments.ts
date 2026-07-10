@@ -62,6 +62,7 @@ export async function renderFragment(name: string): Promise<string> {
       ['https://t.me/skazkamuseum', c.telegram],
       ['https://max.ru/chat/skazkamuseum', c.maxLink],
       ['info@skazkamuseum.ru', c.email],
+      ['spb@skazka-museum.ru', c.email],
     ];
     for (const [from, to] of repl) html = html.split(from).join(to);
   }

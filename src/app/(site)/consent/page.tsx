@@ -1,6 +1,10 @@
+import { db } from '@/lib/db';
+
 export const metadata = { title: 'Согласие на обработку персональных данных' };
 
-export default function Consent() {
+export default async function Consent() {
+  const company = await db.companySettings.findUnique({ where: { id: 1 } });
+  const email = company?.email || 'spb@skazka-museum.ru';
   return (
     <section className="section container" style={{ maxWidth: 820 }}>
       <h1>Согласие на обработку персональных данных</h1>
@@ -53,7 +57,7 @@ export default function Consent() {
         путем направления Субъектом подписанного письменного заявления по адресу местонахождения
         Оператора: 197022, город Санкт-Петербург, проспект Каменноостровский, д. 61, помещ. 3-н,
         или в форме электронного документа на адрес электронной почты Оператора
-        spb@skazka-museum.ru. С момента получения Оператором такого заявления обработка
+        {email}. С момента получения Оператором такого заявления обработка
         персональных данных прекращается в течение 30 календарных дней, за исключением случаев,
         когда Оператор вправе продолжить обработку без согласия Субъекта на основании закона.</p>
     </section>
