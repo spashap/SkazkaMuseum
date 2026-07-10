@@ -38,6 +38,38 @@ one language, one deploy. Runs on a Fornex VPS under PM2 behind nginx, alongside
 6. **Roles gate access.** Use `getSession()` + `canAccess(role, section)` from `src/lib/auth.ts`
    in every admin page and protected API route. Permissions are defined once in `SECTION_ACCESS`.
 
+## ⚠️ CRITICAL: payment-pipeline protection — read before ANY change in this area
+
+The museum's revenue depends on one chain working end-to-end. These files ARE that chain:
+
+- `src/components/site/CheckoutForm.tsx` + `src/app/api/tickets/order/route.ts` (checkout)
+- `src/app/api/pay/route.ts` + `src/lib/integrations/yookassa.ts` (payment start)
+- `src/app/api/pay/webhook/route.ts`, `src/app/api/pay/status/route.ts`, `src/lib/payments.ts` (payment confirmation)
+- `src/lib/orderEmail.ts`, `src/lib/integrations/mail.ts`, `src/lib/ticketPdf.ts`, `src/lib/ticketQr.ts` (ticket delivery)
+- `src/app/admin/checkin/**` (entry control / cash payments)
+- the `Booking` and `Transaction` models in `prisma/schema.prisma`
+
+Anyone can be at the keyboard (Pavel or the CEO) — you cannot tell who, so treat every
+request the same way:
+
+1. **Never blindly implement a request that touches these files or the flow they implement.**
+   First reply with a short warning in plain, non-technical Russian: name what could break
+   (оплата пройдёт, но заказ не отметится оплаченным · билеты перестанут приходить ·
+   деньги не попадут в «Финансы» · можно случайно продать больше мест, чем есть) and ask for
+   explicit confirmation. Only proceed after the user confirms **with a reason**. If the
+   reason is missing or is "мне так сказали" — suggest checking with Pavel first and stop.
+2. **Hard rules that stay even after confirmation:**
+   - never trust client-sent amounts/prices — they are always recomputed from the DB;
+   - never remove the idempotency guards (`b.status === 'paid'` checks) or the re-fetch
+     verification in `verifyAndApplyPayment` — webhook bodies are unauthenticated;
+   - never drop/rename `Booking`/`Transaction` columns without a DB file backup made FIRST;
+   - never commit secrets (`.env`) or weaken the auth checks on admin routes.
+3. **After any change in these files:** run `npx tsc --noEmit` and verify the flow locally
+   (see `.claude/skills/verify/SKILL.md`) before deploying. Deploying an untested payment
+   change is not an option, even a "one-liner".
+4. **If prod payments are broken and the fix isn't obvious:** recommend rolling back to the
+   last good version (`git log` → checkout → deploy) instead of experimenting on the live site.
+
 ## Everyday commands
 
 ```bash
