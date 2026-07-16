@@ -37,25 +37,25 @@
     <div class="form-wrap" style="max-width:560px;margin:0 auto;">
       <p style="text-align:center;color:var(--gold);font-size:0.78rem;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.5rem;">Запись</p>
       <h2 style="text-align:center;font-family:'Ruslan Display',cursive;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:1.5rem;letter-spacing:0.05em;">ЗАБРОНИРОВАТЬ КВЕСТ</h2>
-      <form onsubmit="return false;" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+      <form class="js-form" onsubmit="submitForm(event,this)" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label for="f-kvesty-1">Имя *</label><input id="f-kvesty-1" type="text" placeholder="Ваше имя" required></div>
-          <div class="form-group"><label for="f-kvesty-2">Телефон *</label><input id="f-kvesty-2" type="tel" placeholder="+7" required></div>
+          <div class="form-group"><label for="f-kvesty-1">Имя *</label><input id="f-kvesty-1" name="name" type="text" placeholder="Ваше имя" required></div>
+          <div class="form-group"><label for="f-kvesty-2">Телефон *</label><input id="f-kvesty-2" name="phone" type="tel" placeholder="+7" required></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label for="f-kvesty-3">Дата *</label><input id="f-kvesty-3" type="date" required></div>
-          <div class="form-group"><label for="f-kvesty-4">Количество человек</label><input id="f-kvesty-4" type="number" min="1" max="30" value="4"></div>
+          <div class="form-group"><label for="f-kvesty-3">Дата *</label><input id="f-kvesty-3" name="date" type="date" required></div>
+          <div class="form-group"><label for="f-kvesty-4">Количество человек</label><input id="f-kvesty-4" name="count" type="number" min="1" max="30" value="4"></div>
         </div>
         <div class="form-group" style="margin-bottom:1rem;">
           <label for="f-kvesty-5">Квест-программа</label>
-          <select id="f-kvesty-5">
+          <select id="f-kvesty-5" name="program">
             <option value="">Выберите...</option>
             <option>Здравствуй, сказка! — 1 000 ₽/чел. (от 4 лет)</option>
             <option>В поисках сказочного сокровища — 1 000 ₽/чел. (от 8 лет)</option>
             <option>Седьмая тайна сказки — 1 000 ₽/чел. (от 13 лет)</option>
           </select>
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-kvesty-6">Комментарий</label><textarea id="f-kvesty-6" placeholder="Возраст участников, особые пожелания..."></textarea></div>
+        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-kvesty-6">Комментарий</label><textarea id="f-kvesty-6" name="comment" placeholder="Возраст участников, особые пожелания..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Забронировать 🗝️</button>
       </form>
     </div>

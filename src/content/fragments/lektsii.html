@@ -97,15 +97,15 @@
     <div class="form-wrap" style="max-width:560px;margin:0 auto;">
       <p style="text-align:center;color:var(--gold);font-size:0.78rem;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.5rem;">Онлайн-запись</p>
       <h2 style="text-align:center;font-family:'Ruslan Display',cursive;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:1.5rem;letter-spacing:0.05em;">ЗАПИСАТЬСЯ НА ЛЕКЦИЮ</h2>
-      <form onsubmit="sendLektsiiToMax(event);" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+      <form class="js-form" onsubmit="submitForm(event,this)" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label for="f-lektsii-1">Имя *</label><input id="f-lektsii-1" type="text" required placeholder="Ваше имя"></div>
-          <div class="form-group"><label for="f-lektsii-2">Телефон *</label><input id="f-lektsii-2" type="tel" required placeholder="+7"></div>
+          <div class="form-group"><label for="f-lektsii-1">Имя *</label><input id="f-lektsii-1" name="name" type="text" required placeholder="Ваше имя"></div>
+          <div class="form-group"><label for="f-lektsii-2">Телефон *</label><input id="f-lektsii-2" name="phone" type="tel" required placeholder="+7"></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
           <div class="form-group" style="min-width:0;">
             <label for="f-lektsii-3">Лекция</label>
-            <select id="f-lektsii-3" style="width:100%;">
+            <select id="f-lektsii-3" name="program" style="width:100%;">
               <option value="">Выберите...</option>
               <option>07.07 — Карельские сказки</option>
               <option>14.07 — Саамские сказки</option>
@@ -120,14 +120,14 @@
           </div>
           <div class="form-group" style="min-width:0;">
             <label for="f-lektsii-4">Абонемент</label>
-            <select id="f-lektsii-4">
+            <select id="f-lektsii-4" name="abonement">
               <option>Одна лекция — 500 ₽</option>
               <option>Три лекции — 1 200 ₽</option>
               <option>Девять лекций — 2 700 ₽</option>
             </select>
           </div>
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-lektsii-5">Комментарий</label><textarea id="f-lektsii-5" placeholder="Пожелания, вопросы..."></textarea></div>
+        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-lektsii-5">Комментарий</label><textarea id="f-lektsii-5" name="comment" placeholder="Пожелания, вопросы..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Записаться ✨</button>
       </form>
       <p style="text-align:center;margin-top:1.2rem;color:var(--text-light);font-size:0.82rem;">Или позвоните: <a href="tel:+79213638305" style="color:var(--crimson);font-weight:600;">+7 921 363 83 05</a></p>

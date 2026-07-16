@@ -35,10 +35,10 @@
     <div class="section__header text-center"><span class="eyebrow">Бронирование</span><h2>Заявка на день рождения</h2></div>
     <div class="form-card">
       <form class="js-form" onsubmit="submitForm(event,this)">
-        <div class="form-row"><div class="form-group"><label for="f-birthday-1">Имя родителя *</label><input id="f-birthday-1" type="text" required placeholder="Ваше имя"></div><div class="form-group"><label for="f-birthday-2">Телефон *</label><input id="f-birthday-2" type="tel" required placeholder="+7"></div></div>
-        <div class="form-row"><div class="form-group"><label for="f-birthday-3">Дата праздника *</label><input id="f-birthday-3" type="date" required></div><div class="form-group"><label for="f-birthday-4">Возраст именинника *</label><input id="f-birthday-4" type="number" min="4" max="14" placeholder="лет"></div></div>
-        <div class="form-row"><div class="form-group"><label for="f-birthday-5">Количество детей</label><input id="f-birthday-5" type="number" min="5" max="30" placeholder="человек"></div></div>
-        <div class="form-group"><label for="f-birthday-6">Квест-программа *</label><select id="f-birthday-6" required><option value="">Выберите квест...</option><option>«Спасти сказку»</option><option>«Былинные богатыри»</option><option>«Царское задание»</option></select></div>
+        <div class="form-row"><div class="form-group"><label for="f-birthday-1">Имя родителя *</label><input id="f-birthday-1" name="name" type="text" required placeholder="Ваше имя"></div><div class="form-group"><label for="f-birthday-2">Телефон *</label><input id="f-birthday-2" name="phone" type="tel" required placeholder="+7"></div></div>
+        <div class="form-row"><div class="form-group"><label for="f-birthday-3">Дата праздника *</label><input id="f-birthday-3" name="date" type="date" required></div><div class="form-group"><label for="f-birthday-4">Возраст именинника *</label><input id="f-birthday-4" name="age" type="number" min="4" max="14" placeholder="лет"></div></div>
+        <div class="form-row"><div class="form-group"><label for="f-birthday-5">Количество детей</label><input id="f-birthday-5" name="count" type="number" min="5" max="30" placeholder="человек"></div></div>
+        <div class="form-group"><label for="f-birthday-6">Квест-программа *</label><select id="f-birthday-6" name="program" required><option value="">Выберите квест...</option><option>«Спасти сказку»</option><option>«Былинные богатыри»</option><option>«Царское задание»</option></select></div>
         <div class="form-group"><label>Дополнительные опции <span style="font-size:0.8rem;color:var(--text-light);font-weight:400">(можно выбрать несколько)</span></label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem 1rem;margin-top:0.5rem;">
             <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:400;cursor:pointer;"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px;"> 🎈 Фотозона «С днём рождения» — 5 000 ₽</label>
@@ -52,7 +52,7 @@
             <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:400;cursor:pointer;"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px;"> ⏱️ Продление аренды (+1 час) — 5 000 ₽</label>
           </div>
         </div>
-        <div class="form-group"><label for="f-birthday-7">Пожелания</label><textarea id="f-birthday-7" placeholder="Аллергии у детей, особые пожелания..."></textarea></div>
+        <div class="form-group"><label for="f-birthday-7">Пожелания</label><textarea id="f-birthday-7" name="comment" placeholder="Аллергии у детей, особые пожелания..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Отправить заявку 🎂</button>
       </form>
       <div class="form-success"><div class="form-success__icon">🎉</div><h3>Заявка принята!</h3><p>Менеджер свяжется с вами в течение 2 часов.</p></div>

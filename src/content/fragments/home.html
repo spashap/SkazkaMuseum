@@ -140,6 +140,7 @@
 <section class="section segment-strip">
   <div class="container">
     <div class="section__header text-center">
+      <span class="eyebrow">Для кого</span>
       <h2>Выберите своё путешествие</h2>
     </div>
     <div class="segment-grid">
@@ -357,7 +358,7 @@
         <div class="price-card__badge">Популярно</div>
         <div class="price-card__name">Интерактивная экскурсия</div>
         <div class="price-card__meta">⏱ 60 минут · от 6 лет</div>
-        <div class="price-card__price">от 1 050 ₽/чел.</div>
+        <div class="price-card__price">от 1 190 ₽/чел.</div>
         <div class="price-card__desc">С профессиональным актёром-героем</div>
         <ul class="price-card__list">
           <li>Задания и артефакты героев</li>
@@ -372,7 +373,7 @@
       <div class="price-card">
         <div class="price-card__name">Клуб богатырей</div>
         <div class="price-card__meta">📅 Пн · 17:00 и 19:00 · 45 мин</div>
-        <div class="price-card__price">от 700 ₽/чел.</div>
+        <div class="price-card__price">от 1 200 ₽/чел.</div>
         <div class="price-card__desc">Путешествие по истории богатырей Руси</div>
         <ul class="price-card__list">
           <li>История и легенды богатырей</li>
@@ -387,7 +388,7 @@
       <!-- Мрачный фольклор 18+ -->
       <div class="price-card">
         <div class="price-card__name">Мрачный фольклор 18+</div>
-        <div class="price-card__meta">📅 Ср, Чт, Вс · 19:30 · строго 18+</div>
+        <div class="price-card__meta">📅 Ср, Вс · 19:30 · строго 18+</div>
         <div class="price-card__price">2 500 ₽/чел.</div>
         <div class="price-card__desc">Иммерсивный спектакль о тёмной стороне фольклора</div>
         <ul class="price-card__list">
@@ -402,7 +403,7 @@
       <div class="price-card">
         <div class="price-card__name">Иммерсивное чтение сказок</div>
         <div class="price-card__meta">📖 Пт · 17:00 и 19:00 · 45 мин · до 10 чел.</div>
-        <div class="price-card__price">от 700 ₽/чел.</div>
+        <div class="price-card__price">от 1 200 ₽/чел.</div>
         <div class="price-card__desc">Театрализованное представление по мотивам русских народных сказок</div>
         <ul class="price-card__list">
           <li>Световые и звуковые эффекты</li>
@@ -488,7 +489,7 @@
       <div class="price-card">
         <div class="price-card__name">«Гуси-Лебеди» для малышей</div>
         <div class="price-card__meta">📅 Вт, Чт, Сб · 16:00 · 30–40 мин · до 10 детей</div>
-        <div class="price-card__price">от 700 ₽/чел.</div>
+        <div class="price-card__price">от 1 200 ₽/чел.</div>
         <div class="price-card__desc">Машенька спасает братика вместе с детьми — интерактивный спектакль по народной сказке</div>
         <ul class="price-card__list">
           <li>Пять залов музея</li>
@@ -697,7 +698,7 @@
   <div class="container">
     <div class="section__header text-center"><span class="eyebrow">Бронирование</span><h2>Забронировать посещение</h2></div>
     <div class="form-card">
-      <form class="js-form" onsubmit="sendHomeToMax(event);">
+      <form class="js-form" onsubmit="submitForm(event,this)">
         <div class="form-row">
           <div class="form-group"><label for="f-home-1">Ваше имя *</label><input id="f-home-1" type="text" name="name" required placeholder="Как к вам обращаться"></div>
           <div class="form-group"><label for="f-home-2">Телефон *</label><input id="f-home-2" type="tel" name="phone" required placeholder="+7 (___) ___-__-__"></div>
@@ -723,7 +724,7 @@
     <div style="text-align:center;margin:1.5rem 0;color:var(--text-light);font-size:0.875rem;">или свяжитесь напрямую</div>
     <div class="direct-btns" style="justify-content:center;">
       <a href="tel:+79213638305" class="contact-btn contact-btn--phone">📞 Позвонить</a>
-      <a href="https://max.ru/chat/skazkamuseum" target="_blank" class="contact-btn contact-btn--max">MAX</a>
+      <a href="https://max.ru/chat/skazkamuseum" target="_blank" class="contact-btn" style="background:#006BE6;color:#fff;border:none;font-weight:600;">MAX</a>
       <a href="https://t.me/museum_skazki" target="_blank" class="contact-btn contact-btn--tg">Telegram</a>
     </div>
   </div>

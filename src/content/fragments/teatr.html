@@ -57,8 +57,8 @@
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <div>
-              <div style="color:var(--crimson);font-size:1.1rem;font-weight:700;">1 000 ₽ <span style="font-size:0.78rem;font-weight:400;color:var(--text-light);">ребёнок</span></div>
-              <div style="color:var(--text-light);font-size:0.78rem;">+ 700 ₽ (будни) / 900 ₽ (выходные) взрослый</div>
+              <div style="color:var(--crimson);font-size:1.1rem;font-weight:700;">1 200 ₽ <span style="font-size:0.78rem;font-weight:400;color:var(--text-light);">ребёнок</span></div>
+              <div style="color:var(--text-light);font-size:0.78rem;">+ 900 ₽ взрослый</div>
             </div>
             <button class="btn btn--primary" style="font-size:0.82rem;padding:0.55rem 1rem;" onclick="document.getElementById('teatr-form').scrollIntoView({behavior:'smooth'})">Купить билет</button>
           </div>
@@ -90,7 +90,7 @@
             ℹ️ Сопровождающий внутри не нужен, но взрослый должен находиться в музее. В стоимость детского билета включён самостоятельный осмотр музея.
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;">
-            <div style="color:var(--crimson);font-size:1.1rem;font-weight:700;">1 000 ₽ <span style="font-size:0.78rem;font-weight:400;color:var(--text-light);">детский билет</span></div>
+            <div style="color:var(--crimson);font-size:1.1rem;font-weight:700;">1 200 ₽ <span style="font-size:0.78rem;font-weight:400;color:var(--text-light);">детский билет</span></div>
             <button class="btn btn--primary" style="font-size:0.82rem;padding:0.55rem 1rem;" onclick="document.getElementById('teatr-form').scrollIntoView({behavior:'smooth'})">Купить билет</button>
           </div>
         </div>
@@ -109,21 +109,21 @@
     <div class="form-wrap" style="max-width:560px;margin:0 auto;">
       <p style="text-align:center;color:var(--gold);font-size:0.78rem;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.5rem;">Онлайн-запись</p>
       <h2 style="text-align:center;font-family:'Ruslan Display',cursive;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:1.5rem;letter-spacing:0.05em;">ЗАБРОНИРОВАТЬ БИЛЕТЫ</h2>
-      <form onsubmit="sendTeatrToMax(event);" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+      <form class="js-form" onsubmit="submitForm(event,this)" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
           <div class="form-group"><label for="f-teatr-1">Имя *</label><input id="f-teatr-1" type="text" name="name" placeholder="Ваше имя" required></div>
-          <div class="form-group"><label for="f-teatr-2">Телефон *</label><input id="f-teatr-2" type="tel" name="contact" placeholder="+7" required></div>
+          <div class="form-group"><label for="f-teatr-2">Телефон *</label><input id="f-teatr-2" type="tel" name="phone" placeholder="+7" required></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
           <div class="form-group"><label for="f-teatr-3">Дата *</label><input id="f-teatr-3" type="date" name="date" required></div>
-          <div class="form-group"><label for="f-teatr-4">Количество человек</label><input id="f-teatr-4" type="number" name="children" min="1" max="30" value="2"></div>
+          <div class="form-group"><label for="f-teatr-4">Количество человек</label><input id="f-teatr-4" type="number" name="count" min="1" max="30" value="2"></div>
         </div>
         <div class="form-group" style="margin-bottom:1rem;">
           <label for="f-teatr-5">Спектакль</label>
-          <select id="f-teatr-5" name="show">
+          <select id="f-teatr-5" name="program">
             <option value="">Выберите...</option>
-            <option>«Гуси-Лебеди» — 1 000 ₽/реб. (от 2 до 6 лет)</option>
-            <option>Иммерсивное чтение сказок — 1 000 ₽/чел. (6+)</option>
+            <option>«Гуси-Лебеди» — 1 200 ₽/реб. (от 2 до 6 лет)</option>
+            <option>Иммерсивное чтение сказок — 1 200 ₽/чел. (6+)</option>
           </select>
         </div>
         <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-teatr-6">Комментарий</label><textarea id="f-teatr-6" name="comment" placeholder="Возраст детей, особые пожелания..."></textarea></div>
@@ -138,10 +138,12 @@
 <section class="section" style="background:var(--cream);padding-top:2rem;padding-bottom:2.5rem;">
   <div class="container">
     <div style="border-left:4px solid var(--gold);padding:1.5rem 2rem;background:rgba(200,150,62,0.06);border-radius:0 12px 12px 0;">
-      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;margin-bottom:1rem;color:var(--dark);">Театр для детей в Санкт-Петербурге — Музей русской сказки «За лесами, за горами»</h2>
-      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;margin-bottom:0.8rem;">Ищете детский театр в Санкт-Петербурге? Музей русской сказки «За лесами, за горами» предлагает живые интерактивные спектакли по мотивам русского фольклора. Профессиональные актёры разыгрывают настоящие сказки прямо в волшебных залах музея — для малышей от 2 лет и всей семьи.</p>
-      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;margin-bottom:0.8rem;">В репертуаре — спектакль «Гуси-Лебеди» для самых маленьких (от 2 до 6 лет) с живыми актёрами, яркими костюмами и интерактивными сценами, а также «Иммерсивное чтение сказок» для детей 6+ — особый формат, где каждый зритель становится частью истории. Уникальные декорации площадью 700 м² создают полное погружение в атмосферу русской народной сказки.</p>
-      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;">Театр находится в 7 минутах от метро «Петроградская» (Каменноостровский проспект, 61). Билеты на спектакль — 1 000 ₽/чел. Звоните <strong>+7 921 363 83 05</strong> или бронируйте место онлайн на сайте.</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;margin-bottom:1rem;color:var(--dark);">Театр для детей в Санкт-Петербурге — живые сказки, в которых ребёнок становится главным героем</h2>
+      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;margin-bottom:0.8rem;">Если вы ищете театр для детей в Санкт-Петербурге, где можно не просто посмотреть спектакль, а стать частью настоящей сказки, добро пожаловать в Музей русской сказки «За лесами, за горами».</p>
+      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;margin-bottom:0.8rem;">Здесь привычный театр превращается в настоящее приключение. Вместо обычной сцены — волшебные залы, сказочные декорации, любимые герои русского фольклора и профессиональные актёры, которые вовлекают каждого ребёнка в развитие сюжета. Дети не сидят в креслах в роли зрителей — они путешествуют по сказочному миру, помогают героям, выполняют задания и становятся участниками происходящего.</p>
+      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;margin-bottom:0.8rem;">Каждый спектакль создан так, чтобы ребёнок прожил историю вместе с любимыми персонажами. Живая игра актёров, красочные костюмы, атмосферные декорации и современные театральные технологии создают ощущение полного погружения в русскую народную сказку. Такой формат вызывает искренние эмоции у детей и надолго остаётся в памяти всей семьи.</p>
+      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;margin-bottom:0.8rem;">Театр в Музее русской сказки — это место, где дети знакомятся с культурой и традициями России через игру, движение и живое общение. Здесь сказки оживают, а каждый визит превращается в маленькое путешествие, наполненное открытиями, смехом и яркими впечатлениями.</p>
+      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;">Если вы выбираете, куда сходить с ребёнком в Санкт-Петербурге, хотите провести время всей семьёй необычно и подарить детям настоящее чудо, спектакли Музея русской сказки станут одним из самых запоминающихся событий вашего отдыха. Забронируйте посещение онлайн и откройте для своей семьи удивительный мир русских сказок.</p>
     </div>
   </div>
 </section>

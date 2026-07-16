@@ -84,11 +84,11 @@
     <div class="section__header text-center"><span class="eyebrow">Бронирование</span><h2>Оставить заявку</h2></div>
     <div class="form-card">
       <form class="js-form" onsubmit="submitForm(event,this)">
-        <div class="form-row"><div class="form-group"><label for="f-schools-1">Имя педагога *</label><input id="f-schools-1" type="text" required placeholder="ФИО"></div><div class="form-group"><label for="f-schools-2">Телефон *</label><input id="f-schools-2" type="tel" required placeholder="+7"></div></div>
-        <div class="form-row"><div class="form-group"><label for="f-schools-3">Школа *</label><input id="f-schools-3" type="text" required placeholder="Название"></div><div class="form-group"><label for="f-schools-4">Класс</label><input id="f-schools-4" type="text" placeholder="напр. 3-А"></div></div>
-        <div class="form-row"><div class="form-group"><label for="f-schools-5">Дата *</label><input id="f-schools-5" type="date" required></div><div class="form-group"><label for="f-schools-6">Количество учеников</label><input id="f-schools-6" type="number" min="10" max="50" placeholder="человек"></div></div>
-        
-        <div class="form-group"><label for="f-schools-7">Комментарий</label><textarea id="f-schools-7" placeholder="Учебные цели, пожелания..."></textarea></div>
+        <div class="form-row"><div class="form-group"><label for="f-schools-1">Имя педагога *</label><input id="f-schools-1" name="name" type="text" required placeholder="ФИО"></div><div class="form-group"><label for="f-schools-2">Телефон *</label><input id="f-schools-2" name="phone" type="tel" required placeholder="+7"></div></div>
+        <div class="form-row"><div class="form-group"><label for="f-schools-3">Школа *</label><input id="f-schools-3" name="school" type="text" required placeholder="Название"></div><div class="form-group"><label for="f-schools-4">Класс</label><input id="f-schools-4" name="school_class" type="text" placeholder="напр. 3-А"></div></div>
+        <div class="form-row"><div class="form-group"><label for="f-schools-5">Дата *</label><input id="f-schools-5" name="date" type="date" required></div><div class="form-group"><label for="f-schools-6">Количество учеников</label><input id="f-schools-6" name="count" type="number" min="10" max="50" placeholder="человек"></div></div>
+
+        <div class="form-group"><label for="f-schools-7">Комментарий</label><textarea id="f-schools-7" name="comment" placeholder="Учебные цели, пожелания..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Отправить заявку 🏫</button>
       </form>
       <div class="form-success"><div class="form-success__icon">✅</div><h3>Заявка принята!</h3><p>Свяжемся в течение рабочего дня.</p></div>

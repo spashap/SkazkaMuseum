@@ -86,16 +86,16 @@
     <div class="form-wrap" style="max-width:560px;margin:0 auto;">
       <p style="text-align:center;color:var(--gold);font-size:0.78rem;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:0.5rem;">Онлайн-заявка</p>
       <h2 style="text-align:center;font-family:'Ruslan Display',cursive;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:1.5rem;letter-spacing:0.05em;">ОСТАВИТЬ ЗАЯВКУ</h2>
-      <form onsubmit="sendPartnersToMax(event);" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+      <form class="js-form" onsubmit="submitForm(event,this)" style="background:var(--cream);border-radius:16px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label for="f-partners-1">Имя *</label><input id="f-partners-1" type="text" required placeholder="Ваше имя"></div>
-          <div class="form-group"><label for="f-partners-2">Телефон *</label><input id="f-partners-2" type="tel" required placeholder="+7"></div>
+          <div class="form-group"><label for="f-partners-1">Имя *</label><input id="f-partners-1" name="name" type="text" required placeholder="Ваше имя"></div>
+          <div class="form-group"><label for="f-partners-2">Телефон *</label><input id="f-partners-2" name="phone" type="tel" required placeholder="+7"></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-          <div class="form-group"><label for="f-partners-3">Компания / канал</label><input id="f-partners-3" type="text" placeholder="Название"></div>
+          <div class="form-group"><label for="f-partners-3">Компания / канал</label><input id="f-partners-3" name="company" type="text" placeholder="Название"></div>
           <div class="form-group" style="min-width:0;">
             <label for="f-partners-4">Формат сотрудничества</label>
-            <select id="f-partners-4" style="width:100%;">
+            <select id="f-partners-4" name="program" style="width:100%;">
               <option value="">Выберите...</option>
               <option>Турфирма</option>
               <option>Гид</option>
@@ -104,7 +104,7 @@
             </select>
           </div>
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-partners-5">Комментарий</label><textarea id="f-partners-5" placeholder="Расскажите о себе и предложении..."></textarea></div>
+        <div class="form-group" style="margin-bottom:1.5rem;"><label for="f-partners-5">Комментарий</label><textarea id="f-partners-5" name="comment" placeholder="Расскажите о себе и предложении..."></textarea></div>
         <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Отправить заявку ✨</button>
       </form>
       <p style="text-align:center;margin-top:1.2rem;color:var(--text-light);font-size:0.82rem;">Или напишите: <a href="mailto:spb@skazka-museum.ru" style="color:var(--crimson);font-weight:600;">spb@skazka-museum.ru</a></p>
